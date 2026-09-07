@@ -350,8 +350,11 @@ _getPortfolioExposure(state) {
 
       const poly = polySkill ? polySkill.getCachedPrice(market.closeTime) : null;
       const estimate = this.settlementAware
-        ? this.settlementReference.getForecast(market, openPrice, now)
-        : probModel.calculateImpliedProbability(btcPrice, openPrice, timeRemaining, totalDuration, binanceFeed);
+	// Explicit on purpose: live trading must never act on an uncalibrated basis-error
+	// estimate. This matches ProxyReference's own default, but says so here instead of
+	// relying on an implicit default a future edit could silently flip.
+		? this.settlementReference.getForecast(market, openPrice, now, { requireCalibration: true })
+		: probModel.calculateImpliedProbability(btcPrice, openPrice, timeRemaining, totalDuration, binanceFeed);
       const prob = { ...estimate }; // Blending must not mutate a cached reference forecast.
       if (this.settlementAware && !prob.ready) {
         count(prob.reason || 'settlement_reference_unavailable');

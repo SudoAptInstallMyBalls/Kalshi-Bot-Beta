@@ -69,6 +69,7 @@ async function main(args = process.argv.slice(2)) {
     sourceFiles.push('src/strategy/settlement-number.js','src/agents/skills/analysis/ml-signal-scorer.js',
 	'src/agents/skills/trading/risk-manager.js','scripts/record-settlement-index.js','src/research/coinbase-shadow.js','src/research/coinbase-recorder.js');
     const manifest = { createdAt: new Date().toISOString(), base, fingerprint: audit.fingerprint,
+	  basisErrorBps: audit.absoluteSpotMinusOfficialBps, // {count,min,median,mean,p95,max} — what's actually driving the entry guard
       quotesSha256: hashQuery(h, 'SELECT * FROM candles WHERE period_minutes=1 ORDER BY ticker,end_period_ts'),
       indexSha256: reference?.db ? hashQuery(reference.db, 'SELECT * FROM index_samples ORDER BY timestamp') : null,
       codeSha256: Object.fromEntries(sourceFiles.map(file => [file, crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex')])),
@@ -84,6 +85,7 @@ async function main(args = process.argv.slice(2)) {
       ...Object.entries(tradeResults).map(([name, v]) => `${name}: ${v.normal.trades} trades, normal P&L ${v.normal.pnl.toFixed(3)}, adverse P&L ${v.adverse.pnl.toFixed(3)}.`), '',
       `Fresh data must be after ${result.freshDataAfter}. No live promotion.`, '', 'See report.json for fixed-time coverage, calibration bins, temporal blocks, source hashes and risk rejection counts.'].join('\n'));
     console.log(JSON.stringify({ directory: dir, forecasts: rows.length,
+	  basisErrorBps: audit.absoluteSpotMinusOfficialBps,
       models: Object.fromEntries(Object.entries(summary.all.models).map(([k, v]) => [k, { brier: v.brier, markets: v.markets, forecasts: v.forecasts }])),
       forward: summary.forward ? { after: summary.forward.after, markets: summary.forward.comparison.commonMarkets,
         forecasts: summary.forward.comparison.commonForecasts, brier: Object.fromEntries(Object.entries(summary.forward.comparison.models).map(([k,v])=>[k,v.brier])) } : null,
