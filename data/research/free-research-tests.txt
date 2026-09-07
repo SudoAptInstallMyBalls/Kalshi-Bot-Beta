@@ -1,0 +1,150 @@
+[Safety] New trading halted: equity_drawdown_latched
+✔ marked equity drawdown persists across restart, time passing and recovered cash (2.6841ms)
+✔ declared external flows do not become strategy gains and stale equity blocks entries (0.2568ms)
+✔ one-percent fee-inclusive cap skips unaffordable whole contract and never rounds up (0.6779ms)
+✔ regularized baseline excludes constant features with train-only preprocessing (7.4139ms)
+✔ depth replay respects limits and partial depth and refuses gaps and stale snapshots (0.4222ms)
+✔ forecasts retain rejected candidates and settlement labels stay distinct from execution outcomes (61.2603ms)
+✔ audit profit factor and beta match known values without inventing zero-variance estimates (1.7426ms)
+✔ daily audit includes flat days, aligns returns and labels incomplete boundary days (3.8791ms)
+▶ CoinbaseRecorder: record() ingestion invariants
+  ✔ rejects ticks with wrong product_id or message type (28.5528ms)
+  ✔ strictly rejects ticks timestamped in the future (event > received) (11.0778ms)
+  ✔ rejects stale receipt latency (>5000ms delay) (9.4043ms)
+  ✔ rejects non-monotonic event_ms (9.9074ms)
+  ✔ confirms receipt-second deduplication using INSERT OR IGNORE (9.6705ms)
+✔ CoinbaseRecorder: record() ingestion invariants (70.0129ms)
+▶ evaluateCoinbaseShadow: missing reasons & settlement average
+  ✔ classifies settlement_window_unobserved when decision ts is within final 60s of close (2.2758ms)
+  ✔ classifies missing_or_stale_coinbase when ticks are absent or stale (0.72ms)
+  ✔ classifies coinbase_volatility_gap when minute volatility cannot be formed (0.727ms)
+  ✔ classifies forecast_unavailable when forecast model is not ready (1.1301ms)
+  ✔ skips settlement average calculation when samples.length !== 60 (0.9632ms)
+  ✔ computes full settlement average when samples.length === 60 (1.1401ms)
+✔ evaluateCoinbaseShadow: missing reasons & settlement average (7.4126ms)
+[OrderMgr] Promoted to position: BTC yes x4 @ 50c (source: placement)
+[OrderMgr] Cancelling stale order: a (BTC yes, age: 1788804896s)
+[OrderMgr] Promoted to position: BTC yes x3 @ 50c (source: finalize)
+[OrderMgr] Cancelling stale order: a (BTC yes, age: 1788804896s)
+✔ placement fills become positions exactly once and later fills are incremental (8.2736ms)
+✔ older persisted pending rows do not double existing positions after upgrade (0.213ms)
+✔ cancel race retains actual fills, fees and cost basis; balance comes from account (3.7461ms)
+✔ uncertain cancel keeps entry tracked instead of issuing a guessed refund (0.6338ms)
+✔ an unresolved submission halts after restart but not during its in-flight request (0.2619ms)
+✔ fee-inclusive sizing cannot spend above its budget (0.4839ms)
+✔ strategy selection requires samples and positive normal and stressed validation (0.1519ms)
+✔ delayed window excludes early entries and broad window reserves the last minute (4.1112ms)
+[OrderExecutor] Sending V2 Order: undefined BTC (ASK @ $0.3600) x1 | Edge: 16.0%
+[OrderExecutor Payload]: {"ticker":"BTC","client_order_id":"06976ac7-1106-49b6-9c5b-b69d2fe0bf5f","side":"ask","count":"1.00","price":"0.3600","time_in_force":"good_till_canceled","self_trade_prevention_type":"taker_at_cross","post_only":false,"cancel_order_on_pause":false,"reduce_only":false}
+[OrderExecutor ERROR] Order not accepted: 404 - {"error":{"code":"user_not_found"}}
+[OrderExecutor] Sending V2 Order: undefined BTC (ASK @ $0.3600) x1 | Edge: 16.0%
+[OrderExecutor Payload]: {"ticker":"BTC","client_order_id":"e0fd1564-a88c-4738-8297-1175b7ded91f","side":"ask","count":"1.00","price":"0.3600","time_in_force":"good_till_canceled","self_trade_prevention_type":"taker_at_cross","post_only":false,"cancel_order_on_pause":false,"reduce_only":false}
+[OrderExecutor ERROR] Order outcome requires reconciliation: UNKNOWN - timeout
+✔ aggregate cash cannot fund an order on an empty crypto shard (20.1783ms)
+✔ entry uses authoritative shard and NO price plus fees (0.4332ms)
+✔ reduce-only exit routes without requiring free cash (0.1589ms)
+✔ cancel routes using persisted ticker and refuses unknown order routing (0.3964ms)
+✔ executor removes explicit rejection marker but preserves timeout uncertainty (2.3993ms)
+✔ incident recovery refuses any unrelated or filled pending state (0.2376ms)
+✔ fixed-point order fields preserve fractional counts and convert dollars exactly once (3.0808ms)
+✔ late cancel fill is counted before repricing; costs and fees include all partial exits (20.0964ms)
+[Kalshi] Failed to fetch positions: Missing portfolio positions array
+[PositionManager] Settlement needs manual reconciliation: entry
+✔ unconfirmed cancellation preserves order identity and resumes it without duplicate sell (36.1875ms)
+✔ unknown POST outcome blocks duplicate exits and new entries (1.2688ms)
+✔ explicit invalid-order exit rejection clears only the submission marker and retains the position (0.7984ms)
+✔ startup books verified finalized settlement before comparing open quantities (0.7785ms)
+✔ failed quote refresh marks retained quotes stale and final risk check refuses them (0.535ms)
+✔ portfolio mismatch preserves cost basis and pending identities instead of fabricating positions (0.2731ms)
+✔ portfolio pagination follows cursors and rejects incomplete schemas (0.9858ms)
+✔ settlement retries are deduplicated, bounded, and cleared on stop (0.8299ms)
+✔ settlement does not drop an entry that is still pending (0.2102ms)
+✔ dynamic grid snaps both book sides without worsening their limit (2.7371ms)
+✔ exits use IOC and fresh quotes, retain reduce-only and preserve the worst permitted price (1.4384ms)
+✔ Coinbase book applies size replacements and removals and resets on resnapshot (7.453ms)
+✔ book records independently of quiet ticker, keeps sources separate and rejects stale data (15.0059ms)
+✔ original study hashes remain unchanged and experimental default matches frozen proxy (5.2573ms)
+[ML] Trained 1 stumps on 7 samples; validation=1, test=2
+[ML] Top features: recent_pnl(0.750), spot_move(0.000), abs_move(0.000), move_dir(0.000), time_remaining(0.000)
+[ML] Model load skipped: Research replay models cannot be loaded for live scoring
+✔ as-of join excludes future closes and fees round to cents (1.4524ms)
+✔ reference downloads resume by complete chunk and reject malformed or missing minutes (73.798ms)
+✔ real signal generator replay is deterministic, disjoint by market, and labels after entry (28.2378ms)
+✔ changing future outcome and final quote cannot change the earlier feature vector (3.3366ms)
+✔ missing candle or spot coverage rejects market; zero liquidity rejects simulated fill (2.9825ms)
+✔ research outcomes train the existing model without permitting live model loading (73.8356ms)
+✔ replay CLI rejects unknown flags and history/output collision (0.5078ms)
+✔ history rows deduplicate, retain raw precision, and aggregate occupied seconds only (19.2651ms)
+✔ candle field normalization distinguishes dollars from legacy cents and missing data (1.2621ms)
+✔ pagination follows cursors and rejects loops; rate limit retries honor Retry-After (2.1646ms)
+✔ full-market download merges trade tiers and rerun skips completed datasets (17.7589ms)
+✔ an interrupted trade batch is not marked complete and can be safely retried (1.13ms)
+✔ CSV export escapes commas, quotes and newlines and includes empty-table headers (98.8004ms)
+✔ live recording preserves snapshots, deltas and gap markers; auth signs only websocket GET (205.4536ms)
+✔ normal CDF matches known quantiles, symmetry and tails (1.5094ms)
+✔ probability model scales volatility with remaining time and stays bounded (0.319ms)
+✔ Kelly uses entry odds, permits positive edge below 50% probability, and includes fees (0.1931ms)
+✔ risk budget includes open, pending and same-pass portfolio/ticker exposure (7.6282ms)
+✔ position sizing rounds down and respects remaining market capacity (0.7914ms)
+✔ unknown volatility reaches the signal generator guard instead of silently trading a fallback (4.978ms)
+✔ scores defer writes, use ticker/global caches, and label before timer flush (26.8067ms)
+✔ batch failure rolls back both tables and retains every row for retry (12.958ms)
+[ML] Not enough training data (0 samples, need 300+)
+[ML] Not enough training data (299 samples, need 300+)
+[ML] Trained 42 stumps on 210 samples; validation=45, test=45
+[ML] Top features: spot_move(9.880), abs_move(0.000), move_dir(0.000), time_remaining(0.000), time_elapsed(0.000)
+[ML] Model load skipped: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+✔ threshold, timer and shutdown all flush queued rows (87.3684ms)
+✔ training floor, chronological split, train-only normalization and reload (225.9053ms)
+✔ ML cannot enlarge until validation beats baseline AND sample gate passes (13.5326ms)
+✔ held-out accuracy and Brier score match hand-calculated values (12.6326ms)
+[PositionManager] WON: BTC yes x4 | Cost: $2.00 | Payout: $4.00 | P&L: +$2.00
+✔ partial exits cannot label ML or leak into closed-trade features; full close aggregates PnL (7.0944ms)
+✔ settlement after partial exit uses numeric costs and the entire trade outcome (1.5375ms)
+✔ failed remote reconciliation leaves local pending orders and positions intact (0.5491ms)
+✔ all literal local imports resolve without executing the trading application (70.5978ms)
+✔ default storage, research config and frozen policy remain rooted at the repository (315.4349ms)
+✔ extracted control authentication still rejects missing and incorrect credentials (0.9595ms)
+[Safety] New trading halted: minimum_balance
+[Safety] New trading halted: execution_failures
+[Safety] New trading halted: minimum_balance
+[Safety] New trading halted: execution_failures
+[Safety] New trading halted: authentication_failed
+[Safety] New trading halted: execution_failures
+✔ session baseline excludes persisted historical PnL; drawdown halves once and pauses (1.9242ms)
+✔ minimum balance distinguishes unknown startup from funded account and latches (1.6805ms)
+✔ all safety thresholds accept configuration overrides (0.5508ms)
+✔ fifth failed placement stops sixth POST; a successful placement resets the streak (3.7053ms)
+✔ 401 on a balance GET blocks subsequent GET, POST and DELETE immediately (0.8333ms)
+✔ scan runner refuses dispatch while halted and execution rechecks after a pause (1.0354ms)
+✔ ML shrink and session halving are applied once; dollar cap is enforced (0.2902ms)
+✔ MasterAgent shutdown waits for an in-flight scan before flushing skills (10.7978ms)
+✔ risk check preserves fractional-cent quotes and rejects stale spot input (0.3179ms)
+✔ far-from-strike disagreements are counted, boundaries are disjoint, cumulative buckets are cumulative (10.4228ms)
+✔ official numbers allow valid thousands separators and reject missing or malformed values (0.1633ms)
+✔ as-of excludes future data and reports stale, missing, invalid and unsupported markets (1.4534ms)
+✔ mixed feeds, duplicate timestamps and corrupted normalized candles fail closed (0.5319ms)
+✔ official equality resolves yes and missing values cannot silently resolve no (0.3734ms)
+✔ live and replay use identical completed-minute volatility and exclude future ticks (3.187ms)
+✔ averaging model incorporates observed samples, shrinks future variance, and respects rounding (1.216ms)
+✔ averaging never treats missing or not-yet-received samples as observed (0.163ms)
+✔ index recorder stamps live receipt, rejects conflicting edits and segregates historical data (55.8211ms)
+✔ official reference requires live, fresh, contiguous history and official strike metadata (33.7063ms)
+✔ historical index observations cannot accidentally authorize live entries (10.6685ms)
+✔ proxy calibration includes only past published settlements, excludes own outcome, and expires (3.3761ms)
+✔ robust entry guard rejects disappearing edge and blending cannot bypass it (2.5293ms)
+✔ forecast evaluation spans later markets independently of trading drawdown and uses common cohorts (39.8659ms)
+✔ execution risk check rejects stale and proxy references when settlement-aware trading is enabled (1.3942ms)
+[State] Failed to save state: disk full
+✔ market grouping prevents duplicate contract labels from straddling splits (3.2077ms)
+✔ labels resolved in a later split and labels without timestamps are excluded (0.2226ms)
+✔ execution labels record when known; legacy labels with unknown timing are excluded (7.7255ms)
+✔ failed durable state write throws and halts instead of allowing an untracked POST (2.5373ms)
+ℹ tests 109
+ℹ suites 2
+ℹ pass 109
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1951.3368

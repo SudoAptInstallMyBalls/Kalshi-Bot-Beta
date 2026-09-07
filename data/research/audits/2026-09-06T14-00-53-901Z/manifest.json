@@ -1,0 +1,30 @@
+{
+  "config": {
+    "startingBalance": 100,
+    "feeRate": 0.07,
+    "slippageCents": 1,
+    "volumeParticipation": 0.01,
+    "minimumTrainingSamples": 300,
+    "strategy": {
+      "MIN_EDGE": 10,
+      "MIN_DIVERGENCE": 15,
+      "TRADING_WINDOW": 4,
+      "MIN_CONTRACT_PRICE": 35,
+      "MAX_CONTRACT_PRICE": 65,
+      "USE_KELLY_SIZING": true,
+      "KELLY_FRACTION": 0.08,
+      "MAX_POSITION_SIZE": 5,
+      "TREND_ENABLED": true
+    }
+  },
+  "regimes": "Volatility: spotContext trailing 15-return sigma at market OPEN; tertiles fitted only to first third of markets. Trend: trailing EMA/ROC at OPEN. Thresholds reused for all later markets.",
+  "walkForward": "Anchored history: first 40%, then three nonoverlapping 20% test blocks. Fixed baseline; no optimization or ML fit. Each fold resets to $100.",
+  "scenarios": [
+    "normal: next minute close, 1c exit slippage",
+    "adverse: next minute adverse extremes, 1c exit slippage",
+    "cost stress: adverse extremes, 2c exit slippage, 1.5x fee rate"
+  ],
+  "sharpe": "Realized-equity UTC daily simple returns, zero risk-free rate, sqrt(365) annualization; exclude partial boundary days. Not marked-to-market. Very short and autocorrelated sample.",
+  "limitation": "Previously inspected retrospective data; no pristine holdout or statistical claim of alpha/decay. Minute execution delay, not measured latency. No queue, depth, partial fills or full live risk engine.",
+  "createdAt": "2026-09-06T14:00:53.902Z"
+}

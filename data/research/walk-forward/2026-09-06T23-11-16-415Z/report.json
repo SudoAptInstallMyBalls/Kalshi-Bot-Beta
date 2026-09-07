@@ -1,0 +1,87 @@
+{
+  "directory": "C:\\Users\\Rando\\Downloads\\kalshibot-main\\data\\research\\walk-forward\\2026-09-06T23-11-16-415Z",
+  "folds": [
+    {
+      "training": 6,
+      "validation": 7,
+      "test": 8,
+      "testStart": "2026-08-27T16:00:00Z",
+      "testEnd": "2026-08-30T19:00:00Z",
+      "normal": {
+        "trades": 8,
+        "pnl": -0.40000000000000047,
+        "profitFactor": 0.6078431372549016,
+        "grossProfit": 0.6199999999999998,
+        "grossLoss": 1.0200000000000002,
+        "meanPnl": -0.05000000000000005,
+        "winRate": 0.5
+      },
+      "adverse": {
+        "trades": 7,
+        "pnl": -1.1640000000000004,
+        "profitFactor": 0.1528384279475982,
+        "grossProfit": 0.20999999999999996,
+        "grossLoss": 1.3740000000000003,
+        "meanPnl": -0.16628571428571434,
+        "winRate": 0.2857142857142857
+      },
+      "selected": null,
+      "reason": "Insufficient independent fit/validation labels; no model trained or selected"
+    },
+    {
+      "training": 15,
+      "validation": 6,
+      "test": 31,
+      "testStart": "2026-08-30T19:00:00Z",
+      "testEnd": "2026-09-02T22:00:00Z",
+      "normal": {
+        "trades": 31,
+        "pnl": -2.924000000000001,
+        "profitFactor": 0.4203013481363996,
+        "grossProfit": 2.1199999999999997,
+        "grossLoss": 5.0440000000000005,
+        "meanPnl": -0.09432258064516133,
+        "winRate": 0.3225806451612903
+      },
+      "adverse": {
+        "trades": 7,
+        "pnl": -1.8900000000000003,
+        "profitFactor": 0,
+        "grossProfit": 0,
+        "grossLoss": 1.8900000000000003,
+        "meanPnl": -0.2700000000000001,
+        "winRate": 0
+      },
+      "selected": null,
+      "reason": "Insufficient independent fit/validation labels; no model trained or selected"
+    },
+    {
+      "training": 21,
+      "validation": 31,
+      "test": 39,
+      "testStart": "2026-09-02T22:00:00Z",
+      "testEnd": "2026-09-06T03:00:00Z",
+      "normal": {
+        "trades": 39,
+        "pnl": -2.9570000000000016,
+        "profitFactor": 0.4469796147372357,
+        "grossProfit": 2.3899999999999997,
+        "grossLoss": 5.347000000000001,
+        "meanPnl": -0.07582051282051289,
+        "winRate": 0.48717948717948717
+      },
+      "adverse": {
+        "trades": 20,
+        "pnl": -5.980000000000001,
+        "profitFactor": 0.014827018121911012,
+        "grossProfit": 0.08999999999999986,
+        "grossLoss": 6.070000000000001,
+        "meanPnl": -0.29900000000000004,
+        "winRate": 0.1
+      },
+      "selected": null,
+      "reason": "Insufficient independent fit/validation labels; no model trained or selected"
+    }
+  ],
+  "livePromotion": false
+}

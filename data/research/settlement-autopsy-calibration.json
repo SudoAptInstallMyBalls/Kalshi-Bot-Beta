@@ -1,0 +1,33 @@
+{
+  "limitation": "Retrospective fixed baseline trade cohort. Opening-return proxy uses Binance price at market open as reference; this is a sensitivity experiment, not a validated strategy or exact settlement model. No parameters fitted. P&L is baseline only.",
+  "trades": 121,
+  "pnl": -9.764999999999958,
+  "audit": {
+    "markets": 2048,
+    "eligibleMarkets": 2047,
+    "missingCandles": 1,
+    "missingSpot": 0,
+    "invalidMarkets": 0,
+    "invalidQuotes": 42,
+    "rejectedEntries": 80,
+    "noSignal": 28,
+    "entryFilters": {
+      "entry_candidate": 201,
+      "edge_below_threshold": 263,
+      "price_out_of_range": 232,
+      "outside_entry_window": 252
+    },
+    "fillRejections": {
+      "invalidPrice": 0,
+      "limitExceeded": 80,
+      "liquidity": 0,
+      "balance": 0
+    },
+    "riskPausedMarkets": 1818
+  },
+  "meanProbability": 0.8492995328435562,
+  "settlementHitRate": 0.45454545454545453,
+  "modelBrier": 0.3994033347055181,
+  "quoteBrier": 0.2303239669421488,
+  "openingReturnProxyBrier": 0.24017776579827513
+}

@@ -1,0 +1,138 @@
+{
+  "_savedAt": "2026-09-07T18:36:49.555Z",
+  "stats": {
+    "totalTrades": 3,
+    "wins": 1,
+    "losses": 2,
+    "totalPnL": -0.3323000000000002,
+    "volumeTraded": 2.29,
+    "startTime": 1788698808749,
+    "tradesPerHour": 0.18399316690265494,
+    "bestTrade": 0.42269999999999996,
+    "worstTrade": -0.49260000000000015,
+    "avgEdge": 20.865745472399993,
+    "totalEdge": 62.59723641719998,
+    "grossWins": 0.42269999999999996,
+    "grossLosses": 0.7550000000000001,
+    "streak": -2,
+    "strategyStats": {
+      "DIRECTIONAL": {
+        "wins": 1,
+        "losses": 2
+      }
+    },
+    "unrealizedPnL": 0.1499999999999999
+  },
+  "riskState": {
+    "highWater": 60.2877,
+    "cashFlows": 0,
+    "halted": false,
+    "equity": 60.2877,
+    "observedAt": 1788806125198,
+    "drawdown": 0
+  },
+  "pendingOrders": [],
+  "openPositions": [],
+  "closedPositions": [
+    {
+      "orderId": "01a07a07-6888-76e3-aa9d-4f5761f73de5",
+      "clientOrderId": "f8fcf785-d061-4b4c-b803-20d27f503f2b",
+      "ticker": "KXBTC15M-26SEP070015-15",
+      "type": "DIRECTIONAL_YES",
+      "signalUuid": "8ab0b821-e543-4654-a6dd-8caff0c10fa5",
+      "side": "yes",
+      "contracts": 1,
+      "filledContracts": 1,
+      "priceCents": 56.00000000000001,
+      "priceDecimal": 0.56,
+      "totalCost": 0.5773,
+      "edge": 16.56359914413703,
+      "modelProb": 0.7256359914413704,
+      "reason": "Spot +0.066% | Model 73% vs Kalshi 56% | 1H: NEUTRAL",
+      "entryTime": 1788753700950,
+      "closeTime": 1788754500000,
+      "status": "filled",
+      "isDualSide": false,
+      "entryCostVerified": true,
+      "won": true,
+      "pnl": 0.42269999999999996,
+      "payout": 1,
+      "cost": 0.5773,
+      "exitType": "SETTLEMENT",
+      "result": "yes",
+      "settleTime": 1788755112038
+    },
+    {
+      "orderId": "01a07a32-29d8-7a6e-a48e-1eba0bd7f3b4",
+      "clientOrderId": "8a8c68b0-8ad0-48b1-8e70-8fb5900c362d",
+      "ticker": "KXBTC15M-26SEP070100-00",
+      "type": "DIRECTIONAL_YES",
+      "signalUuid": "cdd2781d-b567-4a07-8d01-58c4bf7edccb",
+      "side": "yes",
+      "contracts": 1,
+      "filledContracts": 1,
+      "priceCents": 55.00000000000001,
+      "priceDecimal": 0.55,
+      "totalCost": 0.5674000000000001,
+      "edge": 14.270650024468988,
+      "modelProb": 0.6927065002446899,
+      "reason": "Spot +0.042% | Model 69% vs Kalshi 55% | 1H: NEUTRAL",
+      "entryTime": 1788756502472,
+      "closeTime": 1788757200000,
+      "status": "filled",
+      "isDualSide": false,
+      "entryCostVerified": true,
+      "won": false,
+      "pnl": -0.49260000000000015,
+      "payout": 0.0748,
+      "cost": 0.5674000000000001,
+      "exitType": "SCALP_TAKE_PROFIT",
+      "settleTime": 1788756853968
+    },
+    {
+      "orderId": "01a07a40-1070-709f-8d84-12d0bb092bbe",
+      "clientOrderId": "3720e71a-667e-4302-8c65-2e4facf84563",
+      "ticker": "KXBTC15M-26SEP070115-15",
+      "type": "DIRECTIONAL_YES",
+      "signalUuid": "034e5df7-5ea5-4fed-9f94-85ba924089f6",
+      "side": "yes",
+      "contracts": 1,
+      "filledContracts": 1,
+      "priceCents": 54,
+      "priceDecimal": 0.54,
+      "totalCost": 0.5574,
+      "edge": 11.196511206400972,
+      "modelProb": 0.6519651120640098,
+      "reason": "Spot +0.024% | Model 65% vs Kalshi 54% | 1H: NEUTRAL",
+      "entryTime": 1788757413905,
+      "closeTime": 1788758100000,
+      "status": "filled",
+      "isDualSide": false,
+      "entryCostVerified": true,
+      "won": false,
+      "pnl": -0.2624,
+      "payout": 0.295,
+      "cost": 0.5574,
+      "exitType": "SCALP_TAKE_PROFIT",
+      "settleTime": 1788757506581
+    }
+  ],
+  "tradeLog": [],
+  "pnlHistory": [
+    {
+      "timestamp": 1788755112038,
+      "pnl": 0.42269999999999996,
+      "cumulative": 0.42269999999999996
+    },
+    {
+      "timestamp": 1788756853969,
+      "pnl": -0.49260000000000015,
+      "cumulative": -0.06990000000000018
+    },
+    {
+      "timestamp": 1788757506581,
+      "pnl": -0.2624,
+      "cumulative": -0.3323000000000002
+    }
+  ]
+}

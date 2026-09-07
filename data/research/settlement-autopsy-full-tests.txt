@@ -1,0 +1,122 @@
+[Safety] New trading halted: equity_drawdown_latched
+✔ marked equity drawdown persists across restart, time passing and recovered cash (1.7241ms)
+✔ declared external flows do not become strategy gains and stale equity blocks entries (0.1402ms)
+✔ one-percent fee-inclusive cap skips unaffordable whole contract and never rounds up (0.4329ms)
+✔ regularized baseline excludes constant features with train-only preprocessing (5.3633ms)
+✔ depth replay respects limits and partial depth and refuses gaps and stale snapshots (0.2994ms)
+✔ forecasts retain rejected candidates and settlement labels stay distinct from execution outcomes (23.6207ms)
+✔ audit profit factor and beta match known values without inventing zero-variance estimates (1.0457ms)
+✔ daily audit includes flat days, aligns returns and labels incomplete boundary days (1.94ms)
+[OrderMgr] Promoted to position: BTC yes x4 @ 50c (source: placement)
+[OrderMgr] Cancelling stale order: a (BTC yes, age: 1788784371s)
+[OrderMgr] Promoted to position: BTC yes x3 @ 50c (source: finalize)
+[OrderMgr] Cancelling stale order: a (BTC yes, age: 1788784371s)
+✔ placement fills become positions exactly once and later fills are incremental (2.1341ms)
+✔ older persisted pending rows do not double existing positions after upgrade (0.4985ms)
+✔ cancel race retains actual fills, fees and cost basis; balance comes from account (0.5342ms)
+✔ uncertain cancel keeps entry tracked instead of issuing a guessed refund (0.316ms)
+✔ an unresolved submission halts after restart but not during its in-flight request (0.1667ms)
+✔ fee-inclusive sizing cannot spend above its budget (0.2922ms)
+✔ strategy selection requires samples and positive normal and stressed validation (0.107ms)
+✔ delayed window excludes early entries and broad window reserves the last minute (0.9171ms)
+[OrderExecutor] Sending V2 Order: undefined BTC (ASK @ $0.3600) x1 | Edge: 16.0%
+[OrderExecutor Payload]: {"ticker":"BTC","client_order_id":"bbcc1aa8-4969-4055-8201-8f503e451ce2","side":"ask","count":"1.00","price":"0.3600","time_in_force":"good_till_canceled","self_trade_prevention_type":"taker_at_cross","post_only":false,"cancel_order_on_pause":false,"reduce_only":false}
+[OrderExecutor] Sending V2 Order: undefined BTC (ASK @ $0.3600) x1 | Edge: 16.0%
+[OrderExecutor Payload]: {"ticker":"BTC","client_order_id":"7081e73f-5077-4112-aaf8-816e8861ef97","side":"ask","count":"1.00","price":"0.3600","time_in_force":"good_till_canceled","self_trade_prevention_type":"taker_at_cross","post_only":false,"cancel_order_on_pause":false,"reduce_only":false}
+✔ aggregate cash cannot fund an order on an empty crypto shard (3.5741ms)
+✔ entry uses authoritative shard and NO price plus fees (0.3501ms)
+✔ reduce-only exit routes without requiring free cash (0.1109ms)
+✔ cancel routes using persisted ticker and refuses unknown order routing (0.3028ms)
+✔ executor removes explicit rejection marker but preserves timeout uncertainty (1.4481ms)
+✔ incident recovery refuses any unrelated or filled pending state (0.2272ms)
+[OrderExecutor ERROR] Order not accepted: 404 - {"error":{"code":"user_not_found"}}
+[OrderExecutor ERROR] Order outcome requires reconciliation: UNKNOWN - timeout
+✔ fixed-point order fields preserve fractional counts and convert dollars exactly once (3.1065ms)
+✔ late cancel fill is counted before repricing; costs and fees include all partial exits (6.3191ms)
+[Kalshi] Failed to fetch positions: Missing portfolio positions array
+[PositionManager] Settlement needs manual reconciliation: entry
+✔ unconfirmed cancellation preserves order identity and resumes it without duplicate sell (17.7773ms)
+✔ unknown POST outcome blocks duplicate exits and new entries (1.2129ms)
+✔ explicit invalid-order exit rejection clears only the submission marker and retains the position (0.9184ms)
+✔ startup books verified finalized settlement before comparing open quantities (0.5557ms)
+✔ failed quote refresh marks retained quotes stale and final risk check refuses them (0.5776ms)
+✔ portfolio mismatch preserves cost basis and pending identities instead of fabricating positions (0.2016ms)
+✔ portfolio pagination follows cursors and rejects incomplete schemas (0.904ms)
+✔ settlement retries are deduplicated, bounded, and cleared on stop (0.7672ms)
+✔ settlement does not drop an entry that is still pending (0.1808ms)
+✔ dynamic grid snaps both book sides without worsening their limit (1.5884ms)
+✔ exits use IOC and fresh quotes, retain reduce-only and preserve the worst permitted price (1.4534ms)
+[ML] Trained 1 stumps on 7 samples; validation=1, test=2
+[ML] Top features: recent_pnl(0.750), spot_move(0.000), abs_move(0.000), move_dir(0.000), time_remaining(0.000)
+[ML] Model load skipped: Research replay models cannot be loaded for live scoring
+✔ as-of join excludes future closes and fees round to cents (2.1428ms)
+✔ reference downloads resume by complete chunk and reject malformed or missing minutes (16.5881ms)
+✔ real signal generator replay is deterministic, disjoint by market, and labels after entry (15.0006ms)
+✔ changing future outcome and final quote cannot change the earlier feature vector (2.685ms)
+✔ missing candle or spot coverage rejects market; zero liquidity rejects simulated fill (2.0886ms)
+✔ research outcomes train the existing model without permitting live model loading (9.3414ms)
+✔ replay CLI rejects unknown flags and history/output collision (0.3252ms)
+✔ history rows deduplicate, retain raw precision, and aggregate occupied seconds only (7.5933ms)
+✔ candle field normalization distinguishes dollars from legacy cents and missing data (0.9225ms)
+✔ pagination follows cursors and rejects loops; rate limit retries honor Retry-After (1.6521ms)
+✔ full-market download merges trade tiers and rerun skips completed datasets (14.2589ms)
+✔ an interrupted trade batch is not marked complete and can be safely retried (0.7326ms)
+✔ CSV export escapes commas, quotes and newlines and includes empty-table headers (12.2616ms)
+✔ live recording preserves snapshots, deltas and gap markers; auth signs only websocket GET (49.9697ms)
+✔ normal CDF matches known quantiles, symmetry and tails (1.06ms)
+✔ probability model scales volatility with remaining time and stays bounded (0.202ms)
+✔ Kelly uses entry odds, permits positive edge below 50% probability, and includes fees (0.1476ms)
+✔ risk budget includes open, pending and same-pass portfolio/ticker exposure (0.3196ms)
+✔ position sizing rounds down and respects remaining market capacity (0.254ms)
+✔ unknown volatility reaches the signal generator guard instead of silently trading a fallback (1.7405ms)
+✔ scores defer writes, use ticker/global caches, and label before timer flush (21.8631ms)
+✔ batch failure rolls back both tables and retains every row for retry (13.4584ms)
+[ML] Not enough training data (0 samples, need 300+)
+[ML] Not enough training data (299 samples, need 300+)
+[ML] Trained 42 stumps on 210 samples; validation=45, test=45
+[ML] Top features: spot_move(9.880), abs_move(0.000), move_dir(0.000), time_remaining(0.000), time_elapsed(0.000)
+[ML] Model load skipped: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+✔ threshold, timer and shutdown all flush queued rows (90.3164ms)
+✔ training floor, chronological split, train-only normalization and reload (57.4555ms)
+✔ ML cannot enlarge until validation beats baseline AND sample gate passes (12.5999ms)
+✔ held-out accuracy and Brier score match hand-calculated values (10.6567ms)
+[PositionManager] WON: BTC yes x4 | Cost: $2.00 | Payout: $4.00 | P&L: +$2.00
+✔ partial exits cannot label ML or leak into closed-trade features; full close aggregates PnL (2.8018ms)
+✔ settlement after partial exit uses numeric costs and the entire trade outcome (1.8869ms)
+✔ failed remote reconciliation leaves local pending orders and positions intact (1.5154ms)
+✔ all literal local imports resolve without executing the trading application (156.5962ms)
+✔ default storage, research config and frozen policy remain rooted at the repository (70.7016ms)
+✔ extracted control authentication still rejects missing and incorrect credentials (0.7738ms)
+[Safety] New trading halted: minimum_balance
+[Safety] New trading halted: execution_failures
+[Safety] New trading halted: minimum_balance
+[Safety] New trading halted: execution_failures
+[Safety] New trading halted: authentication_failed
+[Safety] New trading halted: execution_failures
+✔ session baseline excludes persisted historical PnL; drawdown halves once and pauses (1.7011ms)
+✔ minimum balance distinguishes unknown startup from funded account and latches (0.5329ms)
+✔ all safety thresholds accept configuration overrides (0.177ms)
+✔ fifth failed placement stops sixth POST; a successful placement resets the streak (1.8855ms)
+✔ 401 on a balance GET blocks subsequent GET, POST and DELETE immediately (0.3918ms)
+✔ scan runner refuses dispatch while halted and execution rechecks after a pause (0.5326ms)
+✔ ML shrink and session halving are applied once; dollar cap is enforced (0.1391ms)
+✔ MasterAgent shutdown waits for an in-flight scan before flushing skills (3.748ms)
+✔ risk check preserves fractional-cent quotes and rejects stale spot input (0.2132ms)
+✔ far-from-strike disagreements are counted, boundaries are disjoint, cumulative buckets are cumulative (4.3082ms)
+✔ official numbers allow valid thousands separators and reject missing or malformed values (0.1415ms)
+✔ as-of excludes future data and reports stale, missing, invalid and unsupported markets (1.2164ms)
+✔ mixed feeds, duplicate timestamps and corrupted normalized candles fail closed (0.346ms)
+✔ official equality resolves yes and missing values cannot silently resolve no (0.223ms)
+[State] Failed to save state: disk full
+✔ market grouping prevents duplicate contract labels from straddling splits (2.0844ms)
+✔ labels resolved in a later split and labels without timestamps are excluded (0.195ms)
+✔ execution labels record when known; legacy labels with unknown timing are excluded (4.9149ms)
+✔ failed durable state write throws and halts instead of allowing an untracked POST (2.112ms)
+ℹ tests 85
+ℹ suites 0
+ℹ pass 85
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 688.4667

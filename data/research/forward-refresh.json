@@ -1,0 +1,13 @@
+{
+  "completedAt": "2026-09-07T18:13:24.355Z",
+  "selected": 71,
+  "marketsWithCandlesDownloaded": 1,
+  "lastClose": "2026-09-07T18:00:00Z",
+  "spot": {
+    "stored": 32340,
+    "downloaded": 340,
+    "from": 1786863600000,
+    "to": 1788804000000
+  },
+  "studyId": "settlement-forward-v1"
+}

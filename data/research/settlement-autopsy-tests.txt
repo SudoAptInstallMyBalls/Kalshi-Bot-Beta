@@ -1,0 +1,29 @@
+[ML] Trained 1 stumps on 7 samples; validation=1, test=2
+[ML] Top features: recent_pnl(0.750), spot_move(0.000), abs_move(0.000), move_dir(0.000), time_remaining(0.000)
+[ML] Model load skipped: Research replay models cannot be loaded for live scoring
+✔ as-of join excludes future closes and fees round to cents (1.0326ms)
+✔ reference downloads resume by complete chunk and reject malformed or missing minutes (22.1438ms)
+✔ real signal generator replay is deterministic, disjoint by market, and labels after entry (15.6713ms)
+✔ changing future outcome and final quote cannot change the earlier feature vector (2.4892ms)
+✔ missing candle or spot coverage rejects market; zero liquidity rejects simulated fill (1.7377ms)
+✔ research outcomes train the existing model without permitting live model loading (9.2958ms)
+✔ replay CLI rejects unknown flags and history/output collision (0.3091ms)
+✔ normal CDF matches known quantiles, symmetry and tails (1.0039ms)
+✔ probability model scales volatility with remaining time and stays bounded (0.1921ms)
+✔ Kelly uses entry odds, permits positive edge below 50% probability, and includes fees (0.1486ms)
+✔ risk budget includes open, pending and same-pass portfolio/ticker exposure (0.7133ms)
+✔ position sizing rounds down and respects remaining market capacity (0.4762ms)
+✔ unknown volatility reaches the signal generator guard instead of silently trading a fallback (2.1438ms)
+✔ far-from-strike disagreements are counted, boundaries are disjoint, cumulative buckets are cumulative (4.0085ms)
+✔ official numbers allow valid thousands separators and reject missing or malformed values (0.0946ms)
+✔ as-of excludes future data and reports stale, missing, invalid and unsupported markets (1.1985ms)
+✔ mixed feeds, duplicate timestamps and corrupted normalized candles fail closed (0.3583ms)
+✔ official equality resolves yes and missing values cannot silently resolve no (0.2514ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 263.3181

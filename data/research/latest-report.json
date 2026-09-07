@@ -1,0 +1,167 @@
+{
+  "id": "2026-09-07T13-31-24-021Z-e739aca6",
+  "createdAt": "2026-09-07T13:31:24.684Z",
+  "platform": "win32/arm64",
+  "history": "C:\\Users\\Rando\\Downloads\\kalshibot-main\\data\\market-history\\history.sqlite",
+  "range": {
+    "start": "2026-08-16T10:00:00Z",
+    "end": "2026-09-07T13:15:00Z"
+  },
+  "reference": {
+    "source": "binance:BTCUSDT:1m",
+    "candles": 32055
+  },
+  "config": {
+    "startingBalance": 100,
+    "feeRate": 0.07,
+    "slippageCents": 1,
+    "volumeParticipation": 0.01,
+    "minimumTrainingSamples": 300,
+    "strategy": {
+      "MAX_TRADE_RISK_PCT": 0.01,
+      "MAX_EQUITY_DRAWDOWN_PCT": 0.1,
+      "ROUND_TRIP_SLIPPAGE_CENTS": 1,
+      "MIN_EDGE": 10,
+      "MIN_DIVERGENCE": 15,
+      "TRADING_WINDOW": 4,
+      "MIN_CONTRACT_PRICE": 35,
+      "MAX_CONTRACT_PRICE": 65,
+      "USE_KELLY_SIZING": true,
+      "KELLY_FRACTION": 0.08,
+      "MAX_POSITION_SIZE": 5,
+      "TREND_ENABLED": true
+    }
+  },
+  "mode": "research-only",
+  "liveModelChanged": false,
+  "sourceHashes": {
+    "src/strategy/exit-policy.js": "ea85c894239c19eed429791519bf8892b0719c804d4cd6c9c613bbf25e583902",
+    "src/research/history-replay.js": "f50393733f51875aa2c34064af108e7cb35f363db1980ba0ca426a649e375286",
+    "src/ml/ml-pipeline.js": "70c5977ea9b3f3fe813ed6a5ef738fdd0ca88830d35c7fd553081f825c1f3398",
+    "src/agents/skills/analysis/signal-generator.js": "700ddb6e7327e94114263a05374268d6623435ce2dca08fa7713348333a12a67",
+    "src/agents/skills/analysis/probability-model.js": "887fbf93f4b24019ffc409ac3f8877383230e4b65855109eb864aa27547368ff"
+  },
+  "assumptions": [
+    "Signals use only completed candles; entries and exits execute at the following minute end, never on the signal candle.",
+    "One entry attempt per market; shared signal and exit rules, but not a full replay of the live orchestrator, risk breakers or ML-filtered trading.",
+    "Normal scenario: next-minute closing ask for entry, closing bid minus configured slippage for exit; entry limit includes configured slippage.",
+    "Adverse scenario: next-minute worst ask/bid. Full fills require volume participation capacity; aggregate volume is NOT evidence of available book depth.",
+    "Fees use configurable quadratic rate and cent rounding per simulated order. Series-specific multipliers, rounding rebates and split fills are not reconstructed.",
+    "Minute spot EMA and volatility approximate the tick feed. No historical Polymarket feed; that strategy is disabled. Settlement uses recorded Kalshi result.",
+    "Configured fee-inclusive equity risk cap and a latched minute-mark equity drawdown threshold are modeled. This still does not reproduce exact live account marks or intrasecond execution.",
+    "Recent performance features contain only earlier simulated closes; data and models are isolated from real execution labels."
+  ],
+  "normal": {
+    "samples": 121,
+    "audit": {
+      "markets": 2100,
+      "eligibleMarkets": 2099,
+      "missingCandles": 1,
+      "missingSpot": 0,
+      "invalidMarkets": 0,
+      "invalidQuotes": 42,
+      "rejectedEntries": 80,
+      "noSignal": 28,
+      "entryFilters": {
+        "entry_candidate": 201,
+        "edge_below_threshold": 263,
+        "price_out_of_range": 232,
+        "outside_entry_window": 252
+      },
+      "fillRejections": {
+        "invalidPrice": 0,
+        "limitExceeded": 80,
+        "liquidity": 0,
+        "balance": 0
+      },
+      "riskPausedMarkets": 1870
+    },
+    "balance": 90.23500000000004,
+    "pnl": -9.764999999999958,
+    "maxDrawdown": 0.09825999999999951,
+    "maxMarkedDrawdown": 0.1001498501498495,
+    "riskLatched": true,
+    "winRate": 0.4793388429752066
+  },
+  "adverse": {
+    "samples": 33,
+    "audit": {
+      "markets": 2100,
+      "eligibleMarkets": 2099,
+      "missingCandles": 1,
+      "missingSpot": 0,
+      "invalidMarkets": 0,
+      "invalidQuotes": 36,
+      "rejectedEntries": 88,
+      "noSignal": 17,
+      "entryFilters": {
+        "entry_candidate": 121,
+        "edge_below_threshold": 149,
+        "price_out_of_range": 124,
+        "outside_entry_window": 153
+      },
+      "fillRejections": {
+        "invalidPrice": 0,
+        "limitExceeded": 87,
+        "liquidity": 0,
+        "balance": 0,
+        "riskCap": 1
+      },
+      "riskPausedMarkets": 1961
+    },
+    "balance": 89.59,
+    "pnl": -10.409999999999997,
+    "maxDrawdown": 0.10409999999999997,
+    "maxMarkedDrawdown": 0.1045477261369316,
+    "riskLatched": true,
+    "winRate": 0.15151515151515152
+  },
+  "split": {
+    "method": "chronological, disjoint markets",
+    "training": 84,
+    "validation": 18,
+    "test": 19,
+    "validationStarts": 1787015760000,
+    "testStarts": 1787043660000
+  },
+  "ml": {
+    "trained": false,
+    "modelVersion": "v1.0",
+    "trainingSize": 0,
+    "trees": 0,
+    "features": 0,
+    "trainedAt": null,
+    "validationMetrics": null,
+    "testMetrics": null,
+    "trainedThisRun": false,
+    "minimumSamples": 300,
+    "modelPath": null,
+    "reason": "Only 121 simulated outcomes; need 300"
+  },
+  "baselines": {
+    "validation": {
+      "constantHalf": {
+        "size": 18,
+        "accuracy": 0.6111111111111112,
+        "brierScore": 0.25
+      },
+      "trainingWinRate": {
+        "size": 18,
+        "accuracy": 0.6111111111111112,
+        "brierScore": 0.2474962207105064
+      }
+    },
+    "test": {
+      "constantHalf": {
+        "size": 19,
+        "accuracy": 0.47368421052631576,
+        "brierScore": 0.25
+      },
+      "trainingWinRate": {
+        "size": 19,
+        "accuracy": 0.47368421052631576,
+        "brierScore": 0.2507682897720491
+      }
+    }
+  }
+}

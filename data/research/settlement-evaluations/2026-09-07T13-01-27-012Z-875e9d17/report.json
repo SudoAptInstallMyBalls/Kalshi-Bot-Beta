@@ -1,0 +1,4698 @@
+{
+  "manifest": {
+    "createdAt": "2026-09-07T13:01:30.908Z",
+    "base": {
+      "startingBalance": 100,
+      "feeRate": 0.07,
+      "slippageCents": 1,
+      "volumeParticipation": 0.01,
+      "minimumTrainingSamples": 300,
+      "strategy": {
+        "MAX_TRADE_RISK_PCT": 0.01,
+        "MAX_EQUITY_DRAWDOWN_PCT": 0.1,
+        "ROUND_TRIP_SLIPPAGE_CENTS": 1,
+        "MIN_EDGE": 10,
+        "MIN_DIVERGENCE": 15,
+        "TRADING_WINDOW": 4,
+        "MIN_CONTRACT_PRICE": 35,
+        "MAX_CONTRACT_PRICE": 65,
+        "USE_KELLY_SIZING": true,
+        "KELLY_FRACTION": 0.08,
+        "MAX_POSITION_SIZE": 5,
+        "TREND_ENABLED": true
+      }
+    },
+    "fingerprint": {
+      "marketsSha256": "451c6427c8669ae5d604929737a9b2546bcdfdb667667ac9b4e281b312f17667",
+      "spotSha256": "20d2048a85bb1b968d846d182224bbc4baff2f269cb6bafd917e2a9936661d9a",
+      "spotRows": 31275,
+      "firstClose": "2026-08-16T10:15:00Z",
+      "lastClose": "2026-09-07T00:15:00Z"
+    },
+    "quotesSha256": "804880bc13f41bf4c833bd8df856af042ab7111a7d7f72f1a1fedc83fae64688",
+    "indexSha256": null,
+    "codeSha256": {
+      "src/strategy/volatility.js": "cf84bf61cab7e50dd97732f4cbdcf7ba8231f14dc661346ffd41d66e29a984f2",
+      "src/strategy/settlement-forecast.js": "707973a9ee0d3d42a13944af1b61098ebc47412272a826b681ae10fc030dc5d4",
+      "src/research/proxy-reference.js": "12241b44d5bc135675fd26bed1c46b51f4c17267cd4fafb670682ef9bc0a7e83",
+      "src/research/settlement-evaluation.js": "b3094f5dc3edbd59a3e7941acbcc4214c178b90e0ac86feef072695afa804715",
+      "src/research/history-replay.js": "f50393733f51875aa2c34064af108e7cb35f363db1980ba0ca426a649e375286",
+      "src/agents/skills/analysis/signal-generator.js": "700ddb6e7327e94114263a05374268d6623435ce2dca08fa7713348333a12a67",
+      "src/agents/skills/analysis/probability-model.js": "887fbf93f4b24019ffc409ac3f8877383230e4b65855109eb864aa27547368ff",
+      "src/market-data/settlement-reference.js": "bd1214d78b9be019afc28cc66e59e6f59b0830f550cd20ee5fb7734af6b3964f",
+      "scripts/evaluate-settlement-models.js": "a77d4aef174d1bb4c8ff346098e33786950f78f7def58019e124be9a258078c2",
+      "src/strategy/settlement-number.js": "60959b1217c86a89d9795b7d17af25f75e65572a3e54c97e41a4f27677fc033a",
+      "src/agents/skills/analysis/ml-signal-scorer.js": "290ed61d30087867496cb0ae904124d49281d9a8475f4717395d15d80be483c1",
+      "src/agents/skills/trading/risk-manager.js": "81d4ff513cebb2cd4940ee9bf06bc13aa0b297a0ed15eb92300ca8bc0e9bb8ff",
+      "scripts/record-settlement-index.js": "f6108a9531c45662e02838907148dd42e248a674886d77f12d73a056817f9132"
+    },
+    "selection": "No candidate selection or live promotion. Fixed variants, fixed minute offsets, chronological 60/20/20 report blocks.",
+    "limits": "Retrospective data already inspected. Forecasts within markets are correlated. Proxy assumes opening basis persists, with trailing absolute residual stress; 95th percentile is empirical, not a guaranteed confidence bound. Historical settlement_ts is assumed public availability, not local historical receipt time. BRTI observations require both event and receipt timestamps. Proxy cannot observe the final settlement minute.",
+    "livePromotion": false,
+    "freshDataAfter": "2026-09-07T00:15:00Z"
+  },
+  "markets": 2048,
+  "eligibleForecasts": 15674,
+  "skipped": {
+    "missing_or_invalid_quote": 710
+  },
+  "offsetsMinutes": [
+    1,
+    2,
+    3,
+    4,
+    8,
+    12,
+    13,
+    14
+  ],
+  "calibrationSettings": {
+    "minimumSamples": 100,
+    "windowSamples": 256,
+    "maxAgeMs": 604800000,
+    "quantile": 0.95
+  },
+  "skippedCalibrationMarkets": 0,
+  "all": {
+    "commonForecasts": 14225,
+    "commonMarkets": 2047,
+    "models": {
+      "rawTerminal": {
+        "forecasts": 14225,
+        "markets": 2047,
+        "brier": 0.20148885110520698,
+        "logLoss": 0.6185731935532648,
+        "meanProbability": 0.5650611599017182,
+        "hitRate": 0.5027768014059754,
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 1262,
+            "probability": 0.033432902743429325,
+            "outcome": 0.05150554675118859
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 768,
+            "probability": 0.15004337565185474,
+            "outcome": 0.16536458333333334
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 916,
+            "probability": 0.2516189391848307,
+            "outcome": 0.26965065502183405
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 1308,
+            "probability": 0.3519098896207822,
+            "outcome": 0.3165137614678899
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 1626,
+            "probability": 0.45062520465878,
+            "outcome": 0.4354243542435424
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 1716,
+            "probability": 0.5503912158072631,
+            "outcome": 0.5326340326340326
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 1507,
+            "probability": 0.648684389666987,
+            "outcome": 0.5646980756469807
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 1297,
+            "probability": 0.7480593408326783,
+            "outcome": 0.6260601387818041
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 1206,
+            "probability": 0.8495995419240565,
+            "outcome": 0.7155887230514096
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 2619,
+            "probability": 0.9699056826929332,
+            "outcome": 0.8213058419243986
+          }
+        ]
+      },
+      "proxyTerminal": {
+        "forecasts": 14225,
+        "markets": 2047,
+        "brier": 0.17435836762052176,
+        "logLoss": 0.5140926732561412,
+        "meanProbability": 0.5013684818155044,
+        "hitRate": 0.5027768014059754,
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 1484,
+            "probability": 0.03219795252997648,
+            "outcome": 0.04716981132075472
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 860,
+            "probability": 0.15065174641924278,
+            "outcome": 0.17674418604651163
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 1175,
+            "probability": 0.25249032878508526,
+            "outcome": 0.24765957446808512
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 1551,
+            "probability": 0.35210595033535136,
+            "outcome": 0.32817537072856223
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 1951,
+            "probability": 0.4520199830998606,
+            "outcome": 0.45617631983598156
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 2140,
+            "probability": 0.5453560095231867,
+            "outcome": 0.5668224299065421
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 1571,
+            "probability": 0.6477118569155605,
+            "outcome": 0.6301718650541057
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 1068,
+            "probability": 0.7463782662970725,
+            "outcome": 0.7378277153558053
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 832,
+            "probability": 0.8487296746068262,
+            "outcome": 0.8557692307692307
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 1593,
+            "probability": 0.968015488234763,
+            "outcome": 0.9648462021343377
+          }
+        ]
+      },
+      "proxyAverage": {
+        "forecasts": 14225,
+        "markets": 2047,
+        "brier": 0.17454771292656604,
+        "logLoss": 0.5203846490925811,
+        "meanProbability": 0.5011517136506306,
+        "hitRate": 0.5027768014059754,
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 1672,
+            "probability": 0.02619773498239348,
+            "outcome": 0.05263157894736842
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 826,
+            "probability": 0.15178321506161435,
+            "outcome": 0.19612590799031476
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 1139,
+            "probability": 0.25216630534404066,
+            "outcome": 0.257243195785777
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 1491,
+            "probability": 0.35121312229411566,
+            "outcome": 0.3346747149564051
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 1893,
+            "probability": 0.45168811872311665,
+            "outcome": 0.4595879556259905
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 2057,
+            "probability": 0.545024079881264,
+            "outcome": 0.5639280505590666
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 1535,
+            "probability": 0.6474441694829621,
+            "outcome": 0.6254071661237784
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 1050,
+            "probability": 0.7460211584080012,
+            "outcome": 0.7257142857142858
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 807,
+            "probability": 0.8492396411904174,
+            "outcome": 0.8426270136307311
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 1755,
+            "probability": 0.9744648678275363,
+            "outcome": 0.9561253561253561
+          }
+        ]
+      },
+      "marketMidpoint": {
+        "forecasts": 14225,
+        "markets": 2047,
+        "brier": 0.17317259235500984,
+        "logLoss": 0.5091902325275453,
+        "meanProbability": 0.5037339543057952,
+        "hitRate": 0.5027768014059754,
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 1458,
+            "probability": 0.03335631001371757,
+            "outcome": 0.033607681755829906
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 736,
+            "probability": 0.15069293478260867,
+            "outcome": 0.15625
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 1172,
+            "probability": 0.2527986348122866,
+            "outcome": 0.24488054607508533
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 1652,
+            "probability": 0.3526967312348683,
+            "outcome": 0.3389830508474576
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 2103,
+            "probability": 0.4514526866381374,
+            "outcome": 0.4460294816928198
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 1981,
+            "probability": 0.5482609793033865,
+            "outcome": 0.5668854114083796
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 1658,
+            "probability": 0.6470325693606699,
+            "outcome": 0.6399276236429433
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 1107,
+            "probability": 0.747488708220416,
+            "outcome": 0.7452574525745257
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 765,
+            "probability": 0.8478901960784343,
+            "outcome": 0.8562091503267973
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 1593,
+            "probability": 0.9684500941619573,
+            "outcome": 0.9661016949152542
+          }
+        ]
+      }
+    }
+  },
+  "byBlock": {
+    "train": {
+      "commonForecasts": 8526,
+      "commonMarkets": 1227,
+      "models": {
+        "rawTerminal": {
+          "forecasts": 8526,
+          "markets": 1227,
+          "brier": 0.21234012116643644,
+          "logLoss": 0.6662630250619042,
+          "meanProbability": 0.6016288068093152,
+          "hitRate": 0.5021111893033076,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 651,
+              "probability": 0.03347138545332725,
+              "outcome": 0.041474654377880185
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 412,
+              "probability": 0.15131681791183846,
+              "outcome": 0.14563106796116504
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 472,
+              "probability": 0.25158239604852733,
+              "outcome": 0.2542372881355932
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 674,
+              "probability": 0.35285839496724825,
+              "outcome": 0.28635014836795253
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 901,
+              "probability": 0.45221587427850024,
+              "outcome": 0.413984461709212
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 968,
+              "probability": 0.5508998211998912,
+              "outcome": 0.49793388429752067
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 911,
+              "probability": 0.6491812532977993,
+              "outcome": 0.5367727771679474
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 805,
+              "probability": 0.7476225530130739,
+              "outcome": 0.6024844720496895
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 814,
+              "probability": 0.8505100922140477,
+              "outcome": 0.671990171990172
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 1918,
+              "probability": 0.97106795368359,
+              "outcome": 0.7846715328467153
+            }
+          ]
+        },
+        "proxyTerminal": {
+          "forecasts": 8526,
+          "markets": 1227,
+          "brier": 0.17256690259836788,
+          "logLoss": 0.509672254847696,
+          "meanProbability": 0.5017956729556267,
+          "hitRate": 0.5021111893033076,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 894,
+              "probability": 0.03230350242169461,
+              "outcome": 0.05480984340044743
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 512,
+              "probability": 0.14997112908888016,
+              "outcome": 0.169921875
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 706,
+              "probability": 0.2521787978691909,
+              "outcome": 0.24504249291784702
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 946,
+              "probability": 0.3528772120425026,
+              "outcome": 0.3192389006342495
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 1179,
+              "probability": 0.4531379213823855,
+              "outcome": 0.45038167938931295
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 1245,
+              "probability": 0.5459976856670998,
+              "outcome": 0.5606425702811245
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 932,
+              "probability": 0.6473712370347473,
+              "outcome": 0.6319742489270386
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 637,
+              "probability": 0.7463677230759524,
+              "outcome": 0.7346938775510204
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 504,
+              "probability": 0.8493808390726525,
+              "outcome": 0.8670634920634921
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 971,
+              "probability": 0.9679653770335236,
+              "outcome": 0.9752832131822863
+            }
+          ]
+        },
+        "proxyAverage": {
+          "forecasts": 8526,
+          "markets": 1227,
+          "brier": 0.1725471954270273,
+          "logLoss": 0.5154239321812796,
+          "meanProbability": 0.501542689753887,
+          "hitRate": 0.5021111893033076,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 1003,
+              "probability": 0.025796495843074318,
+              "outcome": 0.05782652043868395
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 492,
+              "probability": 0.1507308409448026,
+              "outcome": 0.18902439024390244
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 687,
+              "probability": 0.2516247653918011,
+              "outcome": 0.2576419213973799
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 906,
+              "probability": 0.3517088774764455,
+              "outcome": 0.32339955849889623
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 1149,
+              "probability": 0.45265326049789734,
+              "outcome": 0.453437771975631
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 1200,
+              "probability": 0.5458666240946056,
+              "outcome": 0.56
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 908,
+              "probability": 0.6473650036985161,
+              "outcome": 0.6255506607929515
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 627,
+              "probability": 0.7463898714486473,
+              "outcome": 0.7240829346092504
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 488,
+              "probability": 0.8501853356263049,
+              "outcome": 0.8442622950819673
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 1066,
+              "probability": 0.9744673500755775,
+              "outcome": 0.9690431519699813
+            }
+          ]
+        },
+        "marketMidpoint": {
+          "forecasts": 8526,
+          "markets": 1227,
+          "brier": 0.17077983462350727,
+          "logLoss": 0.5027971251748166,
+          "meanProbability": 0.5035851513018973,
+          "hitRate": 0.5021111893033076,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 907,
+              "probability": 0.0326080485115767,
+              "outcome": 0.03638368246968027
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 434,
+              "probability": 0.1510714285714286,
+              "outcome": 0.15898617511520738
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 707,
+              "probability": 0.25232673267326744,
+              "outcome": 0.24328147100424327
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 970,
+              "probability": 0.3532731958762889,
+              "outcome": 0.33298969072164947
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 1262,
+              "probability": 0.45145007923930397,
+              "outcome": 0.4334389857369255
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 1163,
+              "probability": 0.5485769561478933,
+              "outcome": 0.5743766122098022
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 978,
+              "probability": 0.6466564417177904,
+              "outcome": 0.6349693251533742
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 659,
+              "probability": 0.7474658573596352,
+              "outcome": 0.7420333839150227
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 463,
+              "probability": 0.8470539956803457,
+              "outcome": 0.8660907127429806
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 983,
+              "probability": 0.9689069175991851,
+              "outcome": 0.9745676500508647
+            }
+          ]
+        }
+      }
+    },
+    "validation": {
+      "commonForecasts": 2845,
+      "commonMarkets": 410,
+      "models": {
+        "rawTerminal": {
+          "forecasts": 2845,
+          "markets": 410,
+          "brier": 0.18359450817011091,
+          "logLoss": 0.5422931785898522,
+          "meanProbability": 0.5431022158987091,
+          "hitRate": 0.4906854130052724,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 274,
+              "probability": 0.032987429727980216,
+              "outcome": 0.029197080291970802
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 130,
+              "probability": 0.14701027417398338,
+              "outcome": 0.11538461538461539
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 189,
+              "probability": 0.2512748016206175,
+              "outcome": 0.20634920634920634
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 271,
+              "probability": 0.35195695286619577,
+              "outcome": 0.2693726937269373
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 343,
+              "probability": 0.4510670057650652,
+              "outcome": 0.42857142857142855
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 404,
+              "probability": 0.5521088201661662,
+              "outcome": 0.5544554455445545
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 335,
+              "probability": 0.6466421001838616,
+              "outcome": 0.5552238805970149
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 296,
+              "probability": 0.7477812586142936,
+              "outcome": 0.6452702702702703
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 205,
+              "probability": 0.8480132624979014,
+              "outcome": 0.7560975609756098
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 398,
+              "probability": 0.9661447735242886,
+              "outcome": 0.8994974874371859
+            }
+          ]
+        },
+        "proxyTerminal": {
+          "forecasts": 2845,
+          "markets": 410,
+          "brier": 0.17419145202177003,
+          "logLoss": 0.5117438084889826,
+          "meanProbability": 0.48960439987721327,
+          "hitRate": 0.4906854130052724,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 316,
+              "probability": 0.02971501929743851,
+              "outcome": 0.022151898734177215
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 183,
+              "probability": 0.14832611116826006,
+              "outcome": 0.16393442622950818
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 230,
+              "probability": 0.2512719524896721,
+              "outcome": 0.2391304347826087
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 323,
+              "probability": 0.3523131185894127,
+              "outcome": 0.34365325077399383
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 383,
+              "probability": 0.44880311303136816,
+              "outcome": 0.4516971279373368
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 440,
+              "probability": 0.5437078623749263,
+              "outcome": 0.6045454545454545
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 319,
+              "probability": 0.6465784556944922,
+              "outcome": 0.6206896551724138
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 200,
+              "probability": 0.7460776834205461,
+              "outcome": 0.725
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 157,
+              "probability": 0.8499603515149892,
+              "outcome": 0.8343949044585988
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 294,
+              "probability": 0.9685725029163103,
+              "outcome": 0.9523809523809523
+            }
+          ]
+        },
+        "proxyAverage": {
+          "forecasts": 2845,
+          "markets": 410,
+          "brier": 0.17453059956474398,
+          "logLoss": 0.51639760973527,
+          "meanProbability": 0.48901011382514725,
+          "hitRate": 0.4906854130052724,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 362,
+              "probability": 0.026029741538122396,
+              "outcome": 0.03314917127071823
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 171,
+              "probability": 0.15237784691775347,
+              "outcome": 0.19883040935672514
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 226,
+              "probability": 0.253522945677684,
+              "outcome": 0.22123893805309736
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 310,
+              "probability": 0.35248897475886937,
+              "outcome": 0.36774193548387096
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 366,
+              "probability": 0.44902218472803984,
+              "outcome": 0.453551912568306
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 423,
+              "probability": 0.5432318701398741,
+              "outcome": 0.5981087470449172
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 316,
+              "probability": 0.6471339315870204,
+              "outcome": 0.6234177215189873
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 195,
+              "probability": 0.7458916400670685,
+              "outcome": 0.717948717948718
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 147,
+              "probability": 0.8481793076506483,
+              "outcome": 0.8095238095238095
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 329,
+              "probability": 0.9739570716581994,
+              "outcome": 0.9452887537993921
+            }
+          ]
+        },
+        "marketMidpoint": {
+          "forecasts": 2845,
+          "markets": 410,
+          "brier": 0.17158382636203814,
+          "logLoss": 0.5042710405431493,
+          "meanProbability": 0.49579964850615066,
+          "hitRate": 0.4906854130052724,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 307,
+              "probability": 0.03147394136807821,
+              "outcome": 0.026058631921824105
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 166,
+              "probability": 0.15186746987951813,
+              "outcome": 0.13253012048192772
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 239,
+              "probability": 0.25351464435146437,
+              "outcome": 0.22594142259414227
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 330,
+              "probability": 0.3522575757575757,
+              "outcome": 0.32727272727272727
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 403,
+              "probability": 0.45198511166253175,
+              "outcome": 0.48883374689826303
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 402,
+              "probability": 0.5475746268656703,
+              "outcome": 0.5422885572139303
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 326,
+              "probability": 0.6478987730061356,
+              "outcome": 0.656441717791411
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 214,
+              "probability": 0.7480607476635516,
+              "outcome": 0.705607476635514
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 154,
+              "probability": 0.8475974025974026,
+              "outcome": 0.8571428571428571
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 304,
+              "probability": 0.9695312500000002,
+              "outcome": 0.9605263157894737
+            }
+          ]
+        }
+      }
+    },
+    "test": {
+      "commonForecasts": 2854,
+      "commonMarkets": 410,
+      "models": {
+        "rawTerminal": {
+          "forecasts": 2854,
+          "markets": 410,
+          "brier": 0.1869098311711548,
+          "logLoss": 0.5521447209282476,
+          "meanProbability": 0.4777091760735424,
+          "hitRate": 0.5168185003503855,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 337,
+              "probability": 0.0337207584172856,
+              "outcome": 0.08902077151335312
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 226,
+              "probability": 0.14946658353242961,
+              "outcome": 0.23008849557522124
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 255,
+              "probability": 0.25194164647883754,
+              "outcome": 0.34509803921568627
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 363,
+              "probability": 0.350113617601427,
+              "outcome": 0.40771349862258954
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 382,
+              "probability": 0.4464766939079308,
+              "outcome": 0.49214659685863876
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 344,
+              "probability": 0.5469428373739532,
+              "outcome": 0.6046511627906976
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 261,
+              "probability": 0.6495714556025293,
+              "outcome": 0.6743295019157088
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 196,
+              "probability": 0.7502732517072894,
+              "outcome": 0.6938775510204082
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 187,
+              "probability": 0.8473749394978968,
+              "outcome": 0.8609625668449198
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 303,
+              "probability": 0.9674885410727762,
+              "outcome": 0.9504950495049505
+            }
+          ]
+        },
+        "proxyTerminal": {
+          "forecasts": 2854,
+          "markets": 410,
+          "brier": 0.17987655460626095,
+          "logLoss": 0.5296396275704146,
+          "meanProbability": 0.5118192812036538,
+          "hitRate": 0.5168185003503855,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 274,
+              "probability": 0.03471709595437912,
+              "outcome": 0.051094890510948905
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 165,
+              "probability": 0.15534306353485286,
+              "outcome": 0.21212121212121213
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 239,
+              "probability": 0.2545830793062844,
+              "outcome": 0.26359832635983266
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 282,
+              "probability": 0.34928137969341055,
+              "outcome": 0.3404255319148936
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 389,
+              "probability": 0.45179893425959355,
+              "outcome": 0.4781491002570694
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 455,
+              "probability": 0.5451940269870665,
+              "outcome": 0.5472527472527473
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 320,
+              "probability": 0.649833771660684,
+              "outcome": 0.634375
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 231,
+              "probability": 0.7466675849427795,
+              "outcome": 0.7575757575757576
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 171,
+              "probability": 0.8456805332889418,
+              "outcome": 0.8421052631578947
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 328,
+              "probability": 0.9676645603689917,
+              "outcome": 0.9451219512195121
+            }
+          ]
+        },
+        "proxyAverage": {
+          "forecasts": 2854,
+          "markets": 410,
+          "brier": 0.18054109054234843,
+          "logLoss": 0.5391786923151892,
+          "meanProbability": 0.5120870287337155,
+          "hitRate": 0.5168185003503855,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 307,
+              "probability": 0.027706713756215147,
+              "outcome": 0.05863192182410423
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 163,
+              "probability": 0.15433589001910844,
+              "outcome": 0.2147239263803681
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 226,
+              "probability": 0.2524558506174256,
+              "outcome": 0.2920353982300885
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 275,
+              "probability": 0.348141600624061,
+              "outcome": 0.33454545454545453
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 378,
+              "probability": 0.45133569529183293,
+              "outcome": 0.48412698412698413
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 434,
+              "probability": 0.5444412496153591,
+              "outcome": 0.5414746543778802
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 311,
+              "probability": 0.6479905286707287,
+              "outcome": 0.6270096463022508
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 228,
+              "probability": 0.7451179698115022,
+              "outcome": 0.7368421052631579
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 172,
+              "probability": 0.8474627234324758,
+              "outcome": 0.8662790697674418
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 360,
+              "probability": 0.974921586892256,
+              "outcome": 0.9277777777777778
+            }
+          ]
+        },
+        "marketMidpoint": {
+          "forecasts": 2854,
+          "markets": 410,
+          "brier": 0.18190443947091794,
+          "logLoss": 0.5331925921929088,
+          "meanProbability": 0.5120877715487037,
+          "hitRate": 0.5168185003503855,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 244,
+              "probability": 0.03850614754098362,
+              "outcome": 0.03278688524590164
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 136,
+              "probability": 0.1480514705882353,
+              "outcome": 0.17647058823529413
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 226,
+              "probability": 0.253517699115044,
+              "outcome": 0.26991150442477874
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 352,
+              "probability": 0.3515198863636364,
+              "outcome": 0.3664772727272727
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 438,
+              "probability": 0.4509703196347043,
+              "outcome": 0.4429223744292237
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 416,
+              "probability": 0.5480408653846143,
+              "outcome": 0.5697115384615384
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 354,
+              "probability": 0.6472740112994346,
+              "outcome": 0.6384180790960452
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 234,
+              "probability": 0.7470299145299141,
+              "outcome": 0.7905982905982906
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 148,
+              "probability": 0.8508108108108108,
+              "outcome": 0.8243243243243243
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 306,
+              "probability": 0.9659084967320272,
+              "outcome": 0.9444444444444444
+            }
+          ]
+        }
+      }
+    }
+  },
+  "byMinute": {
+    "1": {
+      "commonForecasts": 2047,
+      "commonMarkets": 2047,
+      "models": {
+        "rawTerminal": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.2591633111603335,
+          "logLoss": 0.7460636630305677,
+          "meanProbability": 0.5635304187932706,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 8,
+              "probability": 0.057554866770897495,
+              "outcome": 0.25
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 20,
+              "probability": 0.16360161385682867,
+              "outcome": 0.1
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 86,
+              "probability": 0.2554277040481823,
+              "outcome": 0.29069767441860467
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 217,
+              "probability": 0.3566330586722432,
+              "outcome": 0.35023041474654376
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 459,
+              "probability": 0.45214037345545943,
+              "outcome": 0.4684095860566449
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 478,
+              "probability": 0.5491635373818361,
+              "outcome": 0.5690376569037657
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 359,
+              "probability": 0.6467552262956927,
+              "outcome": 0.5654596100278552
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 196,
+              "probability": 0.745233095138402,
+              "outcome": 0.5918367346938775
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 110,
+              "probability": 0.8431131932255282,
+              "outcome": 0.44545454545454544
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 114,
+              "probability": 0.959932222384565,
+              "outcome": 0.6140350877192983
+            }
+          ]
+        },
+        "proxyTerminal": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.2382401075561255,
+          "logLoss": 0.6686549194516107,
+          "meanProbability": 0.4969863688819769,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 9,
+              "probability": 0.17739335808044474,
+              "outcome": 0.1111111111111111
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 94,
+              "probability": 0.26043897468756316,
+              "outcome": 0.22340425531914893
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 336,
+              "probability": 0.3588371896052433,
+              "outcome": 0.38392857142857145
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 563,
+              "probability": 0.4541402789182229,
+              "outcome": 0.4706927175843694
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 652,
+              "probability": 0.540468732552808,
+              "outcome": 0.5690184049079755
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 291,
+              "probability": 0.6419803170733405,
+              "outcome": 0.584192439862543
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 93,
+              "probability": 0.7346663237109198,
+              "outcome": 0.7096774193548387
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 9,
+              "probability": 0.8307962802049191,
+              "outcome": 0.7777777777777778
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        },
+        "proxyAverage": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.23830743958410827,
+          "logLoss": 0.6687820179925318,
+          "meanProbability": 0.496882273624058,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 14,
+              "probability": 0.18012139234481558,
+              "outcome": 0.07142857142857142
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 94,
+              "probability": 0.26040255351824493,
+              "outcome": 0.22340425531914893
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 343,
+              "probability": 0.35776789636818457,
+              "outcome": 0.3935860058309038
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 551,
+              "probability": 0.45420409520240806,
+              "outcome": 0.47005444646098005
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 644,
+              "probability": 0.5407494095686667,
+              "outcome": 0.5714285714285714
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 292,
+              "probability": 0.6427182965681986,
+              "outcome": 0.5753424657534246
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 99,
+              "probability": 0.736267481573031,
+              "outcome": 0.7070707070707071
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 10,
+              "probability": 0.8330786638223143,
+              "outcome": 0.8
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        },
+        "marketMidpoint": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.23758583292623336,
+          "logLoss": 0.667614886926155,
+          "meanProbability": 0.4989252564728881,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 3,
+              "probability": 0.15833333333333333,
+              "outcome": 0
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 88,
+              "probability": 0.2631250000000001,
+              "outcome": 0.25
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 331,
+              "probability": 0.3598036253776431,
+              "outcome": 0.3564954682779456
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 635,
+              "probability": 0.45507086614173375,
+              "outcome": 0.4755905511811024
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 571,
+              "probability": 0.546129597197897,
+              "outcome": 0.5569176882661997
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 335,
+              "probability": 0.6420447761194038,
+              "outcome": 0.6208955223880597
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 76,
+              "probability": 0.7363157894736841,
+              "outcome": 0.7236842105263158
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 8,
+              "probability": 0.84,
+              "outcome": 0.875
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        }
+      }
+    },
+    "2": {
+      "commonForecasts": 2047,
+      "commonMarkets": 2047,
+      "models": {
+        "rawTerminal": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.24691294429695743,
+          "logLoss": 0.7203753459957598,
+          "meanProbability": 0.5641726443932378,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 12,
+              "probability": 0.07078883533788807,
+              "outcome": 0
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 63,
+              "probability": 0.15521693824546656,
+              "outcome": 0.19047619047619047
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 137,
+              "probability": 0.2561998934295068,
+              "outcome": 0.25547445255474455
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 257,
+              "probability": 0.3544559393330109,
+              "outcome": 0.377431906614786
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 340,
+              "probability": 0.44874621539452275,
+              "outcome": 0.47352941176470587
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 352,
+              "probability": 0.5504120656335535,
+              "outcome": 0.5227272727272727
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 341,
+              "probability": 0.6474572626176985,
+              "outcome": 0.5630498533724341
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 248,
+              "probability": 0.7439273749918639,
+              "outcome": 0.6370967741935484
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 166,
+              "probability": 0.8457297168270744,
+              "outcome": 0.6445783132530121
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 131,
+              "probability": 0.9622282385492466,
+              "outcome": 0.6412213740458015
+            }
+          ]
+        },
+        "proxyTerminal": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.2250626152863561,
+          "logLoss": 0.6404004248466793,
+          "meanProbability": 0.49876382971856187,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 2,
+              "probability": 0.07481920932007863,
+              "outcome": 0
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 67,
+              "probability": 0.16157172308595608,
+              "outcome": 0.16417910447761194
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 198,
+              "probability": 0.25704527954808737,
+              "outcome": 0.2878787878787879
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 299,
+              "probability": 0.3499227954718389,
+              "outcome": 0.3277591973244147
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 445,
+              "probability": 0.4522869894077027,
+              "outcome": 0.47415730337078654
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 471,
+              "probability": 0.5461710681656632,
+              "outcome": 0.5690021231422505
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 320,
+              "probability": 0.646922086450516,
+              "outcome": 0.634375
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 178,
+              "probability": 0.7430978869148073,
+              "outcome": 0.6910112359550562
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 61,
+              "probability": 0.8387668465726189,
+              "outcome": 0.8688524590163934
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 6,
+              "probability": 0.9178636339183267,
+              "outcome": 1
+            }
+          ]
+        },
+        "proxyAverage": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.2251242799457068,
+          "logLoss": 0.6405400225068006,
+          "meanProbability": 0.4986592517418007,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 6,
+              "probability": 0.08657673192475433,
+              "outcome": 0
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 69,
+              "probability": 0.1617146088992839,
+              "outcome": 0.18840579710144928
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 204,
+              "probability": 0.2556033695739848,
+              "outcome": 0.27941176470588236
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 295,
+              "probability": 0.3493754691792296,
+              "outcome": 0.33220338983050846
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 437,
+              "probability": 0.45198179687787965,
+              "outcome": 0.4782608695652174
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 457,
+              "probability": 0.5457711151492646,
+              "outcome": 0.5689277899343544
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 322,
+              "probability": 0.646528225699479,
+              "outcome": 0.6335403726708074
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 181,
+              "probability": 0.7427466179364902,
+              "outcome": 0.6850828729281768
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 70,
+              "probability": 0.8397085839861155,
+              "outcome": 0.8428571428571429
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 6,
+              "probability": 0.9227661415479823,
+              "outcome": 1
+            }
+          ]
+        },
+        "marketMidpoint": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.22415688678553977,
+          "logLoss": 0.638811980576173,
+          "meanProbability": 0.501845872007817,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 1,
+              "probability": 0.0835,
+              "outcome": 0
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 25,
+              "probability": 0.17299999999999996,
+              "outcome": 0.12
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 178,
+              "probability": 0.2595224719101123,
+              "outcome": 0.24157303370786518
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 342,
+              "probability": 0.35355263157894745,
+              "outcome": 0.32748538011695905
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 475,
+              "probability": 0.4498947368421066,
+              "outcome": 0.47789473684210526
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 450,
+              "probability": 0.5496777777777763,
+              "outcome": 0.5511111111111111
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 367,
+              "probability": 0.6441961852861037,
+              "outcome": 0.6403269754768393
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 170,
+              "probability": 0.7400000000000002,
+              "outcome": 0.7588235294117647
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 39,
+              "probability": 0.8329487179487177,
+              "outcome": 0.8461538461538461
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        }
+      }
+    },
+    "3": {
+      "commonForecasts": 2047,
+      "commonMarkets": 2047,
+      "models": {
+        "rawTerminal": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.2331570976334733,
+          "logLoss": 0.6916586980983045,
+          "meanProbability": 0.5640129781137454,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 40,
+              "probability": 0.06985401191858873,
+              "outcome": 0.1
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 100,
+              "probability": 0.1524088115884557,
+              "outcome": 0.18
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 153,
+              "probability": 0.257389671425136,
+              "outcome": 0.3137254901960784
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 252,
+              "probability": 0.35350777327997107,
+              "outcome": 0.3531746031746032
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 292,
+              "probability": 0.45111506959895914,
+              "outcome": 0.4006849315068493
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 303,
+              "probability": 0.5491832573973288,
+              "outcome": 0.5478547854785478
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 265,
+              "probability": 0.6490189187972342,
+              "outcome": 0.5886792452830188
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 250,
+              "probability": 0.746309040485939,
+              "outcome": 0.608
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 218,
+              "probability": 0.8471818628520544,
+              "outcome": 0.7110091743119266
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 174,
+              "probability": 0.957781028447484,
+              "outcome": 0.7183908045977011
+            }
+          ]
+        },
+        "proxyTerminal": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.2097815720926299,
+          "logLoss": 0.607191816894567,
+          "meanProbability": 0.5004723217747131,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 32,
+              "probability": 0.07187537888358739,
+              "outcome": 0.125
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 115,
+              "probability": 0.15601779252178194,
+              "outcome": 0.16521739130434782
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 224,
+              "probability": 0.2547503315813967,
+              "outcome": 0.27232142857142855
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 297,
+              "probability": 0.35285529295350354,
+              "outcome": 0.30976430976430974
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 322,
+              "probability": 0.4509763363259692,
+              "outcome": 0.453416149068323
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 379,
+              "probability": 0.5455322927762106,
+              "outcome": 0.5699208443271768
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 317,
+              "probability": 0.6451149517631918,
+              "outcome": 0.6624605678233438
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 209,
+              "probability": 0.7436204878763008,
+              "outcome": 0.7177033492822966
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 121,
+              "probability": 0.841191945555664,
+              "outcome": 0.8512396694214877
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 31,
+              "probability": 0.9254587671184928,
+              "outcome": 0.9354838709677419
+            }
+          ]
+        },
+        "proxyAverage": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.20975867806233506,
+          "logLoss": 0.6072314612891891,
+          "meanProbability": 0.5003963706363166,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 37,
+              "probability": 0.07010593497003056,
+              "outcome": 0.10810810810810811
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 123,
+              "probability": 0.15573504341389016,
+              "outcome": 0.17886178861788618
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 219,
+              "probability": 0.25327436248558494,
+              "outcome": 0.2694063926940639
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 296,
+              "probability": 0.3512414157009706,
+              "outcome": 0.3141891891891892
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 315,
+              "probability": 0.4506971654613725,
+              "outcome": 0.45714285714285713
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 365,
+              "probability": 0.5447994571833361,
+              "outcome": 0.5616438356164384
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 320,
+              "probability": 0.6451516275044143,
+              "outcome": 0.66875
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 214,
+              "probability": 0.7456953459110902,
+              "outcome": 0.7102803738317757
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 124,
+              "probability": 0.8445003582076764,
+              "outcome": 0.8467741935483871
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 34,
+              "probability": 0.9282564144271627,
+              "outcome": 0.9411764705882353
+            }
+          ]
+        },
+        "marketMidpoint": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.20966200012212946,
+          "logLoss": 0.6069267859405412,
+          "meanProbability": 0.5041345872007812,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 4,
+              "probability": 0.088,
+              "outcome": 0
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 67,
+              "probability": 0.16373134328358216,
+              "outcome": 0.11940298507462686
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 234,
+              "probability": 0.2557264957264955,
+              "outcome": 0.23076923076923078
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 327,
+              "probability": 0.35186544342507653,
+              "outcome": 0.3333333333333333
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 380,
+              "probability": 0.4506973684210536,
+              "outcome": 0.4105263157894737
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 365,
+              "probability": 0.5482602739726012,
+              "outcome": 0.589041095890411
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 351,
+              "probability": 0.6493447293447292,
+              "outcome": 0.6638176638176638
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 227,
+              "probability": 0.74363436123348,
+              "outcome": 0.7709251101321586
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 87,
+              "probability": 0.8398275862068966,
+              "outcome": 0.8620689655172413
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 5,
+              "probability": 0.9143000000000001,
+              "outcome": 1
+            }
+          ]
+        }
+      }
+    },
+    "4": {
+      "commonForecasts": 2047,
+      "commonMarkets": 2047,
+      "models": {
+        "rawTerminal": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.2256656135394132,
+          "logLoss": 0.6760272350294378,
+          "meanProbability": 0.5646606532375634,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 65,
+              "probability": 0.06415229748278002,
+              "outcome": 0.09230769230769231
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 113,
+              "probability": 0.1549427239369272,
+              "outcome": 0.22123893805309736
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 174,
+              "probability": 0.2520148937073024,
+              "outcome": 0.3275862068965517
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 248,
+              "probability": 0.34897023582994674,
+              "outcome": 0.27419354838709675
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 241,
+              "probability": 0.4498780432061586,
+              "outcome": 0.46473029045643155
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 279,
+              "probability": 0.5508957381350592,
+              "outcome": 0.5197132616487455
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 236,
+              "probability": 0.6511071421765107,
+              "outcome": 0.559322033898305
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 246,
+              "probability": 0.7510078748906289,
+              "outcome": 0.5853658536585366
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 214,
+              "probability": 0.8518204196242607,
+              "outcome": 0.794392523364486
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 231,
+              "probability": 0.9565688663049028,
+              "outcome": 0.7402597402597403
+            }
+          ]
+        },
+        "proxyTerminal": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.20229130206533494,
+          "logLoss": 0.5900356981376811,
+          "meanProbability": 0.501895014657798,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 60,
+              "probability": 0.063312216513401,
+              "outcome": 0.1
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 149,
+              "probability": 0.1552670142071076,
+              "outcome": 0.2080536912751678
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 246,
+              "probability": 0.2505576528716127,
+              "outcome": 0.2682926829268293
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 269,
+              "probability": 0.3496109289632197,
+              "outcome": 0.30855018587360594
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 289,
+              "probability": 0.450810706166729,
+              "outcome": 0.4602076124567474
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 302,
+              "probability": 0.5465458557404955,
+              "outcome": 0.5463576158940397
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 278,
+              "probability": 0.6484948477663612,
+              "outcome": 0.6366906474820144
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 225,
+              "probability": 0.7492108592563165,
+              "outcome": 0.76
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 150,
+              "probability": 0.8445661819830574,
+              "outcome": 0.8333333333333334
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 79,
+              "probability": 0.9352275135991723,
+              "outcome": 0.9240506329113924
+            }
+          ]
+        },
+        "proxyAverage": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.202381110974194,
+          "logLoss": 0.5905218551641437,
+          "meanProbability": 0.5017907856577334,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 69,
+              "probability": 0.0624154750478354,
+              "outcome": 0.08695652173913043
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 161,
+              "probability": 0.15659630958880982,
+              "outcome": 0.2360248447204969
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 244,
+              "probability": 0.2518615559775902,
+              "outcome": 0.26229508196721313
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 257,
+              "probability": 0.3498508707876031,
+              "outcome": 0.3151750972762646
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 282,
+              "probability": 0.45053841571607434,
+              "outcome": 0.46099290780141844
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 291,
+              "probability": 0.5460225949340839,
+              "outcome": 0.5463917525773195
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 273,
+              "probability": 0.6479612509072517,
+              "outcome": 0.63003663003663
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 222,
+              "probability": 0.7480256802039729,
+              "outcome": 0.7522522522522522
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 162,
+              "probability": 0.8440960937042141,
+              "outcome": 0.8271604938271605
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 86,
+              "probability": 0.9376520131109444,
+              "outcome": 0.9186046511627907
+            }
+          ]
+        },
+        "marketMidpoint": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.20319887347337548,
+          "logLoss": 0.5912123732238967,
+          "meanProbability": 0.5045964826575476,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 13,
+              "probability": 0.07553846153846154,
+              "outcome": 0
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 105,
+              "probability": 0.16233333333333333,
+              "outcome": 0.1523809523809524
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 262,
+              "probability": 0.24946564885496178,
+              "outcome": 0.25572519083969464
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 329,
+              "probability": 0.34948328267477247,
+              "outcome": 0.331306990881459
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 312,
+              "probability": 0.4494871794871797,
+              "outcome": 0.41346153846153844
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 312,
+              "probability": 0.5485416666666663,
+              "outcome": 0.5608974358974359
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 290,
+              "probability": 0.6510862068965515,
+              "outcome": 0.6689655172413793
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 266,
+              "probability": 0.7511278195488718,
+              "outcome": 0.7330827067669173
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 137,
+              "probability": 0.839963503649635,
+              "outcome": 0.9051094890510949
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 21,
+              "probability": 0.9270000000000002,
+              "outcome": 1
+            }
+          ]
+        }
+      }
+    },
+    "8": {
+      "commonForecasts": 2047,
+      "commonMarkets": 2047,
+      "models": {
+        "rawTerminal": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.18318481498734984,
+          "logLoss": 0.5803967853096299,
+          "meanProbability": 0.5621214972211123,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 205,
+              "probability": 0.042791503612466156,
+              "outcome": 0.05853658536585366
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 198,
+              "probability": 0.14920081580993091,
+              "outcome": 0.18686868686868688
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 166,
+              "probability": 0.24926721807384405,
+              "outcome": 0.28313253012048195
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 156,
+              "probability": 0.34659174743262444,
+              "outcome": 0.28846153846153844
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 148,
+              "probability": 0.44831353019447284,
+              "outcome": 0.32432432432432434
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 177,
+              "probability": 0.554038077863171,
+              "outcome": 0.5423728813559322
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 155,
+              "probability": 0.6494553277929358,
+              "outcome": 0.5225806451612903
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 177,
+              "probability": 0.7541745213115743,
+              "outcome": 0.6836158192090396
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 201,
+              "probability": 0.8525823540883855,
+              "outcome": 0.7860696517412935
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 464,
+              "probability": 0.9632830877986304,
+              "outcome": 0.8297413793103449
+            }
+          ]
+        },
+        "proxyTerminal": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.15463798757872144,
+          "logLoss": 0.47388429263401377,
+          "meanProbability": 0.5015103487164981,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 257,
+              "probability": 0.04428623694896603,
+              "outcome": 0.06614785992217899
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 234,
+              "probability": 0.14702256271106098,
+              "outcome": 0.20085470085470086
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 201,
+              "probability": 0.25091079725212,
+              "outcome": 0.24378109452736318
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 151,
+              "probability": 0.3488119251741558,
+              "outcome": 0.304635761589404
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 171,
+              "probability": 0.4503875657306935,
+              "outcome": 0.38011695906432746
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 179,
+              "probability": 0.5535398275344021,
+              "outcome": 0.5754189944134078
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 190,
+              "probability": 0.6560474003475076,
+              "outcome": 0.6157894736842106
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 172,
+              "probability": 0.7496003177066048,
+              "outcome": 0.7558139534883721
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 205,
+              "probability": 0.8517123309953688,
+              "outcome": 0.8926829268292683
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 287,
+              "probability": 0.9526898218439313,
+              "outcome": 0.9512195121951219
+            }
+          ]
+        },
+        "proxyAverage": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.15472284884381401,
+          "logLoss": 0.4752167781960805,
+          "meanProbability": 0.5013409247214515,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 294,
+              "probability": 0.043588803340514765,
+              "outcome": 0.07482993197278912
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 218,
+              "probability": 0.1471685859404955,
+              "outcome": 0.2018348623853211
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 196,
+              "probability": 0.2490239348758898,
+              "outcome": 0.27040816326530615
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 139,
+              "probability": 0.3482155249673177,
+              "outcome": 0.2949640287769784
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 167,
+              "probability": 0.449053761141119,
+              "outcome": 0.38323353293413176
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 172,
+              "probability": 0.554466777177196,
+              "outcome": 0.5755813953488372
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 176,
+              "probability": 0.6561949330933363,
+              "outcome": 0.5738636363636364
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 175,
+              "probability": 0.7492834034858941,
+              "outcome": 0.7714285714285715
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 202,
+              "probability": 0.8540176708005227,
+              "outcome": 0.8811881188118812
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 308,
+              "probability": 0.9566546320140643,
+              "outcome": 0.9512987012987013
+            }
+          ]
+        },
+        "marketMidpoint": {
+          "forecasts": 2047,
+          "markets": 2047,
+          "brier": 0.15392311529066854,
+          "logLoss": 0.46936037391288543,
+          "meanProbability": 0.5050205178309727,
+          "hitRate": 0.5031753786028335,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 181,
+              "probability": 0.060627071823204405,
+              "outcome": 0.04419889502762431
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 256,
+              "probability": 0.14888671875000006,
+              "outcome": 0.16015625
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 235,
+              "probability": 0.24719148936170215,
+              "outcome": 0.251063829787234
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 182,
+              "probability": 0.34876373626373613,
+              "outcome": 0.29120879120879123
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 172,
+              "probability": 0.44796511627906965,
+              "outcome": 0.38372093023255816
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 153,
+              "probability": 0.5522222222222225,
+              "outcome": 0.6013071895424836
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 175,
+              "probability": 0.6498285714285715,
+              "outcome": 0.6
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 219,
+              "probability": 0.7534703196347035,
+              "outcome": 0.7488584474885844
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 247,
+              "probability": 0.8488056680161943,
+              "outcome": 0.8947368421052632
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 227,
+              "probability": 0.9392004405286344,
+              "outcome": 0.973568281938326
+            }
+          ]
+        }
+      }
+    },
+    "12": {
+      "commonForecasts": 2042,
+      "commonMarkets": 2042,
+      "models": {
+        "rawTerminal": {
+          "forecasts": 2042,
+          "markets": 2042,
+          "brier": 0.13290220639200223,
+          "logLoss": 0.45523436752697416,
+          "meanProbability": 0.5686348159670304,
+          "hitRate": 0.5024485798237023,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 445,
+              "probability": 0.028229254336609607,
+              "outcome": 0.0449438202247191
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 147,
+              "probability": 0.14917290465643143,
+              "outcome": 0.10884353741496598
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 105,
+              "probability": 0.2440536955375093,
+              "outcome": 0.2
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 106,
+              "probability": 0.34743215208014566,
+              "outcome": 0.2358490566037736
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 82,
+              "probability": 0.4556095186146782,
+              "outcome": 0.3780487804878049
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 81,
+              "probability": 0.5532207219451739,
+              "outcome": 0.4074074074074074
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 73,
+              "probability": 0.6497269894199655,
+              "outcome": 0.5342465753424658
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 100,
+              "probability": 0.7500920448107107,
+              "outcome": 0.7
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 167,
+              "probability": 0.848350655566476,
+              "outcome": 0.7724550898203593
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 736,
+              "probability": 0.9754398365437055,
+              "outcome": 0.8722826086956522
+            }
+          ]
+        },
+        "proxyTerminal": {
+          "forecasts": 2042,
+          "markets": 2042,
+          "brier": 0.0991952596870582,
+          "logLoss": 0.3206279056792948,
+          "meanProbability": 0.5069852380103023,
+          "hitRate": 0.5024485798237023,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 540,
+              "probability": 0.027266351212778168,
+              "outcome": 0.03518518518518519
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 159,
+              "probability": 0.14579203825339274,
+              "outcome": 0.15723270440251572
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 111,
+              "probability": 0.2463435518599302,
+              "outcome": 0.1891891891891892
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 112,
+              "probability": 0.3487410237804781,
+              "outcome": 0.2857142857142857
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 101,
+              "probability": 0.45244305448433797,
+              "outcome": 0.43564356435643564
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 74,
+              "probability": 0.5490675188383689,
+              "outcome": 0.5540540540540541
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 104,
+              "probability": 0.6567545531925547,
+              "outcome": 0.625
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 107,
+              "probability": 0.753414665090771,
+              "outcome": 0.8317757009345794
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 157,
+              "probability": 0.854427268981069,
+              "outcome": 0.8343949044585988
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 577,
+              "probability": 0.9732500771858943,
+              "outcome": 0.9688041594454073
+            }
+          ]
+        },
+        "proxyAverage": {
+          "forecasts": 2042,
+          "markets": 2042,
+          "brier": 0.09948348214006912,
+          "logLoss": 0.3325425202817586,
+          "meanProbability": 0.5068508231853315,
+          "hitRate": 0.5024485798237023,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 601,
+              "probability": 0.021313326849326707,
+              "outcome": 0.03993344425956739
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 130,
+              "probability": 0.1447487150981882,
+              "outcome": 0.2230769230769231
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 106,
+              "probability": 0.24425475165399663,
+              "outcome": 0.18867924528301888
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 93,
+              "probability": 0.3463377734098521,
+              "outcome": 0.3118279569892473
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 93,
+              "probability": 0.4506587594581231,
+              "outcome": 0.41935483870967744
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 63,
+              "probability": 0.5467180886357856,
+              "outcome": 0.5238095238095238
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 87,
+              "probability": 0.6565020670794225,
+              "outcome": 0.632183908045977
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 96,
+              "probability": 0.7498185674442809,
+              "outcome": 0.7708333333333334
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 137,
+              "probability": 0.853997420523815,
+              "outcome": 0.8540145985401459
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 636,
+              "probability": 0.9792640075578843,
+              "outcome": 0.9528301886792453
+            }
+          ]
+        },
+        "marketMidpoint": {
+          "forecasts": 2042,
+          "markets": 2042,
+          "brier": 0.09592933631243852,
+          "logLoss": 0.3053792856439194,
+          "meanProbability": 0.5078807541625848,
+          "hitRate": 0.5024485798237023,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 581,
+              "probability": 0.03310327022375216,
+              "outcome": 0.027538726333907058
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 167,
+              "probability": 0.1424550898203593,
+              "outcome": 0.1437125748502994
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 104,
+              "probability": 0.24620192307692298,
+              "outcome": 0.25961538461538464
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 87,
+              "probability": 0.35022988505747127,
+              "outcome": 0.47126436781609193
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 77,
+              "probability": 0.45363636363636356,
+              "outcome": 0.42857142857142855
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 81,
+              "probability": 0.5516049382716048,
+              "outcome": 0.5679012345679012
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 74,
+              "probability": 0.6509459459459461,
+              "outcome": 0.581081081081081
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 80,
+              "probability": 0.7491874999999997,
+              "outcome": 0.725
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 147,
+              "probability": 0.8587755102040813,
+              "outcome": 0.7891156462585034
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 644,
+              "probability": 0.9690054347826085,
+              "outcome": 0.9658385093167702
+            }
+          ]
+        }
+      }
+    },
+    "13": {
+      "commonForecasts": 1948,
+      "commonMarkets": 1948,
+      "models": {
+        "rawTerminal": {
+          "forecasts": 1948,
+          "markets": 1948,
+          "brier": 0.12559810089731033,
+          "logLoss": 0.4517911312560882,
+          "meanProbability": 0.5684686380219395,
+          "hitRate": 0.5010266940451745,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 487,
+              "probability": 0.02584000425157038,
+              "outcome": 0.043121149897330596
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 127,
+              "probability": 0.1414411467357744,
+              "outcome": 0.13385826771653545
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 95,
+              "probability": 0.2440165566369053,
+              "outcome": 0.14736842105263157
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 72,
+              "probability": 0.35123454737718984,
+              "outcome": 0.19444444444444445
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 64,
+              "probability": 0.44927884990963207,
+              "outcome": 0.375
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 46,
+              "probability": 0.5488706992026994,
+              "outcome": 0.391304347826087
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 78,
+              "probability": 0.6519535559599131,
+              "outcome": 0.6153846153846154
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 80,
+              "probability": 0.7481249664634496,
+              "outcome": 0.6375
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 130,
+              "probability": 0.8574202673815581,
+              "outcome": 0.7307692307692307
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 769,
+              "probability": 0.9781410024317616,
+              "outcome": 0.8764629388816645
+            }
+          ]
+        },
+        "proxyTerminal": {
+          "forecasts": 1948,
+          "markets": 1948,
+          "brier": 0.08688565271426131,
+          "logLoss": 0.28636752238192564,
+          "meanProbability": 0.5030618684667337,
+          "hitRate": 0.5010266940451745,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 593,
+              "probability": 0.02601683890384758,
+              "outcome": 0.04047217537942664
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 127,
+              "probability": 0.14549300187026934,
+              "outcome": 0.14173228346456693
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 101,
+              "probability": 0.24575689075787285,
+              "outcome": 0.15841584158415842
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 87,
+              "probability": 0.3488179328009229,
+              "outcome": 0.3333333333333333
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 60,
+              "probability": 0.4455100514737926,
+              "outcome": 0.43333333333333335
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 83,
+              "probability": 0.5530296473572909,
+              "outcome": 0.5903614457831325
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 71,
+              "probability": 0.6477394407860204,
+              "outcome": 0.676056338028169
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 84,
+              "probability": 0.7500100871458932,
+              "outcome": 0.7023809523809523
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 129,
+              "probability": 0.8549293280335885,
+              "outcome": 0.8527131782945736
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 613,
+              "probability": 0.9771321732365238,
+              "outcome": 0.9738988580750407
+            }
+          ]
+        },
+        "proxyAverage": {
+          "forecasts": 1948,
+          "markets": 1948,
+          "brier": 0.08767114796292352,
+          "logLoss": 0.3175912763229692,
+          "meanProbability": 0.5022064997295248,
+          "hitRate": 0.5010266940451745,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 665,
+              "probability": 0.01617766542596221,
+              "outcome": 0.0481203007518797
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 111,
+              "probability": 0.14797682209473895,
+              "outcome": 0.13513513513513514
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 76,
+              "probability": 0.2496775580155399,
+              "outcome": 0.25
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 68,
+              "probability": 0.34394279030722236,
+              "outcome": 0.3235294117647059
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 48,
+              "probability": 0.4445504991304677,
+              "outcome": 0.5208333333333334
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 65,
+              "probability": 0.5522863180623832,
+              "outcome": 0.5538461538461539
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 65,
+              "probability": 0.6465082849810926,
+              "outcome": 0.7076923076923077
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 63,
+              "probability": 0.7499510268449339,
+              "outcome": 0.6349206349206349
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 102,
+              "probability": 0.8554428942364132,
+              "outcome": 0.7745098039215687
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 685,
+              "probability": 0.9853852839457333,
+              "outcome": 0.9664233576642336
+            }
+          ]
+        },
+        "marketMidpoint": {
+          "forecasts": 1948,
+          "markets": 1948,
+          "brier": 0.08321265349075958,
+          "logLoss": 0.27311047968831764,
+          "meanProbability": 0.5037448665297736,
+          "hitRate": 0.5010266940451745,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 678,
+              "probability": 0.025087758112094436,
+              "outcome": 0.03687315634218289
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 113,
+              "probability": 0.1432743362831858,
+              "outcome": 0.20353982300884957
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 71,
+              "probability": 0.2540140845070422,
+              "outcome": 0.2112676056338028
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 54,
+              "probability": 0.34555555555555556,
+              "outcome": 0.3333333333333333
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 52,
+              "probability": 0.4471153846153847,
+              "outcome": 0.4807692307692308
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 49,
+              "probability": 0.5404081632653063,
+              "outcome": 0.5918367346938775
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 66,
+              "probability": 0.6462121212121215,
+              "outcome": 0.6515151515151515
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 69,
+              "probability": 0.7559420289855071,
+              "outcome": 0.7101449275362319
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 100,
+              "probability": 0.8539599999999998,
+              "outcome": 0.79
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 696,
+              "probability": 0.9791156609195388,
+              "outcome": 0.9626436781609196
+            }
+          ]
+        }
+      }
+    },
+    "14": {
+      "commonForecasts": 0,
+      "commonMarkets": 0,
+      "models": {
+        "rawTerminal": {
+          "forecasts": 0,
+          "markets": 0,
+          "brier": null,
+          "logLoss": null,
+          "meanProbability": null,
+          "hitRate": null,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        },
+        "proxyTerminal": {
+          "forecasts": 0,
+          "markets": 0,
+          "brier": null,
+          "logLoss": null,
+          "meanProbability": null,
+          "hitRate": null,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        },
+        "proxyAverage": {
+          "forecasts": 0,
+          "markets": 0,
+          "brier": null,
+          "logLoss": null,
+          "meanProbability": null,
+          "hitRate": null,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        },
+        "marketMidpoint": {
+          "forecasts": 0,
+          "markets": 0,
+          "brier": null,
+          "logLoss": null,
+          "meanProbability": null,
+          "hitRate": null,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        }
+      }
+    }
+  },
+  "terminalIncludingFinalMinute": {
+    "commonForecasts": 15674,
+    "commonMarkets": 2047,
+    "models": {
+      "rawTerminal": {
+        "forecasts": 15674,
+        "markets": 2047,
+        "brier": 0.1943408486386002,
+        "logLoss": 0.6049956066605021,
+        "meanProbability": 0.5658028245542887,
+        "hitRate": 0.5014673982391221,
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 1639,
+            "probability": 0.03138565678835149,
+            "outcome": 0.04636973764490543
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 853,
+            "probability": 0.14982585233935172,
+            "outcome": 0.15826494724501758
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 982,
+            "probability": 0.25168540174676285,
+            "outcome": 0.2606924643584521
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 1351,
+            "probability": 0.35166653733701575,
+            "outcome": 0.31384159881569207
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 1674,
+            "probability": 0.45053318983359475,
+            "outcome": 0.4295101553166069
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 1764,
+            "probability": 0.5504210583015351,
+            "outcome": 0.5277777777777778
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 1546,
+            "probability": 0.6489282242919974,
+            "outcome": 0.5653298835705045
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 1360,
+            "probability": 0.7482283991514843,
+            "outcome": 0.6308823529411764
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 1282,
+            "probability": 0.8493776128855468,
+            "outcome": 0.719188767550702
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 3223,
+            "probability": 0.9717726677438935,
+            "outcome": 0.826869376357431
+          }
+        ]
+      },
+      "proxyTerminal": {
+        "forecasts": 15674,
+        "markets": 2047,
+        "brier": 0.16473032231777296,
+        "logLoss": 0.48776370436192285,
+        "meanProbability": 0.5002442191698362,
+        "hitRate": 0.5014673982391221,
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 1946,
+            "probability": 0.030303114719111936,
+            "outcome": 0.03854059609455293
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 966,
+            "probability": 0.15012163653155244,
+            "outcome": 0.17287784679089027
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 1257,
+            "probability": 0.2523731913983122,
+            "outcome": 0.24502784407319014
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 1607,
+            "probability": 0.35214764651841446,
+            "outcome": 0.328562538892346
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 1994,
+            "probability": 0.45202062685260724,
+            "outcome": 0.45486459378134403
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 2182,
+            "probability": 0.5453783249313019,
+            "outcome": 0.5669110907424382
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 1633,
+            "probability": 0.6477350532714001,
+            "outcome": 0.6344151867728107
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 1126,
+            "probability": 0.7465413355748861,
+            "outcome": 0.7380106571936057
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 915,
+            "probability": 0.84903279896035,
+            "outcome": 0.8568306010928962
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 2048,
+            "probability": 0.9702830213622864,
+            "outcome": 0.97021484375
+          }
+        ]
+      },
+      "marketMidpoint": {
+        "forecasts": 15674,
+        "markets": 2047,
+        "brier": 0.16221044905576149,
+        "logLoss": 0.47906507160182943,
+        "meanProbability": 0.5022842924588454,
+        "hitRate": 0.5014673982391221,
+        "calibration": [
+          {
+            "from": 0,
+            "to": 0.1,
+            "count": 2029,
+            "probability": 0.02861606702809279,
+            "outcome": 0.029078363725973385
+          },
+          {
+            "from": 0.1,
+            "to": 0.2,
+            "count": 797,
+            "probability": 0.15029422835633635,
+            "outcome": 0.15307402760351319
+          },
+          {
+            "from": 0.2,
+            "to": 0.3,
+            "count": 1218,
+            "probability": 0.2524096880131362,
+            "outcome": 0.24548440065681446
+          },
+          {
+            "from": 0.3,
+            "to": 0.4,
+            "count": 1686,
+            "probability": 0.35250000000000165,
+            "outcome": 0.33926453143534996
+          },
+          {
+            "from": 0.4,
+            "to": 0.5,
+            "count": 2134,
+            "probability": 0.45140581068416236,
+            "outcome": 0.44798500468603564
+          },
+          {
+            "from": 0.5,
+            "to": 0.6,
+            "count": 2022,
+            "probability": 0.548316023738878,
+            "outcome": 0.5647873392680515
+          },
+          {
+            "from": 0.6,
+            "to": 0.7,
+            "count": 1688,
+            "probability": 0.6470082938388568,
+            "outcome": 0.639218009478673
+          },
+          {
+            "from": 0.7,
+            "to": 0.8,
+            "count": 1139,
+            "probability": 0.747563652326603,
+            "outcome": 0.7480245829675154
+          },
+          {
+            "from": 0.8,
+            "to": 0.9,
+            "count": 823,
+            "probability": 0.8483614823815343,
+            "outcome": 0.8554070473876063
+          },
+          {
+            "from": 0.9,
+            "to": 1,
+            "count": 2138,
+            "probability": 0.972584658559396,
+            "outcome": 0.970533208606174
+          }
+        ]
+      }
+    }
+  },
+  "officialIndex": {
+    "configured": false,
+    "unavailable": {},
+    "comparison": {
+      "commonForecasts": 0,
+      "commonMarkets": 0,
+      "models": {
+        "rawTerminal": {
+          "forecasts": 0,
+          "markets": 0,
+          "brier": null,
+          "logLoss": null,
+          "meanProbability": null,
+          "hitRate": null,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        },
+        "proxyTerminal": {
+          "forecasts": 0,
+          "markets": 0,
+          "brier": null,
+          "logLoss": null,
+          "meanProbability": null,
+          "hitRate": null,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        },
+        "officialIndexAverage": {
+          "forecasts": 0,
+          "markets": 0,
+          "brier": null,
+          "logLoss": null,
+          "meanProbability": null,
+          "hitRate": null,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        },
+        "marketMidpoint": {
+          "forecasts": 0,
+          "markets": 0,
+          "brier": null,
+          "logLoss": null,
+          "meanProbability": null,
+          "hitRate": null,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        }
+      }
+    }
+  },
+  "freshDataAfter": "2026-09-07T00:15:00Z",
+  "trading": {
+    "legacyBaseline": {
+      "normal": {
+        "trades": 121,
+        "pnl": -9.764999999999958,
+        "maxDrawdown": 0.09825999999999951,
+        "maxMarkedDrawdown": 0.1001498501498495,
+        "riskLatched": true,
+        "audit": {
+          "markets": 2048,
+          "eligibleMarkets": 2047,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 42,
+          "rejectedEntries": 80,
+          "noSignal": 28,
+          "entryFilters": {
+            "entry_candidate": 201,
+            "edge_below_threshold": 263,
+            "price_out_of_range": 232,
+            "outside_entry_window": 252
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 80,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 1818
+        }
+      },
+      "adverse": {
+        "trades": 33,
+        "pnl": -10.409999999999997,
+        "maxDrawdown": 0.10409999999999997,
+        "maxMarkedDrawdown": 0.1045477261369316,
+        "riskLatched": true,
+        "audit": {
+          "markets": 2048,
+          "eligibleMarkets": 2047,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 36,
+          "rejectedEntries": 88,
+          "noSignal": 17,
+          "entryFilters": {
+            "entry_candidate": 121,
+            "edge_below_threshold": 149,
+            "price_out_of_range": 124,
+            "outside_entry_window": 153
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 87,
+            "liquidity": 0,
+            "balance": 0,
+            "riskCap": 1
+          },
+          "riskPausedMarkets": 1909
+        }
+      }
+    },
+    "proxyAverageRobust": {
+      "normal": {
+        "trades": 1,
+        "pnl": -0.3400000000000034,
+        "maxDrawdown": 0.003400000000000034,
+        "maxMarkedDrawdown": 0.003400000000000034,
+        "riskLatched": false,
+        "audit": {
+          "markets": 2048,
+          "eligibleMarkets": 2047,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 703,
+          "rejectedEntries": 0,
+          "noSignal": 2046,
+          "entryFilters": {
+            "basis_calibration_warmup": 396,
+            "outside_entry_window": 18309,
+            "price_out_of_range": 5927,
+            "edge_below_threshold": 9650,
+            "entry_candidate": 1
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 0,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        }
+      },
+      "adverse": {
+        "trades": 1,
+        "pnl": -0.6820000000000022,
+        "maxDrawdown": 0.006820000000000021,
+        "maxMarkedDrawdown": 0.006820000000000021,
+        "riskLatched": false,
+        "audit": {
+          "markets": 2048,
+          "eligibleMarkets": 2047,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 703,
+          "rejectedEntries": 0,
+          "noSignal": 2046,
+          "entryFilters": {
+            "basis_calibration_warmup": 396,
+            "outside_entry_window": 18309,
+            "price_out_of_range": 5927,
+            "edge_below_threshold": 9650,
+            "entry_candidate": 1
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 0,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        }
+      }
+    }
+  }
+}

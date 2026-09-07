@@ -1,0 +1,155 @@
+{
+  "id": "2026-09-06T12-31-03-598Z-080399e5",
+  "createdAt": "2026-09-06T12:31:04.287Z",
+  "platform": "win32/arm64",
+  "history": "C:\\Users\\Rando\\Downloads\\kalshibot-main\\data\\market-history\\history.sqlite",
+  "range": {
+    "start": "2026-08-21T08:00:00Z",
+    "end": "2026-09-06T03:00:00Z"
+  },
+  "reference": {
+    "source": "binance:BTCUSDT:1m",
+    "candles": 22920
+  },
+  "config": {
+    "startingBalance": 100,
+    "feeRate": 0.07,
+    "slippageCents": 1,
+    "volumeParticipation": 0.01,
+    "minimumTrainingSamples": 300,
+    "strategy": {
+      "MIN_EDGE": 10,
+      "MIN_DIVERGENCE": 15,
+      "TRADING_WINDOW": 4,
+      "MIN_CONTRACT_PRICE": 35,
+      "MAX_CONTRACT_PRICE": 65,
+      "USE_KELLY_SIZING": true,
+      "KELLY_FRACTION": 0.08,
+      "MAX_POSITION_SIZE": 5,
+      "TREND_ENABLED": true
+    }
+  },
+  "mode": "research-only",
+  "liveModelChanged": false,
+  "sourceHashes": {
+    "lib/history-replay.js": "bd3cbc7a75035b7138830f54e1728acc521380a3ded4f7b963a16c6c4e362fe4",
+    "lib/ml-pipeline.js": "46bb7fc6a441131e8eae6b5a4cad86e674a81a4bbe0a1d5c563543ab43b32a00",
+    "agents/skills/analysis/signal-generator.js": "9d20370ea1148a1574be1f8791ec93cab03164cf17a8db4171447bc9086c5998",
+    "agents/skills/analysis/probability-model.js": "8dd938ef1377c7131b82c0517b1a7b510357a05df09a93e3285ccb2049b0917b"
+  },
+  "assumptions": [
+    "Signals use only completed candles; entries and exits execute at the following minute end, never on the signal candle.",
+    "One entry attempt per market; shared signal and exit rules, but not a full replay of the live orchestrator, risk breakers or ML-filtered trading.",
+    "Normal scenario: next-minute closing ask for entry, closing bid minus configured slippage for exit; entry limit includes configured slippage.",
+    "Adverse scenario: next-minute worst ask/bid. Full fills require volume participation capacity; aggregate volume is NOT evidence of available book depth.",
+    "Fees use configurable quadratic rate and cent rounding per simulated order. Series-specific multipliers, rounding rebates and split fills are not reconstructed.",
+    "Minute spot EMA and volatility approximate the tick feed. No historical Polymarket feed; that strategy is disabled. Settlement uses recorded Kalshi result.",
+    "Recent performance features contain only earlier simulated closes; data and models are isolated from real execution labels."
+  ],
+  "normal": {
+    "samples": 91,
+    "audit": {
+      "markets": 1500,
+      "eligibleMarkets": 1500,
+      "missingCandles": 0,
+      "missingSpot": 0,
+      "invalidMarkets": 0,
+      "invalidQuotes": 489,
+      "rejectedEntries": 70,
+      "noSignal": 1339,
+      "entryFilters": {
+        "edge_below_threshold": 6833,
+        "price_out_of_range": 4344,
+        "outside_entry_window": 11973,
+        "entry_candidate": 161
+      },
+      "fillRejections": {
+        "invalidPrice": 0,
+        "limitExceeded": 70,
+        "liquidity": 0,
+        "balance": 0
+      }
+    },
+    "balance": 84.47199999999995,
+    "pnl": -15.528000000000048,
+    "maxDrawdown": 0.166398314349892,
+    "winRate": 0.43956043956043955
+  },
+  "adverse": {
+    "samples": 36,
+    "audit": {
+      "markets": 1500,
+      "eligibleMarkets": 1500,
+      "missingCandles": 0,
+      "missingSpot": 0,
+      "invalidMarkets": 0,
+      "invalidQuotes": 505,
+      "rejectedEntries": 125,
+      "noSignal": 1339,
+      "entryFilters": {
+        "edge_below_threshold": 6833,
+        "price_out_of_range": 4344,
+        "outside_entry_window": 11973,
+        "entry_candidate": 161
+      },
+      "fillRejections": {
+        "invalidPrice": 0,
+        "limitExceeded": 125,
+        "liquidity": 0,
+        "balance": 0
+      }
+    },
+    "balance": 76.54799999999999,
+    "pnl": -23.452000000000012,
+    "maxDrawdown": 0.23452000000000012,
+    "winRate": 0.1111111111111111
+  },
+  "split": {
+    "method": "chronological, disjoint markets",
+    "training": 63,
+    "validation": 14,
+    "test": 14,
+    "validationStarts": 1788562860000,
+    "testStarts": 1788601620000
+  },
+  "ml": {
+    "trained": false,
+    "modelVersion": "v1.0",
+    "trainingSize": 0,
+    "trees": 0,
+    "features": 0,
+    "trainedAt": null,
+    "validationMetrics": null,
+    "testMetrics": null,
+    "trainedThisRun": false,
+    "minimumSamples": 300,
+    "modelPath": null,
+    "reason": "Only 91 simulated outcomes; need 300"
+  },
+  "baselines": {
+    "validation": {
+      "constantHalf": {
+        "size": 14,
+        "accuracy": 0.5714285714285714,
+        "brierScore": 0.25
+      },
+      "trainingWinRate": {
+        "size": 14,
+        "accuracy": 0.5714285714285714,
+        "brierScore": 0.2451499118165785
+      }
+    },
+    "test": {
+      "constantHalf": {
+        "size": 14,
+        "accuracy": 0.42857142857142855,
+        "brierScore": 0.25
+      },
+      "trainingWinRate": {
+        "size": 14,
+        "accuracy": 0.42857142857142855,
+        "brierScore": 0.2700932224741749
+      }
+    }
+  }
+}

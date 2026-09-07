@@ -1,0 +1,17 @@
+✔ live and replay use identical completed-minute volatility and exclude future ticks (3.6502ms)
+✔ averaging model incorporates observed samples, shrinks future variance, and respects rounding (1.1096ms)
+✔ averaging never treats missing or not-yet-received samples as observed (0.1776ms)
+✔ index recorder stamps live receipt, rejects conflicting edits and segregates historical data (16.9386ms)
+✔ official reference requires live, fresh, contiguous history and official strike metadata (31.9375ms)
+✔ historical index observations cannot accidentally authorize live entries (11.7745ms)
+✔ proxy calibration includes only past published settlements, excludes own outcome, and expires (3.4751ms)
+✔ robust entry guard rejects disappearing edge and blending cannot bypass it (2.1616ms)
+✔ forecast evaluation spans later markets independently of trading drawdown and uses common cohorts (36.5134ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 404.9947

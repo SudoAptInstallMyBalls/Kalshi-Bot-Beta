@@ -1,0 +1,583 @@
+[Reference] 340 BTC candles downloaded
+{"completedAt":"2026-09-07T18:13:24.355Z","selected":71,"marketsWithCandlesDownloaded":1,"lastClose":"2026-09-07T18:00:00Z","spot":{"stored":32340,"downloaded":340,"from":1786863600000,"to":1788804000000},"studyId":"settlement-forward-v1"}
+{
+  "directory": "C:\\Users\\Rando\\Downloads\\kalshibot-main\\data\\research\\settlement-evaluations\\2026-09-07T18-13-26-732Z-6466eb2b",
+  "forecasts": 16227,
+  "models": {
+    "rawTerminal": {
+      "brier": 0.20061303263282132,
+      "markets": 2118,
+      "forecasts": 14719
+    },
+    "proxyTerminal": {
+      "brier": 0.17426973653809805,
+      "markets": 2118,
+      "forecasts": 14719
+    },
+    "proxyAverage": {
+      "brier": 0.1744510511320276,
+      "markets": 2118,
+      "forecasts": 14719
+    },
+    "marketMidpoint": {
+      "brier": 0.17319012266458422,
+      "markets": 2118,
+      "forecasts": 14719
+    }
+  },
+  "forward": {
+    "after": "2026-09-07T00:15:00.000Z",
+    "markets": 71,
+    "forecasts": 494,
+    "brier": {
+      "rawTerminal": 0.17539336103425157,
+      "proxyTerminal": 0.17171755607760747,
+      "proxyAverage": 0.17166762192694152,
+      "marketMidpoint": 0.17369491751012126
+    }
+  },
+  "coinbaseShadow": {
+    "ticks": 3224,
+    "comparison": {
+      "commonForecasts": 2,
+      "commonMarkets": 1,
+      "models": {
+        "rawTerminal": {
+          "forecasts": 2,
+          "markets": 1,
+          "brier": 0.0001,
+          "logLoss": 0.01005033585350145,
+          "meanProbability": 0.01,
+          "hitRate": 0,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 2,
+              "probability": 0.01,
+              "outcome": 0
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        },
+        "proxyAverage": {
+          "forecasts": 2,
+          "markets": 1,
+          "brier": 2.0323458470646181e-19,
+          "logLoss": 9.999999722180686e-10,
+          "meanProbability": 3.1877467332463993e-10,
+          "hitRate": 0,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 2,
+              "probability": 3.1877467332463993e-10,
+              "outcome": 0
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        },
+        "marketMidpoint": {
+          "forecasts": 2,
+          "markets": 1,
+          "brier": 0.00003125,
+          "logLoss": 0.0050156983194550005,
+          "meanProbability": 0.005,
+          "hitRate": 0,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 2,
+              "probability": 0.005,
+              "outcome": 0
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        },
+        "coinbaseUsdAverage": {
+          "forecasts": 2,
+          "markets": 1,
+          "brier": 1.0742452043803124e-25,
+          "logLoss": 9.999999722180686e-10,
+          "meanProbability": 2.3175905639050143e-13,
+          "hitRate": 0,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 2,
+              "probability": 2.3175905639050143e-13,
+              "outcome": 0
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        },
+        "coinbaseOpeningAverage": {
+          "forecasts": 2,
+          "markets": 1,
+          "brier": 2.9307918122952075e-25,
+          "logLoss": 9.999999722180686e-10,
+          "meanProbability": 3.82804898890754e-13,
+          "hitRate": 0,
+          "calibration": [
+            {
+              "from": 0,
+              "to": 0.1,
+              "count": 2,
+              "probability": 3.82804898890754e-13,
+              "outcome": 0
+            },
+            {
+              "from": 0.1,
+              "to": 0.2,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.2,
+              "to": 0.3,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.3,
+              "to": 0.4,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.4,
+              "to": 0.5,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.5,
+              "to": 0.6,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.6,
+              "to": 0.7,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.7,
+              "to": 0.8,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.8,
+              "to": 0.9,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            },
+            {
+              "from": 0.9,
+              "to": 1,
+              "count": 0,
+              "probability": null,
+              "outcome": null
+            }
+          ]
+        }
+      }
+    },
+    "missing": {
+      "missing_or_stale_coinbase": 464,
+      "settlement_window_unobserved": 59,
+      "coinbase_volatility_gap": 28
+    }
+  },
+  "trading": {
+    "legacyBaseline": {
+      "normal": {
+        "trades": 121,
+        "pnl": -9.764999999999958,
+        "maxDrawdown": 0.09825999999999951,
+        "maxMarkedDrawdown": 0.1001498501498495,
+        "riskLatched": true,
+        "audit": {
+          "markets": 2119,
+          "eligibleMarkets": 2118,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 42,
+          "rejectedEntries": 80,
+          "noSignal": 28,
+          "entryFilters": {
+            "entry_candidate": 201,
+            "edge_below_threshold": 263,
+            "price_out_of_range": 232,
+            "outside_entry_window": 252
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 80,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 1889
+        }
+      },
+      "adverse": {
+        "trades": 33,
+        "pnl": -10.409999999999997,
+        "maxDrawdown": 0.10409999999999997,
+        "maxMarkedDrawdown": 0.1045477261369316,
+        "riskLatched": true,
+        "audit": {
+          "markets": 2119,
+          "eligibleMarkets": 2118,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 36,
+          "rejectedEntries": 88,
+          "noSignal": 17,
+          "entryFilters": {
+            "entry_candidate": 121,
+            "edge_below_threshold": 149,
+            "price_out_of_range": 124,
+            "outside_entry_window": 153
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 87,
+            "liquidity": 0,
+            "balance": 0,
+            "riskCap": 1
+          },
+          "riskPausedMarkets": 1980
+        }
+      }
+    },
+    "proxyAverageRobust": {
+      "normal": {
+        "trades": 1,
+        "pnl": -0.3400000000000034,
+        "maxDrawdown": 0.003400000000000034,
+        "maxMarkedDrawdown": 0.003400000000000034,
+        "riskLatched": false,
+        "audit": {
+          "markets": 2119,
+          "eligibleMarkets": 2118,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 718,
+          "rejectedEntries": 0,
+          "noSignal": 2117,
+          "entryFilters": {
+            "basis_calibration_warmup": 396,
+            "outside_entry_window": 18945,
+            "price_out_of_range": 6057,
+            "edge_below_threshold": 10088,
+            "entry_candidate": 1
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 0,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        }
+      },
+      "adverse": {
+        "trades": 1,
+        "pnl": -0.6820000000000022,
+        "maxDrawdown": 0.006820000000000021,
+        "maxMarkedDrawdown": 0.006820000000000021,
+        "riskLatched": false,
+        "audit": {
+          "markets": 2119,
+          "eligibleMarkets": 2118,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 718,
+          "rejectedEntries": 0,
+          "noSignal": 2117,
+          "entryFilters": {
+            "basis_calibration_warmup": 396,
+            "outside_entry_window": 18945,
+            "price_out_of_range": 6057,
+            "edge_below_threshold": 10088,
+            "entry_candidate": 1
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 0,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        }
+      }
+    }
+  },
+  "livePromotion": false
+}

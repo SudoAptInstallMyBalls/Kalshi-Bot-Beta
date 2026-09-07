@@ -1,0 +1,25 @@
+{
+  "createdAt": "2026-09-07T13:31:19.896Z",
+  "platform": "win32/arm64",
+  "selection": {
+    "marketLimit": 1000,
+    "minTrades": 0,
+    "from": 1788740101,
+    "to": 1788787518
+  },
+  "run": {
+    "processed": 52,
+    "selectedTrades": 1294446,
+    "targetMet": false
+  },
+  "counts": {
+    "markets": 2100,
+    "trades": 55628713,
+    "candles": 31485,
+    "stream_events": 0
+  },
+  "csvExported": false,
+  "data": "Public exchange trades and one-minute candles; 1s bars aggregate trade prints only.",
+  "historicalOrderbook": "Not provided by the documented historical API; stream_events contains only separately captured live data.",
+  "botTraining": "Market data is not the bot own execution/outcome feature schema. Replay and aligned spot/reference data are separate work."
+}

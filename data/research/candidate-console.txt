@@ -1,0 +1,9 @@
+{"name":"robust_baseline","trades":1,"pnl":-0.3400000000000034,"adverse":-0.6820000000000022,"brier":0.1744790121490157}
+{"name":"edge_10","trades":2,"pnl":0,"adverse":-0.6820000000000022,"brier":0.1744790121490157}
+{"name":"edge_5","trades":3,"pnl":-0.1700000000000017,"adverse":-0.6820000000000022,"brier":0.1744790121490157}
+{"name":"window_8","trades":1,"pnl":-0.3400000000000034,"adverse":-0.6820000000000022,"brier":0.1744790121490157}
+{"name":"edge_5_window_8","trades":4,"pnl":0.060000000000002274,"adverse":-0.6820000000000022,"brier":0.1744790121490157}
+{"name":"basis_p90","trades":2,"pnl":0,"adverse":-0.6820000000000022,"brier":0.1744790121490157}
+{"name":"volatility_60_returns","trades":2,"pnl":0,"adverse":-0.6820000000000022,"brier":0.17438029672516714}
+{"name":"combined","trades":6,"pnl":-0.6300000000000097,"adverse":-0.6820000000000022,"brier":0.17438029672516714}
+{"directory":"C:\\Users\\Rando\\Downloads\\kalshibot-main\\data\\research\\candidate-evaluations\\2026-09-07T18-11-38-103Z","livePromotion":false}

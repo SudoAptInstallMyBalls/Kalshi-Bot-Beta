@@ -1,0 +1,82 @@
+{
+  "_savedAt": "2026-09-07T04:12:33.659Z",
+  "stats": {
+    "totalTrades": 0,
+    "wins": 0,
+    "losses": 0,
+    "totalPnL": 0,
+    "volumeTraded": 1.1600000000000001,
+    "startTime": 1788698808749,
+    "tradesPerHour": 0,
+    "bestTrade": 0,
+    "worstTrade": 0,
+    "avgEdge": 37.130075186330025,
+    "totalEdge": 37.130075186330025,
+    "grossWins": 0,
+    "grossLosses": 0,
+    "streak": 0,
+    "strategyStats": {},
+    "unrealizedPnL": -0.56
+  },
+  "riskState": {
+    "highWater": 59.4,
+    "cashFlows": 0,
+    "halted": false,
+    "equity": 59.3827,
+    "observedAt": 1788754327190,
+    "drawdown": 0.00029124579124573113
+  },
+  "pendingOrders": [],
+  "openPositions": [
+    {
+      "orderId": "01a07a07-6888-76e3-aa9d-4f5761f73de5",
+      "clientOrderId": "f8fcf785-d061-4b4c-b803-20d27f503f2b",
+      "ticker": "KXBTC15M-26SEP070015-15",
+      "type": "DIRECTIONAL_YES",
+      "signalUuid": "8ab0b821-e543-4654-a6dd-8caff0c10fa5",
+      "side": "yes",
+      "contracts": 1,
+      "filledContracts": 1,
+      "priceCents": 56.00000000000001,
+      "priceDecimal": 0.56,
+      "totalCost": 0.5773,
+      "edge": 16.56359914413703,
+      "modelProb": 0.7256359914413704,
+      "reason": "Spot +0.066% | Model 73% vs Kalshi 56% | 1H: NEUTRAL",
+      "entryTime": 1788753700950,
+      "closeTime": 1788754500000,
+      "status": "filled",
+      "isDualSide": false,
+      "entryCostVerified": true,
+      "exitSubmissionUnknown": true
+    }
+  ],
+  "closedPositions": [],
+  "tradeLog": [
+    {
+      "type": "TRADE",
+      "action": "BUY",
+      "side": "yes",
+      "ticker": "KXBTC15M-26SEP070015-15",
+      "contracts": 1,
+      "price": 56.00000000000001,
+      "edge": 16.56359914413703,
+      "signalType": "DIRECTIONAL_YES",
+      "reason": "Spot +0.066% | Model 73% vs Kalshi 56% | 1H: NEUTRAL",
+      "timestamp": 1788753700951
+    },
+    {
+      "type": "TRADE",
+      "action": "BUY",
+      "side": "no",
+      "ticker": "KXBTC15M-26SEP060945-45",
+      "contracts": 1,
+      "price": 56.00000000000001,
+      "edge": 20.566476042192996,
+      "signalType": "DIRECTIONAL_NO",
+      "reason": "Spot -0.032% | Model 77% vs Kalshi 56% | 1H: NEUTRAL",
+      "timestamp": 1788701505632
+    }
+  ],
+  "pnlHistory": []
+}

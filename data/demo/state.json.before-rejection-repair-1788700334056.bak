@@ -1,0 +1,42 @@
+{
+  "_savedAt": "2026-09-06T13:09:39.202Z",
+  "stats": {
+    "totalTrades": 0,
+    "wins": 0,
+    "losses": 0,
+    "totalPnL": 0,
+    "volumeTraded": 0,
+    "startTime": 1788698808749,
+    "tradesPerHour": 0,
+    "bestTrade": 0,
+    "worstTrade": 0,
+    "avgEdge": 0,
+    "totalEdge": 0,
+    "grossWins": 0,
+    "grossLosses": 0,
+    "streak": 0,
+    "strategyStats": {},
+    "unrealizedPnL": 0
+  },
+  "pendingOrders": [
+    {
+      "orderId": "unconfirmed-0b20ee95-d1d9-4b8c-98b0-651a94889701",
+      "clientOrderId": "0b20ee95-d1d9-4b8c-98b0-651a94889701",
+      "ticker": "KXBTC15M-26SEP060915-15",
+      "side": "no",
+      "contracts": 1,
+      "fillCount": 0,
+      "priceCents": 64,
+      "priceDecimal": 0.64,
+      "reservedCost": 0.66,
+      "placedAt": 1788699694968,
+      "closeTime": 1788700500000,
+      "signalUuid": "e9bb46fa-2cc9-4c90-a9da-185071d0d9e9",
+      "submissionUnknown": true
+    }
+  ],
+  "openPositions": [],
+  "closedPositions": [],
+  "tradeLog": [],
+  "pnlHistory": []
+}

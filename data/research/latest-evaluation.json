@@ -1,0 +1,1190 @@
+{
+  "id": "2026-09-07T12-05-21-725Z-2adc0069",
+  "selected": null,
+  "results": [
+    {
+      "name": "corrected_baseline",
+      "train": {
+        "trades": 121,
+        "pnl": -9.764999999999958,
+        "drawdown": 0.09825999999999951,
+        "winRate": 0.4793388429752066,
+        "audit": {
+          "markets": 1228,
+          "eligibleMarkets": 1227,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 42,
+          "rejectedEntries": 80,
+          "noSignal": 28,
+          "entryFilters": {
+            "entry_candidate": 201,
+            "edge_below_threshold": 263,
+            "price_out_of_range": 232,
+            "outside_entry_window": 252
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 80,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 998
+        },
+        "exits": {
+          "SETTLEMENT": {
+            "trades": 2,
+            "pnl": -1.8,
+            "wins": 0
+          },
+          "STOP_LOSS": {
+            "trades": 52,
+            "pnl": -18.075,
+            "wins": 1
+          },
+          "SCALP_TAKE_PROFIT": {
+            "trades": 66,
+            "pnl": 10.069999999999997,
+            "wins": 56
+          },
+          "TAKE_PROFIT": {
+            "trades": 1,
+            "pnl": 0.039999999999999925,
+            "wins": 1
+          }
+        }
+      },
+      "validation": {
+        "trades": 32,
+        "pnl": -2.84399999999998,
+        "drawdown": 0.032407130763868044,
+        "winRate": 0.375,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 121,
+          "rejectedEntries": 23,
+          "noSignal": 355,
+          "entryFilters": {
+            "edge_below_threshold": 1765,
+            "outside_entry_window": 3173,
+            "price_out_of_range": 1202,
+            "entry_candidate": 55
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 23,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "SCALP_TAKE_PROFIT": {
+            "trades": 17,
+            "pnl": 2.0099999999999993,
+            "wins": 12
+          },
+          "STOP_LOSS": {
+            "trades": 15,
+            "pnl": -4.854,
+            "wins": 0
+          }
+        }
+      },
+      "stressValidation": {
+        "trades": 8,
+        "pnl": -1.9140000000000157,
+        "drawdown": 0.020315621254494667,
+        "winRate": 0.25,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 132,
+          "rejectedEntries": 47,
+          "noSignal": 355,
+          "entryFilters": {
+            "edge_below_threshold": 1765,
+            "outside_entry_window": 3173,
+            "price_out_of_range": 1202,
+            "entry_candidate": 55
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 46,
+            "liquidity": 0,
+            "balance": 0,
+            "riskCap": 1
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "SCALP_TAKE_PROFIT": {
+            "trades": 3,
+            "pnl": 0.11999999999999994,
+            "wins": 2
+          },
+          "STOP_LOSS": {
+            "trades": 5,
+            "pnl": -2.0340000000000003,
+            "wins": 0
+          }
+        }
+      },
+      "eligible": false
+    },
+    {
+      "name": "no_trend_boost",
+      "train": {
+        "trades": 124,
+        "pnl": -10.16499999999995,
+        "drawdown": 0.10164999999999949,
+        "winRate": 0.47580645161290325,
+        "audit": {
+          "markets": 1228,
+          "eligibleMarkets": 1227,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 39,
+          "rejectedEntries": 84,
+          "noSignal": 25,
+          "entryFilters": {
+            "entry_candidate": 208,
+            "edge_below_threshold": 242,
+            "price_out_of_range": 232,
+            "outside_entry_window": 225
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 84,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 994
+        },
+        "exits": {
+          "SETTLEMENT": {
+            "trades": 2,
+            "pnl": -1.8,
+            "wins": 0
+          },
+          "STOP_LOSS": {
+            "trades": 55,
+            "pnl": -18.514999999999997,
+            "wins": 2
+          },
+          "SCALP_TAKE_PROFIT": {
+            "trades": 66,
+            "pnl": 10.109999999999998,
+            "wins": 56
+          },
+          "TAKE_PROFIT": {
+            "trades": 1,
+            "pnl": 0.039999999999999925,
+            "wins": 1
+          }
+        }
+      },
+      "validation": {
+        "trades": 27,
+        "pnl": -1.4089999999999492,
+        "drawdown": 0.02313901345291468,
+        "winRate": 0.4444444444444444,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 127,
+          "rejectedEntries": 25,
+          "noSignal": 358,
+          "entryFilters": {
+            "edge_below_threshold": 1799,
+            "outside_entry_window": 3199,
+            "price_out_of_range": 1189,
+            "entry_candidate": 52
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 25,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "SCALP_TAKE_PROFIT": {
+            "trades": 17,
+            "pnl": 1.8099999999999992,
+            "wins": 12
+          },
+          "STOP_LOSS": {
+            "trades": 10,
+            "pnl": -3.2190000000000003,
+            "wins": 0
+          }
+        }
+      },
+      "stressValidation": {
+        "trades": 10,
+        "pnl": -3.304000000000002,
+        "drawdown": 0.035162642187188196,
+        "winRate": 0.2,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 133,
+          "rejectedEntries": 42,
+          "noSignal": 358,
+          "entryFilters": {
+            "edge_below_threshold": 1799,
+            "outside_entry_window": 3199,
+            "price_out_of_range": 1189,
+            "entry_candidate": 52
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 41,
+            "liquidity": 0,
+            "balance": 0,
+            "riskCap": 1
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "SCALP_TAKE_PROFIT": {
+            "trades": 2,
+            "pnl": 0.21999999999999997,
+            "wins": 2
+          },
+          "STOP_LOSS": {
+            "trades": 8,
+            "pnl": -3.5240000000000005,
+            "wins": 0
+          }
+        }
+      },
+      "eligible": false
+    },
+    {
+      "name": "market_blend_75",
+      "train": {
+        "trades": 107,
+        "pnl": -10.087999999999937,
+        "drawdown": 0.10087999999999937,
+        "winRate": 0.45794392523364486,
+        "audit": {
+          "markets": 1228,
+          "eligibleMarkets": 1227,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 46,
+          "rejectedEntries": 75,
+          "noSignal": 46,
+          "entryFilters": {
+            "entry_candidate": 182,
+            "edge_below_threshold": 339,
+            "price_out_of_range": 295,
+            "outside_entry_window": 413
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 75,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 999
+        },
+        "exits": {
+          "SETTLEMENT": {
+            "trades": 2,
+            "pnl": -1.8,
+            "wins": 0
+          },
+          "STOP_LOSS": {
+            "trades": 47,
+            "pnl": -16.46,
+            "wins": 1
+          },
+          "SCALP_TAKE_PROFIT": {
+            "trades": 57,
+            "pnl": 8.131999999999998,
+            "wins": 47
+          },
+          "TAKE_PROFIT": {
+            "trades": 1,
+            "pnl": 0.039999999999999925,
+            "wins": 1
+          }
+        }
+      },
+      "validation": {
+        "trades": 15,
+        "pnl": -0.5399999999999778,
+        "drawdown": 0.010550413058624485,
+        "winRate": 0.4666666666666667,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 130,
+          "rejectedEntries": 14,
+          "noSignal": 381,
+          "entryFilters": {
+            "edge_below_threshold": 1902,
+            "outside_entry_window": 3406,
+            "price_out_of_range": 1239,
+            "entry_candidate": 29
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 14,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "SCALP_TAKE_PROFIT": {
+            "trades": 10,
+            "pnl": 1.0399999999999994,
+            "wins": 7
+          },
+          "STOP_LOSS": {
+            "trades": 5,
+            "pnl": -1.58,
+            "wins": 0
+          }
+        }
+      },
+      "stressValidation": {
+        "trades": 4,
+        "pnl": -0.6400000000000006,
+        "drawdown": 0.008284259906178244,
+        "winRate": 0.25,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 134,
+          "rejectedEntries": 25,
+          "noSignal": 381,
+          "entryFilters": {
+            "edge_below_threshold": 1902,
+            "outside_entry_window": 3406,
+            "price_out_of_range": 1239,
+            "entry_candidate": 29
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 25,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "SCALP_TAKE_PROFIT": {
+            "trades": 2,
+            "pnl": 0.11999999999999988,
+            "wins": 1
+          },
+          "STOP_LOSS": {
+            "trades": 2,
+            "pnl": -0.7600000000000001,
+            "wins": 0
+          }
+        }
+      },
+      "eligible": false
+    },
+    {
+      "name": "market_blend_50",
+      "train": {
+        "trades": 89,
+        "pnl": -7.797999999999959,
+        "drawdown": 0.08497999999999963,
+        "winRate": 0.47191011235955055,
+        "audit": {
+          "markets": 1228,
+          "eligibleMarkets": 1227,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 451,
+          "rejectedEntries": 63,
+          "noSignal": 1075,
+          "entryFilters": {
+            "entry_candidate": 152,
+            "edge_below_threshold": 5487,
+            "outside_entry_window": 9616,
+            "price_out_of_range": 3397
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 63,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "SETTLEMENT": {
+            "trades": 2,
+            "pnl": -1.8,
+            "wins": 0
+          },
+          "STOP_LOSS": {
+            "trades": 36,
+            "pnl": -11.974000000000002,
+            "wins": 2
+          },
+          "SCALP_TAKE_PROFIT": {
+            "trades": 50,
+            "pnl": 5.935999999999997,
+            "wins": 39
+          },
+          "TAKE_PROFIT": {
+            "trades": 1,
+            "pnl": 0.039999999999999925,
+            "wins": 1
+          }
+        }
+      },
+      "validation": {
+        "trades": 2,
+        "pnl": -0.30999999999998806,
+        "drawdown": 0.0030999999999998806,
+        "winRate": 0,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 135,
+          "rejectedEntries": 5,
+          "noSignal": 403,
+          "entryFilters": {
+            "edge_below_threshold": 1973,
+            "outside_entry_window": 3602,
+            "price_out_of_range": 1274,
+            "entry_candidate": 7
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 5,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "STOP_LOSS": {
+            "trades": 1,
+            "pnl": -0.21000000000000008,
+            "wins": 0
+          },
+          "SCALP_TAKE_PROFIT": {
+            "trades": 1,
+            "pnl": -0.09999999999999998,
+            "wins": 0
+          }
+        }
+      },
+      "stressValidation": {
+        "trades": 1,
+        "pnl": -0.3400000000000034,
+        "drawdown": 0.003400000000000034,
+        "winRate": 0,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 135,
+          "rejectedEntries": 6,
+          "noSignal": 403,
+          "entryFilters": {
+            "edge_below_threshold": 1973,
+            "outside_entry_window": 3602,
+            "price_out_of_range": 1274,
+            "entry_candidate": 7
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 6,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "STOP_LOSS": {
+            "trades": 1,
+            "pnl": -0.3400000000000001,
+            "wins": 0
+          }
+        }
+      },
+      "eligible": false
+    },
+    {
+      "name": "eight_minute_window",
+      "train": {
+        "trades": 108,
+        "pnl": -10.04199999999993,
+        "drawdown": 0.1004199999999993,
+        "winRate": 0.46296296296296297,
+        "audit": {
+          "markets": 1228,
+          "eligibleMarkets": 1227,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 32,
+          "rejectedEntries": 65,
+          "noSignal": 15,
+          "entryFilters": {
+            "entry_candidate": 173,
+            "edge_below_threshold": 210,
+            "price_out_of_range": 321,
+            "outside_entry_window": 75
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 65,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 1039
+        },
+        "exits": {
+          "SETTLEMENT": {
+            "trades": 2,
+            "pnl": -1.8,
+            "wins": 0
+          },
+          "STOP_LOSS": {
+            "trades": 48,
+            "pnl": -16.722,
+            "wins": 1
+          },
+          "SCALP_TAKE_PROFIT": {
+            "trades": 57,
+            "pnl": 8.44,
+            "wins": 48
+          },
+          "TAKE_PROFIT": {
+            "trades": 1,
+            "pnl": 0.039999999999999925,
+            "wins": 1
+          }
+        }
+      },
+      "validation": {
+        "trades": 46,
+        "pnl": -5.618999999999986,
+        "drawdown": 0.05618999999999986,
+        "winRate": 0.32608695652173914,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 119,
+          "rejectedEntries": 31,
+          "noSignal": 333,
+          "entryFilters": {
+            "edge_below_threshold": 2637,
+            "price_out_of_range": 3084,
+            "outside_entry_window": 1643,
+            "entry_candidate": 77
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 31,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "SCALP_TAKE_PROFIT": {
+            "trades": 22,
+            "pnl": 2.429999999999999,
+            "wins": 15
+          },
+          "STOP_LOSS": {
+            "trades": 24,
+            "pnl": -8.049000000000001,
+            "wins": 0
+          }
+        }
+      },
+      "stressValidation": {
+        "trades": 17,
+        "pnl": -4.958000000000013,
+        "drawdown": 0.049580000000000124,
+        "winRate": 0.17647058823529413,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 131,
+          "rejectedEntries": 60,
+          "noSignal": 333,
+          "entryFilters": {
+            "edge_below_threshold": 2637,
+            "price_out_of_range": 3084,
+            "outside_entry_window": 1643,
+            "entry_candidate": 77
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 60,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "SCALP_TAKE_PROFIT": {
+            "trades": 8,
+            "pnl": -0.4900000000000003,
+            "wins": 3
+          },
+          "STOP_LOSS": {
+            "trades": 9,
+            "pnl": -4.467999999999999,
+            "wins": 0
+          }
+        }
+      },
+      "eligible": false
+    },
+    {
+      "name": "ten_point_edge",
+      "train": {
+        "trades": 129,
+        "pnl": -9.851999999999947,
+        "drawdown": 0.09901999999999944,
+        "winRate": 0.4728682170542636,
+        "audit": {
+          "markets": 1228,
+          "eligibleMarkets": 1227,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 36,
+          "rejectedEntries": 82,
+          "noSignal": 18,
+          "entryFilters": {
+            "entry_candidate": 211,
+            "edge_below_threshold": 209,
+            "price_out_of_range": 200,
+            "outside_entry_window": 162
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 82,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 998
+        },
+        "exits": {
+          "SETTLEMENT": {
+            "trades": 2,
+            "pnl": -1.8,
+            "wins": 0
+          },
+          "STOP_LOSS": {
+            "trades": 55,
+            "pnl": -17.901999999999997,
+            "wins": 2
+          },
+          "SCALP_TAKE_PROFIT": {
+            "trades": 71,
+            "pnl": 9.809999999999997,
+            "wins": 58
+          },
+          "TAKE_PROFIT": {
+            "trades": 1,
+            "pnl": 0.039999999999999925,
+            "wins": 1
+          }
+        }
+      },
+      "validation": {
+        "trades": 75,
+        "pnl": -6.507999999999939,
+        "drawdown": 0.06880478087649347,
+        "winRate": 0.4,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 117,
+          "rejectedEntries": 50,
+          "noSignal": 285,
+          "entryFilters": {
+            "edge_below_threshold": 1543,
+            "outside_entry_window": 2543,
+            "price_out_of_range": 1062,
+            "entry_candidate": 125
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 50,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "SCALP_TAKE_PROFIT": {
+            "trades": 42,
+            "pnl": 3.959999999999999,
+            "wins": 30
+          },
+          "STOP_LOSS": {
+            "trades": 33,
+            "pnl": -10.468,
+            "wins": 0
+          }
+        }
+      },
+      "stressValidation": {
+        "trades": 30,
+        "pnl": -7.6140000000000185,
+        "drawdown": 0.07717825739408492,
+        "winRate": 0.3,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 129,
+          "rejectedEntries": 95,
+          "noSignal": 285,
+          "entryFilters": {
+            "edge_below_threshold": 1543,
+            "outside_entry_window": 2543,
+            "price_out_of_range": 1062,
+            "entry_candidate": 125
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 95,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "SCALP_TAKE_PROFIT": {
+            "trades": 11,
+            "pnl": 0.5299999999999996,
+            "wins": 9
+          },
+          "STOP_LOSS": {
+            "trades": 19,
+            "pnl": -8.144000000000002,
+            "wins": 0
+          }
+        }
+      },
+      "eligible": false
+    },
+    {
+      "name": "twenty_point_edge",
+      "train": {
+        "trades": 107,
+        "pnl": -10.087999999999937,
+        "drawdown": 0.10087999999999937,
+        "winRate": 0.45794392523364486,
+        "audit": {
+          "markets": 1228,
+          "eligibleMarkets": 1227,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 46,
+          "rejectedEntries": 75,
+          "noSignal": 46,
+          "entryFilters": {
+            "entry_candidate": 182,
+            "edge_below_threshold": 339,
+            "price_out_of_range": 295,
+            "outside_entry_window": 413
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 75,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 999
+        },
+        "exits": {
+          "SETTLEMENT": {
+            "trades": 2,
+            "pnl": -1.8,
+            "wins": 0
+          },
+          "STOP_LOSS": {
+            "trades": 47,
+            "pnl": -16.46,
+            "wins": 1
+          },
+          "SCALP_TAKE_PROFIT": {
+            "trades": 57,
+            "pnl": 8.131999999999998,
+            "wins": 47
+          },
+          "TAKE_PROFIT": {
+            "trades": 1,
+            "pnl": 0.039999999999999925,
+            "wins": 1
+          }
+        }
+      },
+      "validation": {
+        "trades": 15,
+        "pnl": -0.5399999999999778,
+        "drawdown": 0.010550413058624485,
+        "winRate": 0.4666666666666667,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 130,
+          "rejectedEntries": 15,
+          "noSignal": 380,
+          "entryFilters": {
+            "edge_below_threshold": 1898,
+            "outside_entry_window": 3397,
+            "price_out_of_range": 1238,
+            "entry_candidate": 30
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 15,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "SCALP_TAKE_PROFIT": {
+            "trades": 10,
+            "pnl": 1.0399999999999994,
+            "wins": 7
+          },
+          "STOP_LOSS": {
+            "trades": 5,
+            "pnl": -1.58,
+            "wins": 0
+          }
+        }
+      },
+      "stressValidation": {
+        "trades": 4,
+        "pnl": -0.6400000000000006,
+        "drawdown": 0.008284259906178244,
+        "winRate": 0.25,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 134,
+          "rejectedEntries": 26,
+          "noSignal": 380,
+          "entryFilters": {
+            "edge_below_threshold": 1898,
+            "outside_entry_window": 3397,
+            "price_out_of_range": 1238,
+            "entry_candidate": 30
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 26,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "SCALP_TAKE_PROFIT": {
+            "trades": 2,
+            "pnl": 0.11999999999999988,
+            "wins": 1
+          },
+          "STOP_LOSS": {
+            "trades": 2,
+            "pnl": -0.7600000000000001,
+            "wins": 0
+          }
+        }
+      },
+      "eligible": false
+    },
+    {
+      "name": "no_scalping",
+      "train": {
+        "trades": 103,
+        "pnl": -9.118999999999957,
+        "drawdown": 0.10088248679237777,
+        "winRate": 0.44660194174757284,
+        "audit": {
+          "markets": 1228,
+          "eligibleMarkets": 1227,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 32,
+          "rejectedEntries": 63,
+          "noSignal": 22,
+          "entryFilters": {
+            "entry_candidate": 166,
+            "edge_below_threshold": 203,
+            "price_out_of_range": 189,
+            "outside_entry_window": 198
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 63,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 1039
+        },
+        "exits": {
+          "SETTLEMENT": {
+            "trades": 2,
+            "pnl": -1.8,
+            "wins": 0
+          },
+          "STOP_LOSS": {
+            "trades": 51,
+            "pnl": -17.955999999999996,
+            "wins": 0
+          },
+          "TAKE_PROFIT": {
+            "trades": 50,
+            "pnl": 10.636999999999999,
+            "wins": 46
+          }
+        }
+      },
+      "validation": {
+        "trades": 32,
+        "pnl": -2.1469999999999914,
+        "drawdown": 0.03076464154320368,
+        "winRate": 0.4375,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 121,
+          "rejectedEntries": 23,
+          "noSignal": 355,
+          "entryFilters": {
+            "edge_below_threshold": 1765,
+            "outside_entry_window": 3173,
+            "price_out_of_range": 1202,
+            "entry_candidate": 55
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 23,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "TAKE_PROFIT": {
+            "trades": 15,
+            "pnl": 3.486999999999999,
+            "wins": 14
+          },
+          "STOP_LOSS": {
+            "trades": 17,
+            "pnl": -5.634,
+            "wins": 0
+          }
+        }
+      },
+      "stressValidation": {
+        "trades": 8,
+        "pnl": -1.9639999999999986,
+        "drawdown": 0.02032577195962818,
+        "winRate": 0.25,
+        "audit": {
+          "markets": 410,
+          "eligibleMarkets": 410,
+          "missingCandles": 0,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 132,
+          "rejectedEntries": 47,
+          "noSignal": 355,
+          "entryFilters": {
+            "edge_below_threshold": 1765,
+            "outside_entry_window": 3173,
+            "price_out_of_range": 1202,
+            "entry_candidate": 55
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 46,
+            "liquidity": 0,
+            "balance": 0,
+            "riskCap": 1
+          },
+          "riskPausedMarkets": 0
+        },
+        "exits": {
+          "TAKE_PROFIT": {
+            "trades": 3,
+            "pnl": 0.07,
+            "wins": 2
+          },
+          "STOP_LOSS": {
+            "trades": 5,
+            "pnl": -2.0340000000000003,
+            "wins": 0
+          }
+        }
+      },
+      "eligible": false
+    }
+  ],
+  "finalTest": {
+    "name": "corrected_baseline",
+    "diagnosticOnly": true,
+    "normal": {
+      "trades": 50,
+      "pnl": -3.507000000000019,
+      "drawdown": 0.036611421725239776,
+      "winRate": 0.48,
+      "audit": {
+        "markets": 410,
+        "eligibleMarkets": 410,
+        "missingCandles": 0,
+        "missingSpot": 0,
+        "invalidMarkets": 0,
+        "invalidQuotes": 89,
+        "rejectedEntries": 35,
+        "noSignal": 325,
+        "entryFilters": {
+          "edge_below_threshold": 1749,
+          "price_out_of_range": 1064,
+          "outside_entry_window": 2912,
+          "entry_candidate": 85
+        },
+        "fillRejections": {
+          "invalidPrice": 0,
+          "limitExceeded": 35,
+          "liquidity": 0,
+          "balance": 0
+        },
+        "riskPausedMarkets": 0
+      },
+      "exits": {
+        "SCALP_TAKE_PROFIT": {
+          "trades": 31,
+          "pnl": 2.1099999999999985,
+          "wins": 22
+        },
+        "STOP_LOSS": {
+          "trades": 18,
+          "pnl": -4.777000000000001,
+          "wins": 2
+        },
+        "SETTLEMENT": {
+          "trades": 1,
+          "pnl": -0.8400000000000001,
+          "wins": 0
+        }
+      }
+    },
+    "adverse": {
+      "trades": 27,
+      "pnl": -6.109999999999985,
+      "drawdown": 0.06739999999999981,
+      "winRate": 0.18518518518518517,
+      "audit": {
+        "markets": 410,
+        "eligibleMarkets": 410,
+        "missingCandles": 0,
+        "missingSpot": 0,
+        "invalidMarkets": 0,
+        "invalidQuotes": 91,
+        "rejectedEntries": 58,
+        "noSignal": 325,
+        "entryFilters": {
+          "edge_below_threshold": 1749,
+          "price_out_of_range": 1064,
+          "outside_entry_window": 2912,
+          "entry_candidate": 85
+        },
+        "fillRejections": {
+          "invalidPrice": 0,
+          "limitExceeded": 58,
+          "liquidity": 0,
+          "balance": 0
+        },
+        "riskPausedMarkets": 0
+      },
+      "exits": {
+        "SCALP_TAKE_PROFIT": {
+          "trades": 13,
+          "pnl": 0.33999999999999897,
+          "wins": 5
+        },
+        "STOP_LOSS": {
+          "trades": 14,
+          "pnl": -6.450000000000002,
+          "wins": 0
+        }
+      }
+    }
+  },
+  "livePromotion": false,
+  "futureHoldoutAfter": "2026-09-07T00:15:00Z",
+  "limitations": "Retrospective time-block holdout: aggregate results on this history were already inspected. Fresh future data is still required. Each block starts at the same research balance.",
+  "directory": "C:\\Users\\Rando\\Downloads\\kalshibot-main\\data\\research\\evaluations\\2026-09-07T12-05-21-725Z-2adc0069"
+}

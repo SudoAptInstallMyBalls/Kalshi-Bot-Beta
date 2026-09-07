@@ -1,0 +1,131 @@
+{
+  "id": "2026-09-06T06-59-02-719Z-77f5e5e6",
+  "createdAt": "2026-09-06T06:59:03.912Z",
+  "platform": "win32/arm64",
+  "history": "C:\\Users\\Rando\\Downloads\\kalshibot-main\\data\\market-history\\history.sqlite",
+  "range": {
+    "start": "2026-08-21T08:00:00Z",
+    "end": "2026-09-06T03:00:00Z"
+  },
+  "reference": {
+    "source": "binance:BTCUSDT:1m",
+    "candles": 22920
+  },
+  "config": {
+    "startingBalance": 100,
+    "feeRate": 0.07,
+    "slippageCents": 1,
+    "volumeParticipation": 0.01,
+    "minimumTrainingSamples": 300,
+    "strategy": {
+      "MIN_EDGE": 10,
+      "MIN_DIVERGENCE": 15,
+      "TRADING_WINDOW": 4,
+      "MIN_CONTRACT_PRICE": 35,
+      "MAX_CONTRACT_PRICE": 65,
+      "USE_KELLY_SIZING": true,
+      "KELLY_FRACTION": 0.08,
+      "MAX_POSITION_SIZE": 5,
+      "TREND_ENABLED": true
+    }
+  },
+  "mode": "research-only",
+  "liveModelChanged": false,
+  "sourceHashes": {
+    "lib/history-replay.js": "d01c7df5cd1a419c09087290f5306d55b7bafc55ac45892a285161bb1534561c",
+    "lib/ml-pipeline.js": "103c5caf221b9e646c3d04c36bb2617a0036b0f262c12c42844d0a2f6df40207",
+    "agents/skills/analysis/signal-generator.js": "2fe0093f4e5f0722c99272e3f303d2ff987293c2f91a385f09889403620e1e95",
+    "agents/skills/analysis/probability-model.js": "c171bf9803bfa63a94bbc6e2d39e96ea36544b7b96ccddeaeaa37dfa856c5b58"
+  },
+  "assumptions": [
+    "Signals use only completed candles; entries and exits execute at the following minute end, never on the signal candle.",
+    "One entry attempt per market; shared signal and exit rules, but not a full replay of the live orchestrator, risk breakers or ML-filtered trading.",
+    "Normal scenario: next-minute closing ask for entry, closing bid minus configured slippage for exit; entry limit includes configured slippage.",
+    "Adverse scenario: next-minute worst ask/bid. Full fills require volume participation capacity; aggregate volume is NOT evidence of available book depth.",
+    "Fees use configurable quadratic rate and cent rounding per simulated order. Series-specific multipliers, rounding rebates and split fills are not reconstructed.",
+    "Minute spot EMA and volatility approximate the tick feed. No historical Polymarket feed; that strategy is disabled. Settlement uses recorded Kalshi result.",
+    "Recent performance features contain only earlier simulated closes; data and models are isolated from real execution labels."
+  ],
+  "normal": {
+    "samples": 89,
+    "audit": {
+      "markets": 1500,
+      "eligibleMarkets": 1500,
+      "missingCandles": 0,
+      "missingSpot": 0,
+      "invalidMarkets": 0,
+      "invalidQuotes": 489,
+      "rejectedEntries": 69,
+      "noSignal": 1342
+    },
+    "balance": 75.32899999999995,
+    "pnl": -24.67100000000005,
+    "maxDrawdown": 0.25627538385339316,
+    "winRate": 0.4606741573033708
+  },
+  "adverse": {
+    "samples": 35,
+    "audit": {
+      "markets": 1500,
+      "eligibleMarkets": 1500,
+      "missingCandles": 0,
+      "missingSpot": 0,
+      "invalidMarkets": 0,
+      "invalidQuotes": 505,
+      "rejectedEntries": 123,
+      "noSignal": 1342
+    },
+    "balance": 64.616,
+    "pnl": -35.384,
+    "maxDrawdown": 0.35384,
+    "winRate": 0.11428571428571428
+  },
+  "split": {
+    "method": "chronological, disjoint markets",
+    "training": 62,
+    "validation": 13,
+    "test": 14,
+    "validationStarts": 1788569160000,
+    "testStarts": 1788601620000
+  },
+  "ml": {
+    "trained": false,
+    "modelVersion": "v1.0",
+    "trainingSize": 0,
+    "trees": 0,
+    "features": 0,
+    "trainedAt": null,
+    "validationMetrics": null,
+    "testMetrics": null,
+    "trainedThisRun": false,
+    "minimumSamples": 300,
+    "modelPath": null,
+    "reason": "Only 89 simulated outcomes; need 300"
+  },
+  "baselines": {
+    "validation": {
+      "constantHalf": {
+        "size": 13,
+        "accuracy": 0.5384615384615384,
+        "brierScore": 0.25
+      },
+      "trainingWinRate": {
+        "size": 13,
+        "accuracy": 0.5384615384615384,
+        "brierScore": 0.24919955174897937
+      }
+    },
+    "test": {
+      "constantHalf": {
+        "size": 14,
+        "accuracy": 0.42857142857142855,
+        "brierScore": 0.25
+      },
+      "trainingWinRate": {
+        "size": 14,
+        "accuracy": 0.42857142857142855,
+        "brierScore": 0.26337892076705804
+      }
+    }
+  }
+}

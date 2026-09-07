@@ -1,0 +1,83 @@
+{
+  "declaredAt": "2026-09-07T18:11:38.105Z",
+  "variants": [
+    [
+      "robust_baseline",
+      {}
+    ],
+    [
+      "edge_10",
+      {
+        "MIN_DIVERGENCE": 10
+      }
+    ],
+    [
+      "edge_5",
+      {
+        "MIN_DIVERGENCE": 5
+      }
+    ],
+    [
+      "window_8",
+      {
+        "TRADING_WINDOW": 8
+      }
+    ],
+    [
+      "edge_5_window_8",
+      {
+        "MIN_DIVERGENCE": 5,
+        "TRADING_WINDOW": 8
+      }
+    ],
+    [
+      "basis_p90",
+      {
+        "RESEARCH_BASIS_QUANTILE": 0.9
+      }
+    ],
+    [
+      "volatility_60_returns",
+      {
+        "RESEARCH_VOLATILITY_RETURNS": 60
+      }
+    ],
+    [
+      "combined",
+      {
+        "MIN_DIVERGENCE": 10,
+        "TRADING_WINDOW": 8,
+        "RESEARCH_BASIS_QUANTILE": 0.9,
+        "RESEARCH_VOLATILITY_RETURNS": 60
+      }
+    ]
+  ],
+  "base": {
+    "startingBalance": 100,
+    "feeRate": 0.07,
+    "slippageCents": 1,
+    "volumeParticipation": 0.01,
+    "minimumTrainingSamples": 300,
+    "strategy": {
+      "MAX_TRADE_RISK_PCT": 0.01,
+      "MAX_EQUITY_DRAWDOWN_PCT": 0.1,
+      "ROUND_TRIP_SLIPPAGE_CENTS": 1,
+      "MIN_EDGE": 10,
+      "MIN_DIVERGENCE": 15,
+      "TRADING_WINDOW": 4,
+      "MIN_CONTRACT_PRICE": 35,
+      "MAX_CONTRACT_PRICE": 65,
+      "USE_KELLY_SIZING": true,
+      "KELLY_FRACTION": 0.08,
+      "MAX_POSITION_SIZE": 5,
+      "TREND_ENABLED": true
+    }
+  },
+  "frozenBaseline": "settlement-forward-v1",
+  "limit": "Exploratory on already-inspected data; not statistical evidence of alpha. No live promotion. Keep cost, sizing and drawdown safeguards.",
+  "hashes": {
+    "src/research/candidate-reference.js": "7347376d12cf751e073b9814a4344a7a2cda19abd09c8b78d944ebd84697dee3",
+    "src/research/candidate-replay.js": "71dffaa8fea2b5bb392f00c9bbd337aa6a1e9a1846c025f2241a6541b26ec1dd",
+    "scripts/evaluate-research-candidates.js": "9bc24fb0be577d0a4ef36051389b62a3d2abcfd53070e09b47d1406fa170ef0a"
+  }
+}

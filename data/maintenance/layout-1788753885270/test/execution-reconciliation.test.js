@@ -1,0 +1,120 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const BotState = require('../bot/state');
+const PositionManager = require('../agents/skills/trading/position-manager');
+const KalshiMarketData = require('../agents/skills/market-data/kalshi-market-data');
+const KalshiClient = require('../bot/kalshi');
+const RiskManager = require('../agents/skills/trading/risk-manager');
+const { normalizeOrder, executionTotals } = require('../lib/kalshi-order');
+
+function setup(t, client) {
+  for (const name of ['_loadState', '_scheduleSave', 'saveNow']) t.mock.method(BotState.prototype, name, () => {});
+  const state = new BotState();
+  state.safety = { check: () => ({ approved: true, sizeMultiplier: 1 }), halt: reason => { state.halted = reason; } };
+  state.openPositions = [{ orderId: 'entry', ticker: 'BTC', side: 'yes', contracts: 10, filledContracts: 10,
+    priceDecimal: 0.5, totalCost: 5 }];
+  const pm = new PositionManager();
+  pm.normalFillCheckDelayMs = 0;
+  pm.context = { registry: { get: name => name === 'state-manager' ? { botState: state } : { getClient: () => client } } };
+  return { pm, state, tp: { orderId: 'entry', ticker: 'BTC', side: 'yes', contracts: 10, sellPriceCents: 70, reason: 'test' } };
+}
+const entry = { fill_count: 10, taker_fill_cost: 500, taker_fees: 10 };
+const filled = (count, status = 'executed') => ({ status, fill_count: count, taker_fill_cost: count * 70, taker_fees: count });
+
+test('fixed-point order fields preserve fractional counts and convert dollars exactly once', () => {
+  const order = normalizeOrder({ fill_count_fp: '2.50', taker_fill_cost_dollars: '1.25', taker_fees_dollars: '0.03' });
+  assert.equal(order.fill_count, 2.5);
+  assert.deepEqual(executionTotals(order), { filled: 2.5, gross: 125, fees: 3 });
+  assert.throws(() => executionTotals({ fill_count: 1 }), /costs unavailable/);
+});
+
+test('late cancel fill is counted before repricing; costs and fees include all partial exits', async t => {
+  const submitted = []; let reads = 0;
+  const client = { sellPosition: async (ticker, side, count) => { submitted.push(count); return { order_id: `exit${submitted.length}` }; },
+    getOrder: async id => id === 'entry' ? entry : id === 'exit2' ? filled(6) : ++reads === 1 ? filled(2, 'resting') : filled(4, 'canceled'),
+    cancelOrder: async () => { throw new Error('raced fill'); } };
+  const { pm, state, tp } = setup(t, client);
+  await pm._executeTakeProfit(tp);
+  assert.deepEqual(submitted, [10, 6]);
+  assert.equal(state.openPositions.length, 0);
+  assert.ok(Math.abs(state.stats.totalPnL - 1.8) < 1e-10);
+});
+
+test('unconfirmed cancellation preserves order identity and resumes it without duplicate sell', async t => {
+  let submissions = 0, terminal = false;
+  const client = { sellPosition: async () => { submissions++; return { order_id: 'exit' }; },
+    getOrder: async id => id === 'entry' ? entry : terminal ? filled(10) : filled(2, 'resting'), cancelOrder: async () => {} };
+  const { pm, state, tp } = setup(t, client);
+  await pm._executeTakeProfit(tp);
+  assert.equal(submissions, 1);
+  assert.equal(state.openPositions[0].exitOrder.id, 'exit');
+  assert.equal(state.openPositions[0].filledContracts, 10);
+  terminal = true;
+  await pm._executeTakeProfit(tp);
+  assert.equal(submissions, 1);
+  assert.equal(state.openPositions.length, 0);
+});
+
+test('unknown POST outcome blocks duplicate exits and new entries', async t => {
+  let calls = 0;
+  const { pm, state, tp } = setup(t, { getOrder: async () => entry,
+    sellPosition: async () => { calls++; throw new Error('timeout'); } });
+  await pm._executeTakeProfit(tp);
+  await pm._executeTakeProfit(tp);
+  assert.equal(calls, 1);
+  assert.equal(state.openPositions[0].exitSubmissionUnknown, true);
+  assert.equal(new RiskManager()._checkSignal({}, state).reason, 'exit_reconciliation_pending');
+  assert.equal((await pm._settlePosition('entry')).reason, 'exit_reconciliation_pending');
+});
+
+test('failed quote refresh marks retained quotes stale and final risk check refuses them', async t => {
+  const { state } = setup(t, {});
+  state.activeMarkets = [{ ticker: 'BTC', yesBid: 0.5, yesAsk: 0.51 }];
+  const skill = new KalshiMarketData();
+  skill.client = { fetchMarket: async () => { throw new Error('offline'); } };
+  await skill._refreshMarkets(state);
+  assert.equal(state.activeMarkets[0].quoteStale, true);
+  assert.equal(new RiskManager()._checkSignal({ ticker: 'BTC' }, state).reason, 'stale_market_quote');
+});
+
+test('portfolio mismatch preserves cost basis and pending identities instead of fabricating positions', async t => {
+  const { state } = setup(t, {});
+  state.pendingOrders = [{ orderId: 'pending' }];
+  const skill = new KalshiMarketData();
+  skill.client = { fetchPositions: async () => [{ ticker: 'BTC', position_fp: '-3.00' }] };
+  const result = await skill._reconcilePositions(state);
+  assert.equal(result.mismatches.length, 1);
+  assert.equal(state.openPositions[0].orderId, 'entry');
+  assert.equal(state.openPositions[0].totalCost, 5);
+  assert.equal(state.pendingOrders[0].orderId, 'pending');
+  assert.equal(state.halted, 'portfolio_reconciliation_required');
+});
+
+test('portfolio pagination follows cursors and rejects incomplete schemas', async () => {
+  const client = new KalshiClient({}, {}); let calls = 0;
+  client.get = async () => ({ data: { market_positions: [{ ticker: 'BTC', position_fp: '1' }], cursor: ++calls === 1 ? 'page2' : '' } });
+  assert.equal((await client.fetchPositions('BTC')).length, 2);
+  client.get = async () => ({ data: {} });
+  await assert.rejects(client.fetchPositions('BTC'), /Missing portfolio/);
+});
+
+test('settlement retries are deduplicated, bounded, and cleared on stop', async t => {
+  const { pm, state } = setup(t, {});
+  pm.context.config = { SETTLEMENT_MAX_ATTEMPTS: 1 };
+  t.mock.method(pm, '_settlePosition', async () => ({ settled: false, reason: 'not_settled_yet' }));
+  await pm.settlePositionById('entry');
+  pm.scheduleSettlement('entry');
+  assert.equal(pm._settlementTimers.size, 1);
+  await pm.settlePositionById('entry');
+  assert.equal(state.halted, 'settlement_retries_exhausted');
+  await pm.stop();
+  assert.equal(pm._settlementTimers.size, 0);
+});
+
+test('settlement does not drop an entry that is still pending', async t => {
+  const { pm, state } = setup(t, {});
+  state.openPositions = [];
+  state.pendingOrders = [{ orderId: 'entry' }];
+  assert.equal((await pm._settlePosition('entry')).reason, 'entry_order_pending');
+  assert.equal(state.pendingOrders.length, 1);
+});

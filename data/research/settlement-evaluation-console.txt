@@ -1,0 +1,156 @@
+{
+  "directory": "C:\\Users\\Rando\\Downloads\\kalshibot-main\\data\\research\\settlement-evaluations\\2026-09-07T13-03-42-891Z-dcd28777",
+  "forecasts": 15674,
+  "models": {
+    "rawTerminal": {
+      "brier": 0.20148885110520698,
+      "markets": 2047,
+      "forecasts": 14225
+    },
+    "proxyTerminal": {
+      "brier": 0.17435836762052176,
+      "markets": 2047,
+      "forecasts": 14225
+    },
+    "proxyAverage": {
+      "brier": 0.17454771292656604,
+      "markets": 2047,
+      "forecasts": 14225
+    },
+    "marketMidpoint": {
+      "brier": 0.17317259235500984,
+      "markets": 2047,
+      "forecasts": 14225
+    }
+  },
+  "trading": {
+    "legacyBaseline": {
+      "normal": {
+        "trades": 121,
+        "pnl": -9.764999999999958,
+        "maxDrawdown": 0.09825999999999951,
+        "maxMarkedDrawdown": 0.1001498501498495,
+        "riskLatched": true,
+        "audit": {
+          "markets": 2048,
+          "eligibleMarkets": 2047,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 42,
+          "rejectedEntries": 80,
+          "noSignal": 28,
+          "entryFilters": {
+            "entry_candidate": 201,
+            "edge_below_threshold": 263,
+            "price_out_of_range": 232,
+            "outside_entry_window": 252
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 80,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 1818
+        }
+      },
+      "adverse": {
+        "trades": 33,
+        "pnl": -10.409999999999997,
+        "maxDrawdown": 0.10409999999999997,
+        "maxMarkedDrawdown": 0.1045477261369316,
+        "riskLatched": true,
+        "audit": {
+          "markets": 2048,
+          "eligibleMarkets": 2047,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 36,
+          "rejectedEntries": 88,
+          "noSignal": 17,
+          "entryFilters": {
+            "entry_candidate": 121,
+            "edge_below_threshold": 149,
+            "price_out_of_range": 124,
+            "outside_entry_window": 153
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 87,
+            "liquidity": 0,
+            "balance": 0,
+            "riskCap": 1
+          },
+          "riskPausedMarkets": 1909
+        }
+      }
+    },
+    "proxyAverageRobust": {
+      "normal": {
+        "trades": 1,
+        "pnl": -0.3400000000000034,
+        "maxDrawdown": 0.003400000000000034,
+        "maxMarkedDrawdown": 0.003400000000000034,
+        "riskLatched": false,
+        "audit": {
+          "markets": 2048,
+          "eligibleMarkets": 2047,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 703,
+          "rejectedEntries": 0,
+          "noSignal": 2046,
+          "entryFilters": {
+            "basis_calibration_warmup": 396,
+            "outside_entry_window": 18309,
+            "price_out_of_range": 5927,
+            "edge_below_threshold": 9650,
+            "entry_candidate": 1
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 0,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        }
+      },
+      "adverse": {
+        "trades": 1,
+        "pnl": -0.6820000000000022,
+        "maxDrawdown": 0.006820000000000021,
+        "maxMarkedDrawdown": 0.006820000000000021,
+        "riskLatched": false,
+        "audit": {
+          "markets": 2048,
+          "eligibleMarkets": 2047,
+          "missingCandles": 1,
+          "missingSpot": 0,
+          "invalidMarkets": 0,
+          "invalidQuotes": 703,
+          "rejectedEntries": 0,
+          "noSignal": 2046,
+          "entryFilters": {
+            "basis_calibration_warmup": 396,
+            "outside_entry_window": 18309,
+            "price_out_of_range": 5927,
+            "edge_below_threshold": 9650,
+            "entry_candidate": 1
+          },
+          "fillRejections": {
+            "invalidPrice": 0,
+            "limitExceeded": 0,
+            "liquidity": 0,
+            "balance": 0
+          },
+          "riskPausedMarkets": 0
+        }
+      }
+    }
+  },
+  "livePromotion": false
+}

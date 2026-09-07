@@ -1,0 +1,52 @@
+{
+  "rawForecasts": 24,
+  "independentMarkets": 1,
+  "resolvedMarkets": 0,
+  "calibration": {
+    "markets": 0,
+    "model": null,
+    "marketMid": null,
+    "constantHalf": null
+  },
+  "windows": [],
+  "regimeThresholds": null,
+  "regimes": {},
+  "decayAlert": {
+    "active": false,
+    "rule": "Three disjoint 30-market blocks worse than market-mid Brier; diagnostic only, not proof of decay"
+  },
+  "researchCalibration": {
+    "trained": false,
+    "reason": "Need 300 resolved prior markets and 100 held-out markets; late-known labels are purged"
+  },
+  "execution": {
+    "ack": {
+      "n": 0,
+      "meanMs": null,
+      "p95Ms": null
+    },
+    "firstObservedFill": {
+      "n": 0,
+      "meanMs": null,
+      "p95Ms": null
+    },
+    "cancelToObservedTerminal": {
+      "n": 0,
+      "meanMs": null,
+      "p95Ms": null
+    },
+    "limitation": "Polling timestamps bound observation latency; they are not matching-engine event times. Zero fills does not establish execution quality."
+  },
+  "exposure": {
+    "samples": 61,
+    "maxAbsoluteSignedContracts": 0,
+    "factor": {
+      "n": 0,
+      "correlation": null,
+      "beta": null,
+      "limitation": "Near-full-day marked equity intervals; days with declared external flows excluded. Undeclared transfers cannot be corrected automatically."
+    }
+  },
+  "futureDataRequired": true,
+  "livePromotion": false
+}
