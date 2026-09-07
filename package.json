@@ -1,0 +1,60 @@
+{
+  "name": "kalshibot",
+  "version": "2.0.0",
+  "description": "High-frequency arbitrage bot for Kalshi BTC contracts with Binance WebSocket, Polymarket signals, RedStone oracle, and Mission Control UI",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "demo": "node scripts/start-demo.js",
+    "test": "node --test test/*.test.js",
+    "benchmark:ml": "node test/benchmark-ml.js",
+    "data:download": "node scripts/download-history.js",
+    "data:record": "node scripts/record-market-history.js",
+    "data:export": "node scripts/download-history.js --export-only",
+    "research:replay": "node scripts/replay-history.js",
+    "research:prepare": "node scripts/replay-history.js --download-spot",
+    "research:evaluate": "node scripts/evaluate-strategies.js",
+    "research:audit": "node scripts/audit-strategy.js",
+    "research:walk-forward": "node scripts/walk-forward.js",
+    "demo:telemetry": "node scripts/evaluate-telemetry.js",
+    "demo:execution-replay": "node scripts/replay-execution.js",
+    "demo:record": "node scripts/record-market-history.js --env .env.demo --environment demo --out data/demo/recording --seconds 86400",
+    "dev": "node server.js",
+    "backtest": "node scripts/replay-history.js",
+    "backtest:synthetic": "node scripts/synthetic-backtest.js",
+    "check:dashboard": "node --experimental-vm-modules scripts/check-dashboard.js",
+    "check:server": "node scripts/check-server.js",
+    "research:compare-entries": "node scripts/compare-entry-policy.js"
+  },
+  "keywords": [
+    "kalshi",
+    "trading",
+    "bot",
+    "prediction-markets",
+    "bitcoin",
+    "arbitrage",
+    "binance",
+    "polymarket",
+    "redstone"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "better-sqlite3": "^12.6.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.21.0",
+    "socket.io": "^4.7.5",
+    "ws": "^8.18.0"
+  },
+  "optionalDependencies": {
+    "@langchain/openai": "^0.3.0",
+    "langchain": "^0.3.0"
+  },
+  "imports": {
+    "#src/*": "./src/*.js"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "startingBalance": 59.4,
+  "feeRate": 0.07,
+  "slippageCents": 1,
+  "volumeParticipation": 0.01,
+  "minimumTrainingSamples": 300,
+  "strategy": {
+    "MAX_TRADE_RISK_PCT": 0.01,
+    "MAX_EQUITY_DRAWDOWN_PCT": 0.1,
+    "ROUND_TRIP_SLIPPAGE_CENTS": 1,
+    "MIN_EDGE": 10,
+    "MIN_DIVERGENCE": 10,
+    "TRADING_WINDOW": 4,
+    "MIN_CONTRACT_PRICE": 35,
+    "MAX_CONTRACT_PRICE": 65,
+    "USE_KELLY_SIZING": true,
+    "KELLY_FRACTION": 0.08,
+    "MAX_POSITION_SIZE": 5,
+    "TREND_ENABLED": true
+  }
+}

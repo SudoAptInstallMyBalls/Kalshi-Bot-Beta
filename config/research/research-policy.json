@@ -1,0 +1,10 @@
+{
+  "status": "unvalidated",
+  "configSha256": "61ce46bf9cd115cdd68b33bb62b0aa7143b39908cb33a766cc4d6e94e3257510",
+  "inspectedThrough": "2026-09-06T03:00:00Z",
+  "allowLivePromotion": false,
+  "allowMlUpsize": false,
+  "minimumFitOutcomes": 300,
+  "minimumValidationOutcomes": 30,
+  "description": "Frozen baseline for walk-forward evaluation. Changes require a new explicitly named research policy and retained trial history."
+}
