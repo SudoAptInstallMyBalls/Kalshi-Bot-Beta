@@ -1,22 +1,20 @@
 /**
- * BinancePriceFeed Skill
+ * CoinbasePriceFeed Skill (registered under binance-price-feed for drop-in compatibility)
  *
- * Wraps the existing BinanceFeed as an agent skill.
- * Provides real-time BTC spot pricing via WebSocket with REST fallback.
- *
- * Capabilities: get-binance-price, get-volatility, get-price-history
+ * Provides real-time BTC-USD spot pricing via Coinbase WebSocket.
+ * Also populates settlement-index.sqlite so SettlementReference has 0 basis error.
  */
 
 const BaseSkill = require('#src/agents/core/base-skill');
-const BinanceFeed = require('#src/market-data/binance-ws');
+const CoinbaseFeed = require('#src/market-data/coinbase-ws');
 
 class BinancePriceFeed extends BaseSkill {
   constructor() {
     super({
       name: 'binance-price-feed',
-      description: 'Real-time BTC spot price from Binance via WebSocket with REST fallback',
+      description: 'Real-time BTC spot price from Coinbase WebSocket with REST fallback',
       domain: 'market-data',
-      capabilities: ['get-binance-price', 'get-volatility', 'get-price-history'],
+      capabilities: ['get-binance-price', 'get-coinbase-price', 'get-volatility', 'get-price-history'],
       dependencies: ['state-manager'],
     });
 
@@ -26,7 +24,7 @@ class BinancePriceFeed extends BaseSkill {
   async initialize(context) {
     await super.initialize(context);
     const stateManager = context.registry.get('state-manager');
-    this.feed = new BinanceFeed(stateManager.botState, 'btcusdt');
+    this.feed = new CoinbaseFeed(stateManager.botState, { recordIndex: true });
   }
 
   async start() {
@@ -34,15 +32,24 @@ class BinancePriceFeed extends BaseSkill {
     this.feed.start();
   }
 
+  async stop() {
+    if (this.feed) this.feed.stop();
+    await super.stop();
+  }
+
   async handleTask(task) {
+    const stateManager = this.context.registry.get('state-manager');
+    const btc = stateManager.botState.btcPrice || {};
+
     switch (task.action) {
+      case 'get-coinbase-price':
       case 'get-binance-price': {
-        const stateManager = this.context.registry.get('state-manager');
         return {
-          price: stateManager.botState.btcPrice.binance,
-          bid: stateManager.botState.btcPrice.binanceBid,
-          ask: stateManager.botState.btcPrice.binanceAsk,
-          lastUpdate: stateManager.botState.btcPrice.lastUpdate,
+          price: btc.coinbase ?? btc.binance,
+          bid: btc.coinbaseBid ?? btc.binanceBid,
+          ask: btc.coinbaseAsk ?? btc.binanceAsk,
+          lastUpdate: btc.lastUpdate,
+          source: 'coinbase',
         };
       }
 
@@ -54,22 +61,11 @@ class BinancePriceFeed extends BaseSkill {
       case 'get-price-history': {
         return { history: this.feed.priceHistory };
       }
-
-      default:
-        throw new Error(`Unknown action: ${task.action}`);
     }
   }
 
-  /**
-   * Direct access to the underlying feed (for skills that need it).
-   */
   getFeed() {
     return this.feed;
-  }
-
-  async stop() {
-    if (this.feed) this.feed.stop();
-    await super.stop();
   }
 }
 

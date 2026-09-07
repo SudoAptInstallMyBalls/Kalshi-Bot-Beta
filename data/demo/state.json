@@ -1,5 +1,5 @@
 {
-  "_savedAt": "2026-09-07T18:58:44.237Z",
+  "_savedAt": "2026-09-07T19:28:15.006Z",
   "stats": {
     "totalTrades": 3,
     "wins": 1,
@@ -28,7 +28,7 @@
     "cashFlows": 0,
     "halted": false,
     "equity": 60.2877,
-    "observedAt": 1788807524237,
+    "observedAt": 1788809295005,
     "drawdown": 0
   },
   "pendingOrders": [],
