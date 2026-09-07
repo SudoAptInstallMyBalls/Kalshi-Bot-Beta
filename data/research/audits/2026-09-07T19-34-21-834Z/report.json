@@ -1,0 +1,1848 @@
+{
+  "directory": "C:\\Users\\Rando\\Downloads\\kalshibot-main\\data\\research\\audits\\2026-09-07T19-34-21-834Z",
+  "manifest": {
+    "config": {
+      "startingBalance": 100,
+      "feeRate": 0.07,
+      "slippageCents": 1,
+      "volumeParticipation": 0.01,
+      "minimumTrainingSamples": 300,
+      "strategy": {
+        "MAX_TRADE_RISK_PCT": 0.01,
+        "MAX_EQUITY_DRAWDOWN_PCT": 0.1,
+        "ROUND_TRIP_SLIPPAGE_CENTS": 1,
+        "MIN_EDGE": 10,
+        "MIN_DIVERGENCE": 15,
+        "TRADING_WINDOW": 4,
+        "MIN_CONTRACT_PRICE": 35,
+        "MAX_CONTRACT_PRICE": 65,
+        "USE_KELLY_SIZING": true,
+        "KELLY_FRACTION": 0.08,
+        "MAX_POSITION_SIZE": 5,
+        "TREND_ENABLED": true
+      }
+    },
+    "regimes": "Volatility: spotContext trailing 15-return sigma at market OPEN; tertiles fitted only to first third of markets. Trend: trailing EMA/ROC at OPEN. Thresholds reused for all later markets.",
+    "walkForward": "Anchored history: first 40%, then three nonoverlapping 20% test blocks. Fixed baseline; no optimization or ML fit. Each fold resets to $100.",
+    "scenarios": [
+      "normal: next minute close, 1c exit slippage",
+      "adverse: next minute adverse extremes, 1c exit slippage",
+      "cost stress: adverse extremes, 2c exit slippage, 1.5x fee rate"
+    ],
+    "sharpe": "Realized-equity UTC daily simple returns, zero risk-free rate, sqrt(365) annualization; exclude partial boundary days. Not marked-to-market. Very short and autocorrelated sample.",
+    "limitation": "Previously inspected retrospective data; no pristine holdout or statistical claim of alpha/decay. Minute execution delay, not measured latency. No queue, depth, partial fills or full live risk engine.",
+    "createdAt": "2026-09-07T19:34:21.836Z"
+  },
+  "inventory": {
+    "counts": {
+      "markets": 2119,
+      "trades": 55628713,
+      "candles": 31770,
+      "stream_events": 0
+    },
+    "historyBytes": 37463003136,
+    "start": "2026-08-16T10:00:00Z",
+    "end": "2026-09-07T18:00:00Z",
+    "spotCandles": 32340
+  },
+  "parameters": {
+    "strategy": [
+      "BANKROLL_RESERVE_PCT",
+      "EMERGENCY_STOP_GRACE_SECONDS",
+      "ENABLE_SCALPING",
+      "ENABLE_TELEMETRY",
+      "ENTRY_CLOSE_BUFFER_SECONDS",
+      "ENTRY_START_MINUTES",
+      "KELLY_FRACTION",
+      "MAX_CONTRACT_PRICE",
+      "MAX_LOSS_PER_POSITION",
+      "MAX_MARKET_EXPOSURE_PCT",
+      "MAX_PORTFOLIO_EXPOSURE_DOLLARS",
+      "MAX_PORTFOLIO_EXPOSURE_PCT",
+      "MAX_POSITION_SIZE",
+      "MAX_TRADE_RISK_PCT",
+      "MIN_CONTRACT_PRICE",
+      "MIN_DIVERGENCE",
+      "MIN_EDGE",
+      "MIN_NET_EDGE",
+      "MODEL_PROBABILITY_WEIGHT",
+      "ROUND_TRIP_SLIPPAGE_CENTS",
+      "SCALP_MIN_HOLD_SECONDS",
+      "SCALP_QUICK_PROFIT_PCT",
+      "SCALP_TAKE_PROFIT_PCT",
+      "SETTLEMENT_AWARE",
+      "SETTLEMENT_INDEX_DB",
+      "STOP_LOSS_GRACE_SECONDS",
+      "STOP_LOSS_MIN_TIME_REMAINING",
+      "STOP_LOSS_PCT",
+      "TAKER_FEE_RATE",
+      "TAKE_PROFIT_GAIN_FRACTION",
+      "TAKE_PROFIT_PCT",
+      "TRADING_WINDOW",
+      "TREND_BOOST",
+      "TREND_ENABLED",
+      "TREND_FAST_PERIOD",
+      "TREND_PENALTY",
+      "TREND_ROC_THRESHOLD",
+      "TREND_ROC_WINDOW",
+      "TREND_SLOW_PERIOD",
+      "USE_KELLY_SIZING"
+    ],
+    "risk": [
+      "EQUITY_MAX_AGE_MS",
+      "MAX_EQUITY_DRAWDOWN_PCT",
+      "MAX_EXECUTION_FAILURES",
+      "MAX_POSITIONS_PER_CONTRACT",
+      "MAX_POSITION_SIZE",
+      "MAX_TOTAL_OPEN_POSITIONS",
+      "MAX_TRADE_RISK_PCT",
+      "MIN_TRADING_BALANCE",
+      "SESSION_DRAWDOWN_PAUSE_MS",
+      "SESSION_DRAWDOWN_PAUSE_PCT",
+      "SESSION_DRAWDOWN_REDUCE_PCT",
+      "TAKER_FEE_RATE"
+    ],
+    "execution": [
+      "EXIT_NORMAL_DELAY_MS",
+      "EXIT_NORMAL_MAX_ATTEMPTS",
+      "EXIT_NORMAL_SLIPPAGE_CENTS",
+      "EXIT_URGENT_DELAY_MS",
+      "EXIT_URGENT_MAX_ATTEMPTS",
+      "EXIT_URGENT_SLIPPAGE_CENTS",
+      "ORDER_POLL_INTERVAL",
+      "ORDER_STALE_TIMEOUT"
+    ],
+    "ml": [
+      "ML_ALLOW_UPSIZE",
+      "ML_BASELINE_BRIER",
+      "ML_BUFFER_THRESHOLD",
+      "ML_CONTEXT_TTL_MS",
+      "ML_FLUSH_INTERVAL_MS",
+      "ML_MIN_TRAINING_SAMPLES",
+      "ML_RESEARCH_ONLY",
+      "ML_UPSIZE_MIN_TRAINING_SAMPLES"
+    ]
+  },
+  "uniqueConfigParameters": 65,
+  "featureCount": 27,
+  "constantFeatures": [
+    "move_dir",
+    "is_directional",
+    "is_poly_arb",
+    "is_dual_side",
+    "is_buy_yes"
+  ],
+  "normal": {
+    "trades": 121,
+    "pnl": -9.764999999999999,
+    "profitFactor": 0.5335562455218533,
+    "grossProfit": 11.169999999999996,
+    "grossLoss": 20.934999999999995,
+    "meanPnl": -0.080702479338843,
+    "winRate": 0.4793388429752066,
+    "maxRealizedDrawdown": 0.09825999999999951,
+    "annualizedDailySharpe": -5.917524555123478,
+    "dailyObservations": 21,
+    "btcDailyAssociation": {
+      "n": 21,
+      "correlation": -0.0007178271842714212,
+      "beta": -0.0002910257349488079
+    },
+    "daily": [
+      {
+        "date": "2026-08-16",
+        "pnl": -2.620000000000002,
+        "return": -0.02620000000000002,
+        "trades": 32,
+        "fullDay": false,
+        "btcReturn": null
+      },
+      {
+        "date": "2026-08-17",
+        "pnl": -2.9040000000000017,
+        "return": -0.02982131854590267,
+        "trades": 48,
+        "fullDay": true,
+        "btcReturn": 0.025947535771065233
+      },
+      {
+        "date": "2026-08-18",
+        "pnl": -4.241000000000001,
+        "return": -0.044889707438926306,
+        "trades": 41,
+        "fullDay": true,
+        "btcReturn": 0.002995718409907644
+      },
+      {
+        "date": "2026-08-19",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.07121421537318717
+      },
+      {
+        "date": "2026-08-20",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.053225227912278905
+      },
+      {
+        "date": "2026-08-21",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.07275411279538635
+      },
+      {
+        "date": "2026-08-22",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.016123714114332555
+      },
+      {
+        "date": "2026-08-23",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.008551029498178098
+      },
+      {
+        "date": "2026-08-24",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.01619304294131263
+      },
+      {
+        "date": "2026-08-25",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.005742425728943457
+      },
+      {
+        "date": "2026-08-26",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.00617029929281121
+      },
+      {
+        "date": "2026-08-27",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.01551217197361554
+      },
+      {
+        "date": "2026-08-28",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.02995292934866456
+      },
+      {
+        "date": "2026-08-29",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.004934494276960466
+      },
+      {
+        "date": "2026-08-30",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.007004985299757127
+      },
+      {
+        "date": "2026-08-31",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.011576555701449331
+      },
+      {
+        "date": "2026-09-01",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.014536411911792113
+      },
+      {
+        "date": "2026-09-02",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.0012782964656052886
+      },
+      {
+        "date": "2026-09-03",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.050819233149827614
+      },
+      {
+        "date": "2026-09-04",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.01980549614822713
+      },
+      {
+        "date": "2026-09-05",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.0021463513345401086
+      },
+      {
+        "date": "2026-09-06",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.006389437786344487
+      },
+      {
+        "date": "2026-09-07",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": false,
+        "btcReturn": null
+      }
+    ],
+    "audit": {
+      "markets": 2119,
+      "eligibleMarkets": 2118,
+      "missingCandles": 1,
+      "missingSpot": 0,
+      "invalidMarkets": 0,
+      "invalidQuotes": 42,
+      "rejectedEntries": 80,
+      "noSignal": 28,
+      "entryFilters": {
+        "entry_candidate": 201,
+        "edge_below_threshold": 263,
+        "price_out_of_range": 232,
+        "outside_entry_window": 252
+      },
+      "fillRejections": {
+        "invalidPrice": 0,
+        "limitExceeded": 80,
+        "liquidity": 0,
+        "balance": 0
+      },
+      "riskPausedMarkets": 1889
+    }
+  },
+  "adverse": {
+    "trades": 33,
+    "pnl": -10.41,
+    "profitFactor": 0.06552962298025133,
+    "grossProfit": 0.7299999999999999,
+    "grossLoss": 11.14,
+    "meanPnl": -0.31545454545454543,
+    "winRate": 0.15151515151515152,
+    "maxRealizedDrawdown": 0.10409999999999997,
+    "annualizedDailySharpe": -4.169046939163958,
+    "dailyObservations": 21,
+    "btcDailyAssociation": {
+      "n": 21,
+      "correlation": -0.11203748095164158,
+      "beta": -0.06600560455829285
+    },
+    "daily": [
+      {
+        "date": "2026-08-16",
+        "pnl": -2.99,
+        "return": -0.029900000000000003,
+        "trades": 11,
+        "fullDay": false,
+        "btcReturn": null
+      },
+      {
+        "date": "2026-08-17",
+        "pnl": -7.419999999999999,
+        "return": -0.07648696010720543,
+        "trades": 22,
+        "fullDay": true,
+        "btcReturn": 0.025947535771065233
+      },
+      {
+        "date": "2026-08-18",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.002995718409907644
+      },
+      {
+        "date": "2026-08-19",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.07121421537318717
+      },
+      {
+        "date": "2026-08-20",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.053225227912278905
+      },
+      {
+        "date": "2026-08-21",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.07275411279538635
+      },
+      {
+        "date": "2026-08-22",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.016123714114332555
+      },
+      {
+        "date": "2026-08-23",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.008551029498178098
+      },
+      {
+        "date": "2026-08-24",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.01619304294131263
+      },
+      {
+        "date": "2026-08-25",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.005742425728943457
+      },
+      {
+        "date": "2026-08-26",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.00617029929281121
+      },
+      {
+        "date": "2026-08-27",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.01551217197361554
+      },
+      {
+        "date": "2026-08-28",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.02995292934866456
+      },
+      {
+        "date": "2026-08-29",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.004934494276960466
+      },
+      {
+        "date": "2026-08-30",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.007004985299757127
+      },
+      {
+        "date": "2026-08-31",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.011576555701449331
+      },
+      {
+        "date": "2026-09-01",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.014536411911792113
+      },
+      {
+        "date": "2026-09-02",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.0012782964656052886
+      },
+      {
+        "date": "2026-09-03",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.050819233149827614
+      },
+      {
+        "date": "2026-09-04",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.01980549614822713
+      },
+      {
+        "date": "2026-09-05",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.0021463513345401086
+      },
+      {
+        "date": "2026-09-06",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.006389437786344487
+      },
+      {
+        "date": "2026-09-07",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": false,
+        "btcReturn": null
+      }
+    ],
+    "audit": {
+      "markets": 2119,
+      "eligibleMarkets": 2118,
+      "missingCandles": 1,
+      "missingSpot": 0,
+      "invalidMarkets": 0,
+      "invalidQuotes": 36,
+      "rejectedEntries": 88,
+      "noSignal": 17,
+      "entryFilters": {
+        "entry_candidate": 121,
+        "edge_below_threshold": 149,
+        "price_out_of_range": 124,
+        "outside_entry_window": 153
+      },
+      "fillRejections": {
+        "invalidPrice": 0,
+        "limitExceeded": 87,
+        "liquidity": 0,
+        "balance": 0,
+        "riskCap": 1
+      },
+      "riskPausedMarkets": 1980
+    }
+  },
+  "stress": {
+    "trades": 40,
+    "pnl": -10.359999999999998,
+    "profitFactor": 0.08318584070796457,
+    "grossProfit": 0.9399999999999994,
+    "grossLoss": 11.299999999999997,
+    "meanPnl": -0.259,
+    "winRate": 0.225,
+    "maxRealizedDrawdown": 0.10359999999999986,
+    "annualizedDailySharpe": -4.169046939163956,
+    "dailyObservations": 21,
+    "btcDailyAssociation": {
+      "n": 21,
+      "correlation": -0.11203748095164154,
+      "beta": -0.05959829988115688
+    },
+    "daily": [
+      {
+        "date": "2026-08-16",
+        "pnl": -3.710000000000001,
+        "return": -0.03710000000000001,
+        "trades": 20,
+        "fullDay": false,
+        "btcReturn": null
+      },
+      {
+        "date": "2026-08-17",
+        "pnl": -6.65,
+        "return": -0.06906220791359435,
+        "trades": 20,
+        "fullDay": true,
+        "btcReturn": 0.025947535771065233
+      },
+      {
+        "date": "2026-08-18",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.002995718409907644
+      },
+      {
+        "date": "2026-08-19",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.07121421537318717
+      },
+      {
+        "date": "2026-08-20",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.053225227912278905
+      },
+      {
+        "date": "2026-08-21",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.07275411279538635
+      },
+      {
+        "date": "2026-08-22",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.016123714114332555
+      },
+      {
+        "date": "2026-08-23",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.008551029498178098
+      },
+      {
+        "date": "2026-08-24",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.01619304294131263
+      },
+      {
+        "date": "2026-08-25",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.005742425728943457
+      },
+      {
+        "date": "2026-08-26",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.00617029929281121
+      },
+      {
+        "date": "2026-08-27",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.01551217197361554
+      },
+      {
+        "date": "2026-08-28",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.02995292934866456
+      },
+      {
+        "date": "2026-08-29",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.004934494276960466
+      },
+      {
+        "date": "2026-08-30",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.007004985299757127
+      },
+      {
+        "date": "2026-08-31",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.011576555701449331
+      },
+      {
+        "date": "2026-09-01",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.014536411911792113
+      },
+      {
+        "date": "2026-09-02",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.0012782964656052886
+      },
+      {
+        "date": "2026-09-03",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.050819233149827614
+      },
+      {
+        "date": "2026-09-04",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.01980549614822713
+      },
+      {
+        "date": "2026-09-05",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.0021463513345401086
+      },
+      {
+        "date": "2026-09-06",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.006389437786344487
+      },
+      {
+        "date": "2026-09-07",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": false,
+        "btcReturn": null
+      }
+    ],
+    "audit": {
+      "markets": 2119,
+      "eligibleMarkets": 2118,
+      "missingCandles": 1,
+      "missingSpot": 0,
+      "invalidMarkets": 0,
+      "invalidQuotes": 25,
+      "rejectedEntries": 65,
+      "noSignal": 12,
+      "entryFilters": {
+        "entry_candidate": 105,
+        "edge_below_threshold": 119,
+        "price_out_of_range": 94,
+        "outside_entry_window": 108
+      },
+      "fillRejections": {
+        "invalidPrice": 0,
+        "limitExceeded": 65,
+        "liquidity": 0,
+        "balance": 0
+      },
+      "riskPausedMarkets": 2001
+    }
+  },
+  "volatilityThresholds": [
+    0.0010138777096833154,
+    0.0020841068503497924
+  ],
+  "thirtyDollarAccount": {
+    "trades": 0,
+    "pnl": 0,
+    "profitFactor": null,
+    "grossProfit": 0,
+    "grossLoss": 0,
+    "meanPnl": null,
+    "winRate": null,
+    "maxRealizedDrawdown": 0,
+    "annualizedDailySharpe": null,
+    "dailyObservations": 21,
+    "btcDailyAssociation": {
+      "n": 21,
+      "correlation": null,
+      "beta": 0
+    },
+    "daily": [
+      {
+        "date": "2026-08-16",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": false,
+        "btcReturn": null
+      },
+      {
+        "date": "2026-08-17",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.025947535771065233
+      },
+      {
+        "date": "2026-08-18",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.002995718409907644
+      },
+      {
+        "date": "2026-08-19",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.07121421537318717
+      },
+      {
+        "date": "2026-08-20",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.053225227912278905
+      },
+      {
+        "date": "2026-08-21",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.07275411279538635
+      },
+      {
+        "date": "2026-08-22",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.016123714114332555
+      },
+      {
+        "date": "2026-08-23",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.008551029498178098
+      },
+      {
+        "date": "2026-08-24",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.01619304294131263
+      },
+      {
+        "date": "2026-08-25",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.005742425728943457
+      },
+      {
+        "date": "2026-08-26",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.00617029929281121
+      },
+      {
+        "date": "2026-08-27",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.01551217197361554
+      },
+      {
+        "date": "2026-08-28",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.02995292934866456
+      },
+      {
+        "date": "2026-08-29",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.004934494276960466
+      },
+      {
+        "date": "2026-08-30",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.007004985299757127
+      },
+      {
+        "date": "2026-08-31",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.011576555701449331
+      },
+      {
+        "date": "2026-09-01",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.014536411911792113
+      },
+      {
+        "date": "2026-09-02",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.0012782964656052886
+      },
+      {
+        "date": "2026-09-03",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.050819233149827614
+      },
+      {
+        "date": "2026-09-04",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": -0.01980549614822713
+      },
+      {
+        "date": "2026-09-05",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.0021463513345401086
+      },
+      {
+        "date": "2026-09-06",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": true,
+        "btcReturn": 0.006389437786344487
+      },
+      {
+        "date": "2026-09-07",
+        "pnl": 0,
+        "return": 0,
+        "trades": 0,
+        "fullDay": false,
+        "btcReturn": null
+      }
+    ],
+    "audit": {
+      "markets": 2119,
+      "eligibleMarkets": 2118,
+      "missingCandles": 1,
+      "missingSpot": 0,
+      "invalidMarkets": 0,
+      "invalidQuotes": 718,
+      "rejectedEntries": 0,
+      "noSignal": 2118,
+      "entryFilters": {
+        "entry_candidate": 1115,
+        "edge_below_threshold": 9558,
+        "outside_entry_window": 18954,
+        "price_out_of_range": 6271
+      },
+      "fillRejections": {
+        "invalidPrice": 0,
+        "limitExceeded": 0,
+        "liquidity": 0,
+        "balance": 0
+      },
+      "riskPausedMarkets": 0
+    }
+  },
+  "marketRegimes": {
+    "low/BEARISH": 246,
+    "low/NEUTRAL": 153,
+    "low/BULLISH": 230,
+    "medium/BULLISH": 396,
+    "medium/BEARISH": 338,
+    "high/BEARISH": 215,
+    "high/NEUTRAL": 108,
+    "high/BULLISH": 250,
+    "medium/NEUTRAL": 183
+  },
+  "regimes": {
+    "high/BULLISH": {
+      "trades": 4,
+      "pnl": 0.32999999999999996,
+      "profitFactor": 1.8684210526315788,
+      "grossProfit": 0.71,
+      "grossLoss": 0.38,
+      "meanPnl": 0.08249999999999999,
+      "winRate": 0.75
+    },
+    "high/NEUTRAL": {
+      "trades": 1,
+      "pnl": -0.24000000000000005,
+      "profitFactor": 0,
+      "grossProfit": 0,
+      "grossLoss": 0.24000000000000005,
+      "meanPnl": -0.24000000000000005,
+      "winRate": 0
+    },
+    "low/BEARISH": {
+      "trades": 31,
+      "pnl": -2.025000000000002,
+      "profitFactor": 0.6637888095633403,
+      "grossProfit": 3.9979999999999993,
+      "grossLoss": 6.0230000000000015,
+      "meanPnl": -0.06532258064516135,
+      "winRate": 0.4838709677419355
+    },
+    "low/BULLISH": {
+      "trades": 27,
+      "pnl": -3.4370000000000007,
+      "profitFactor": 0.264498181040017,
+      "grossProfit": 1.2359999999999993,
+      "grossLoss": 4.673,
+      "meanPnl": -0.12729629629629635,
+      "winRate": 0.4074074074074074
+    },
+    "low/NEUTRAL": {
+      "trades": 27,
+      "pnl": -0.8830000000000013,
+      "profitFactor": 0.7681806248359146,
+      "grossProfit": 2.9259999999999993,
+      "grossLoss": 3.8090000000000006,
+      "meanPnl": -0.032703703703703735,
+      "winRate": 0.5555555555555556
+    },
+    "medium/BEARISH": {
+      "trades": 12,
+      "pnl": -2.028000000000001,
+      "profitFactor": 0.3638644918444164,
+      "grossProfit": 1.1599999999999997,
+      "grossLoss": 3.1880000000000006,
+      "meanPnl": -0.16900000000000004,
+      "winRate": 0.3333333333333333
+    },
+    "medium/BULLISH": {
+      "trades": 14,
+      "pnl": -1.6720000000000006,
+      "profitFactor": 0.2575488454706925,
+      "grossProfit": 0.5799999999999996,
+      "grossLoss": 2.2520000000000002,
+      "meanPnl": -0.11942857142857147,
+      "winRate": 0.42857142857142855
+    },
+    "medium/NEUTRAL": {
+      "trades": 5,
+      "pnl": 0.18999999999999984,
+      "profitFactor": 1.5135135135135132,
+      "grossProfit": 0.5599999999999998,
+      "grossLoss": 0.37,
+      "meanPnl": 0.037999999999999964,
+      "winRate": 0.8
+    }
+  },
+  "adverseRegimes": {
+    "high/BULLISH": {
+      "trades": 3,
+      "pnl": -1,
+      "profitFactor": 0,
+      "grossProfit": 0,
+      "grossLoss": 1,
+      "meanPnl": -0.3333333333333333,
+      "winRate": 0
+    },
+    "low/BEARISH": {
+      "trades": 8,
+      "pnl": -2.3600000000000003,
+      "profitFactor": 0.12915129151291507,
+      "grossProfit": 0.34999999999999987,
+      "grossLoss": 2.71,
+      "meanPnl": -0.29500000000000004,
+      "winRate": 0.25
+    },
+    "low/BULLISH": {
+      "trades": 7,
+      "pnl": -1.7100000000000004,
+      "profitFactor": 0.10937499999999996,
+      "grossProfit": 0.20999999999999996,
+      "grossLoss": 1.9200000000000004,
+      "meanPnl": -0.2442857142857143,
+      "winRate": 0.14285714285714285
+    },
+    "low/NEUTRAL": {
+      "trades": 6,
+      "pnl": -1.6,
+      "profitFactor": 0.012345679012345689,
+      "grossProfit": 0.020000000000000018,
+      "grossLoss": 1.62,
+      "meanPnl": -0.26666666666666666,
+      "winRate": 0.16666666666666666
+    },
+    "medium/BEARISH": {
+      "trades": 5,
+      "pnl": -2.39,
+      "profitFactor": 0,
+      "grossProfit": 0,
+      "grossLoss": 2.39,
+      "meanPnl": -0.47800000000000004,
+      "winRate": 0
+    },
+    "medium/BULLISH": {
+      "trades": 3,
+      "pnl": -1.5,
+      "profitFactor": 0,
+      "grossProfit": 0,
+      "grossLoss": 1.5,
+      "meanPnl": -0.5,
+      "winRate": 0
+    },
+    "medium/NEUTRAL": {
+      "trades": 1,
+      "pnl": 0.15000000000000002,
+      "profitFactor": null,
+      "grossProfit": 0.15000000000000002,
+      "grossLoss": 0,
+      "meanPnl": 0.15000000000000002,
+      "winRate": 1
+    }
+  },
+  "thirds": {
+    "oldest": {
+      "trades": 121,
+      "pnl": -9.764999999999999,
+      "profitFactor": 0.5335562455218533,
+      "grossProfit": 11.169999999999996,
+      "grossLoss": 20.934999999999995,
+      "meanPnl": -0.080702479338843,
+      "winRate": 0.4793388429752066
+    }
+  },
+  "exits": {
+    "SCALP_TAKE_PROFIT": {
+      "trades": 66,
+      "pnl": 10.069999999999997,
+      "profitFactor": 10.682692307692301,
+      "grossProfit": 11.109999999999998,
+      "grossLoss": 1.0400000000000005,
+      "meanPnl": 0.15257575757575753,
+      "winRate": 0.8484848484848485
+    },
+    "SETTLEMENT": {
+      "trades": 2,
+      "pnl": -1.8,
+      "profitFactor": 0,
+      "grossProfit": 0,
+      "grossLoss": 1.8,
+      "meanPnl": -0.9,
+      "winRate": 0
+    },
+    "STOP_LOSS": {
+      "trades": 52,
+      "pnl": -18.075,
+      "profitFactor": 0.0011052777010223769,
+      "grossProfit": 0.019999999999999907,
+      "grossLoss": 18.095,
+      "meanPnl": -0.34759615384615383,
+      "winRate": 0.019230769230769232
+    },
+    "TAKE_PROFIT": {
+      "trades": 1,
+      "pnl": 0.039999999999999925,
+      "profitFactor": null,
+      "grossProfit": 0.039999999999999925,
+      "grossLoss": 0,
+      "meanPnl": 0.039999999999999925,
+      "winRate": 1
+    }
+  },
+  "calibration": {
+    "all": {
+      "trades": 121,
+      "meanModelProbability": 0.8492995328435562,
+      "settlementHitRate": 0.45454545454545453,
+      "modelSettlementBrier": 0.3994033347055181,
+      "quoteSettlementBrier": 0.2303239669421488
+    },
+    "oldest": {
+      "trades": 121,
+      "meanModelProbability": 0.8492995328435562,
+      "settlementHitRate": 0.45454545454545453,
+      "modelSettlementBrier": 0.3994033347055181,
+      "quoteSettlementBrier": 0.2303239669421488
+    },
+    "middle": {
+      "trades": 0,
+      "meanModelProbability": null,
+      "settlementHitRate": null,
+      "modelSettlementBrier": null,
+      "quoteSettlementBrier": null
+    },
+    "newest": {
+      "trades": 0,
+      "meanModelProbability": null,
+      "settlementHitRate": null,
+      "modelSettlementBrier": null,
+      "quoteSettlementBrier": null
+    }
+  },
+  "costs": {
+    "entryFees": 3.050000000000002,
+    "exitFees": 2.4200000000000013,
+    "modeledExitSlippage": 1.5600000000000012,
+    "meanRoundTripCostPerContract": 0.0601652892561982,
+    "meanEstimatedProbabilityEdge": 0.3575639956534736,
+    "meanRiskFraction": 0.005915571488448865,
+    "maxRiskFraction": 0.009959737232464506,
+    "riskOverOnePercent": 0
+  },
+  "folds": [
+    {
+      "trainMarkets": 847,
+      "trainLabels": 121,
+      "testMarkets": 424,
+      "start": "2026-08-25T08:00:00Z",
+      "end": "2026-08-29T20:00:00Z",
+      "normal": {
+        "trades": 10,
+        "pnl": 0.49699999999999966,
+        "profitFactor": 1.5584269662921344,
+        "grossProfit": 1.3869999999999998,
+        "grossLoss": 0.8900000000000001,
+        "meanPnl": 0.04969999999999995,
+        "winRate": 0.7
+      },
+      "adverse": {
+        "trades": 3,
+        "pnl": -1.07,
+        "profitFactor": 0,
+        "grossProfit": 0,
+        "grossLoss": 1.07,
+        "meanPnl": -0.3566666666666667,
+        "winRate": 0
+      }
+    },
+    {
+      "trainMarkets": 1271,
+      "trainLabels": 121,
+      "testMarkets": 424,
+      "start": "2026-08-29T20:00:00Z",
+      "end": "2026-09-03T06:00:00Z",
+      "normal": {
+        "trades": 40,
+        "pnl": -3.624,
+        "profitFactor": 0.42875157629255983,
+        "grossProfit": 2.7199999999999993,
+        "grossLoss": 6.343999999999999,
+        "meanPnl": -0.09060000000000003,
+        "winRate": 0.35
+      },
+      "adverse": {
+        "trades": 13,
+        "pnl": -3.1940000000000004,
+        "profitFactor": 0.0616921269095182,
+        "grossProfit": 0.20999999999999996,
+        "grossLoss": 3.4040000000000004,
+        "meanPnl": -0.2456923076923077,
+        "winRate": 0.15384615384615385
+      }
+    },
+    {
+      "trainMarkets": 1695,
+      "trainLabels": 121,
+      "testMarkets": 424,
+      "start": "2026-09-03T06:00:00Z",
+      "end": "2026-09-07T18:00:00Z",
+      "normal": {
+        "trades": 44,
+        "pnl": -2.867000000000002,
+        "profitFactor": 0.5195240489358134,
+        "grossProfit": 3.099999999999999,
+        "grossLoss": 5.967000000000001,
+        "meanPnl": -0.06515909090909099,
+        "winRate": 0.5227272727272727
+      },
+      "adverse": {
+        "trades": 24,
+        "pnl": -5.16,
+        "profitFactor": 0.12837837837837832,
+        "grossProfit": 0.7599999999999997,
+        "grossLoss": 5.92,
+        "meanPnl": -0.21499999999999997,
+        "winRate": 0.25
+      }
+    }
+  ],
+  "featureAssociations": [
+    {
+      "name": "spot_move",
+      "oldest": {
+        "n": 121,
+        "correlation": 0.12249355581150377,
+        "beta": 0.2333412582896304
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "abs_move",
+      "oldest": {
+        "n": 121,
+        "correlation": 0.12249355581150377,
+        "beta": 0.2333412582896304
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "move_dir",
+      "oldest": {
+        "n": 121,
+        "correlation": null,
+        "beta": null
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "time_remaining",
+      "oldest": {
+        "n": 121,
+        "correlation": -0.012766284415824546,
+        "beta": -0.1786565030967118
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "time_elapsed",
+      "oldest": {
+        "n": 121,
+        "correlation": 0.012766284415824593,
+        "beta": 0.0017865650309671272
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "volatility",
+      "oldest": {
+        "n": 121,
+        "correlation": -0.04203050616681623,
+        "beta": -0.04164029274719259
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "high_vol",
+      "oldest": {
+        "n": 121,
+        "correlation": 0.0597892368590364,
+        "beta": 0.1920903954802268
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "edge",
+      "oldest": {
+        "n": 121,
+        "correlation": 0.009237023701171306,
+        "beta": 0.00034339970287092556
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "model_prob",
+      "oldest": {
+        "n": 121,
+        "correlation": 0.10953196410857041,
+        "beta": 0.4774751713114689
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "price",
+      "oldest": {
+        "n": 121,
+        "correlation": 0.18330499016244683,
+        "beta": 1.1946777148490166
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "contracts",
+      "oldest": {
+        "n": 121,
+        "correlation": -0.2015559952476671,
+        "beta": -0.21544715447154464
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "yes_spread",
+      "oldest": {
+        "n": 121,
+        "correlation": -0.1243899345163876,
+        "beta": -0.48739495798320726
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "no_spread",
+      "oldest": {
+        "n": 121,
+        "correlation": -0.12438993451638652,
+        "beta": -0.4873949579832031
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "combined_ask",
+      "oldest": {
+        "n": 121,
+        "correlation": -0.12438993451638623,
+        "beta": -0.4873949579832014
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "dual_margin",
+      "oldest": {
+        "n": 121,
+        "correlation": 0.12438993451638589,
+        "beta": 0.48739495798320015
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "is_directional",
+      "oldest": {
+        "n": 121,
+        "correlation": null,
+        "beta": null
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "is_poly_arb",
+      "oldest": {
+        "n": 121,
+        "correlation": null,
+        "beta": null
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "is_dual_side",
+      "oldest": {
+        "n": 121,
+        "correlation": null,
+        "beta": null
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "is_buy_yes",
+      "oldest": {
+        "n": 121,
+        "correlation": null,
+        "beta": null
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "trend_aligned",
+      "oldest": {
+        "n": 121,
+        "correlation": -0.07190590370889581,
+        "beta": -0.0746753246753248
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "trend_counter",
+      "oldest": {
+        "n": 121,
+        "correlation": -0.05777085596010589,
+        "beta": -0.06097560975609755
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "trend_strength",
+      "oldest": {
+        "n": 121,
+        "correlation": -0.026645873529807695,
+        "beta": -0.2073415746156909
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "trend_roc",
+      "oldest": {
+        "n": 121,
+        "correlation": -0.0842431690604997,
+        "beta": -0.3289218698197383
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "recent_wr",
+      "oldest": {
+        "n": 121,
+        "correlation": -0.032889119948890835,
+        "beta": -0.17968980395463385
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "recent_pnl",
+      "oldest": {
+        "n": 121,
+        "correlation": 0.049874902448795,
+        "beta": 0.008320537219173264
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "streak",
+      "oldest": {
+        "n": 121,
+        "correlation": 0.017056297288833726,
+        "beta": 0.0035671534594206356
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    },
+    {
+      "name": "balance",
+      "oldest": {
+        "n": 121,
+        "correlation": 0.04987490244879496,
+        "beta": 0.00832053721917326
+      },
+      "middle": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      },
+      "newest": {
+        "n": 0,
+        "correlation": null,
+        "beta": null
+      }
+    }
+  ]
+}

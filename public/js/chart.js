@@ -1,87 +1,120 @@
 import { el } from './dom.js';
+
 const ctx = document.getElementById('pnl-chart').getContext('2d');
-const pnlChart = new Chart(ctx, {
+
+let currentMode = 'pnl'; // 'pnl' or 'btc'
+let spotHistory = []; // [{ time, price, strike }]
+
+const chart = new Chart(ctx, {
   type: 'line',
   data: {
     labels: [],
-    datasets: [{
-      label: 'Cumulative P&L',
-      data: [],
-      borderColor: '#007373',
-      backgroundColor: 'rgba(0, 115, 115, 0.08)',
-      borderWidth: 2,
-      fill: true,
-      tension: 0.3,
-      pointRadius: 3,
-      pointBackgroundColor: '#007373',
-      pointBorderColor: 'transparent',
-    }],
+    datasets: [
+      {
+        label: 'Cumulative P&L',
+        data: [],
+        borderColor: '#38ef7d',
+        backgroundColor: 'rgba(56, 239, 125, 0.08)',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.2,
+        pointRadius: 2,
+      },
+      {
+        label: 'Kalshi Active Strike',
+        data: [],
+        borderColor: '#facc15',
+        borderDash: [5, 5],
+        borderWidth: 1.5,
+        fill: false,
+        pointRadius: 0,
+      }
+    ],
   },
   options: {
     responsive: true,
     maintainAspectRatio: false,
-    animation: { duration: 300 },
+    animation: false,
     plugins: {
       legend: { display: false },
       tooltip: {
-        backgroundColor: '#ffffff',
-        borderColor: '#007373',
+        backgroundColor: '#181c18',
+        borderColor: '#282f28',
         borderWidth: 1,
-        titleColor: '#5b5a52',
-        bodyColor: '#1c1c1a',
-        bodyFont: { family: 'monospace' },
+        bodyFont: { family: 'JetBrains Mono' },
       },
     },
     scales: {
       x: {
-        display: true,
-        grid: { color: 'rgba(156, 154, 142, 0.35)' },
-        ticks: { color: '#5b5a52', font: { size: 9 }, maxTicksLimit: 8 },
+        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+        ticks: { color: '#6e7568', font: { size: 9 }, maxTicksLimit: 8 },
       },
       y: {
-        display: true,
-        grid: { color: 'rgba(156, 154, 142, 0.35)' },
+        grid: { color: 'rgba(255, 255, 255, 0.05)' },
         ticks: {
-          color: '#5b5a52',
-          font: { size: 10 },
-          callback: v => '$' + v.toFixed(2),
+          color: '#6e7568',
+          font: { size: 9 },
+          callback: v => currentMode === 'pnl' ? '$' + v.toFixed(2) : '$' + v.toLocaleString(),
         },
       },
     },
   },
 });
 
-function updateChart(pnlHistory) {
-  if (!pnlHistory || pnlHistory.length === 0) return;
+function setChartMode(mode, pnlHistory) {
+  currentMode = mode;
+  el('btn-chart-pnl')?.classList.toggle('active', mode === 'pnl');
+  el('btn-chart-btc')?.classList.toggle('active', mode === 'btc');
 
-  // Persist to localStorage for page refresh survival
-  try {
-    localStorage.setItem('kalshibot_pnlHistory', JSON.stringify(pnlHistory.slice(-500)));
-  } catch (e) {
-    // localStorage might be full or disabled
+  if (mode === 'pnl') {
+    chart.data.datasets[0].label = 'Cumulative P&L';
+    chart.data.datasets[1].data = [];
+    updateChart(pnlHistory);
+  } else {
+    chart.data.datasets[0].label = 'Coinbase BTC Spot';
+    chart.data.datasets[0].borderColor = '#38bdf8';
+    chart.data.datasets[0].backgroundColor = 'rgba(56, 189, 248, 0.08)';
+    renderBtcChart();
   }
+}
+
+function updateChart(pnlHistory) {
+  if (currentMode !== 'pnl' || !pnlHistory || pnlHistory.length === 0) return;
 
   const labels = pnlHistory.map(p =>
     new Date(p.timestamp).toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' })
   );
   const data = pnlHistory.map(p => p.cumulative);
 
-  pnlChart.data.labels = labels;
-  pnlChart.data.datasets[0].data = data;
+  chart.data.labels = labels;
+  chart.data.datasets[0].data = data;
+  chart.data.datasets[1].data = [];
 
-  // Color based on P&L
   const lastPnl = data[data.length - 1] || 0;
-  const color = lastPnl >= 0 ? '#1f7a3d' : '#a11d1d';
-  const bgColor = lastPnl >= 0 ? 'rgba(31, 122, 61, 0.08)' : 'rgba(161, 29, 29, 0.08)';
+  const color = lastPnl >= 0 ? '#38ef7d' : '#f87171';
+  chart.data.datasets[0].borderColor = color;
+  chart.data.datasets[0].backgroundColor = lastPnl >= 0 ? 'rgba(56, 239, 125, 0.08)' : 'rgba(248, 113, 113, 0.08)';
 
-  pnlChart.data.datasets[0].borderColor = color;
-  pnlChart.data.datasets[0].backgroundColor = bgColor;
-  pnlChart.data.datasets[0].pointBackgroundColor = color;
-
-  pnlChart.update('none');
-
-  el('chart-total').textContent = (lastPnl >= 0 ? '+' : '') + '$' + lastPnl.toFixed(2);
+  chart.update('none');
 }
 
+function addSpotTick(price, strike = null) {
+  if (!price) return;
+  const timeStr = new Date().toLocaleTimeString('en-US', { hour12: false, minute: '2-digit', second: '2-digit' });
+  spotHistory.push({ time: timeStr, price, strike });
+  if (spotHistory.length > 60) spotHistory.shift();
 
-export { updateChart };
+  if (currentMode === 'btc') {
+    renderBtcChart();
+  }
+}
+
+function renderBtcChart() {
+  if (spotHistory.length === 0) return;
+  chart.data.labels = spotHistory.map(s => s.time);
+  chart.data.datasets[0].data = spotHistory.map(s => s.price);
+  chart.data.datasets[1].data = spotHistory.map(s => s.strike);
+  chart.update('none');
+}
+
+export { updateChart, setChartMode, addSpotTick };

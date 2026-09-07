@@ -1,14 +1,23 @@
 {
-  "rawForecasts": 24,
-  "independentMarkets": 1,
-  "resolvedMarkets": 0,
+  "rawForecasts": 747,
+  "independentMarkets": 14,
+  "resolvedMarkets": 14,
   "calibration": {
-    "markets": 0,
-    "model": null,
-    "marketMid": null,
-    "constantHalf": null
+    "markets": 14,
+    "model": 0.20460939369028738,
+    "marketMid": 0.25836607142857143,
+    "constantHalf": 0.25
   },
-  "windows": [],
+  "windows": [
+    {
+      "start": 1788737423440,
+      "markets": 14,
+      "model": 0.20460939369028738,
+      "marketMid": 0.25836607142857143,
+      "constantHalf": 0.25,
+      "insufficient": true
+    }
+  ],
   "regimeThresholds": null,
   "regimes": {},
   "decayAlert": {
@@ -21,14 +30,14 @@
   },
   "execution": {
     "ack": {
-      "n": 0,
-      "meanMs": null,
-      "p95Ms": null
+      "n": 13,
+      "meanMs": 94.46153846153847,
+      "p95Ms": 99
     },
     "firstObservedFill": {
-      "n": 0,
-      "meanMs": null,
-      "p95Ms": null
+      "n": 5,
+      "meanMs": 93.8,
+      "p95Ms": 96
     },
     "cancelToObservedTerminal": {
       "n": 0,
@@ -38,8 +47,8 @@
     "limitation": "Polling timestamps bound observation latency; they are not matching-engine event times. Zero fills does not establish execution quality."
   },
   "exposure": {
-    "samples": 61,
-    "maxAbsoluteSignedContracts": 0,
+    "samples": 1643,
+    "maxAbsoluteSignedContracts": 1,
     "factor": {
       "n": 0,
       "correlation": null,

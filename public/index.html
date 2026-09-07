@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="linen">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KALSHIBOT - Mission Control</title>
+  <title>KALSHIBOT - Mission Control Terminal</title>
   
-  <!-- Modern Crisp Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,477 +16,269 @@
 <body>
 <div class="page-wrap">
 
-  <!-- Title Bar -->
+  <!-- Full-Width Executive Header -->
   <header class="header">
     <div class="header-left">
       <div class="logo">
         <span class="logo-icon">&#9670;</span>
         <span class="logo-text">KALSHIBOT</span>
       </div>
-      <span class="header-subtitle">MISSION CONTROL</span>
+      <span class="header-subtitle">MISSION CONTROL TERMINAL</span>
     </div>
     
     <div class="header-right">
-      <!-- Connection Indicators -->
+      <!-- 5 Real-Time Connection Dots (Added CB for Coinbase!) -->
       <div class="connection-dots" role="status" aria-label="Feed connection status">
+        <span class="dot" id="dot-coinbase" title="Coinbase WebSocket Feed"></span>
+        <span class="dot-label">CB</span>
         <span class="dot" id="dot-binance" title="Binance Spot WebSocket"></span>
         <span class="dot-label">BIN</span>
-        <span class="dot" id="dot-polymarket" title="Polymarket Feed"></span>
-        <span class="dot-label">POLY</span>
         <span class="dot" id="dot-kalshi" title="Kalshi Exchange API"></span>
         <span class="dot-label">KAL</span>
+        <span class="dot" id="dot-polymarket" title="Polymarket Feed"></span>
+        <span class="dot-label">POLY</span>
         <span class="dot" id="dot-redstone" title="RedStone Oracle Feed"></span>
         <span class="dot-label">RED</span>
       </div>
 
       <!-- Theme Switcher -->
-      <button class="theme-toggle" id="theme-toggle" type="button" title="Toggle theme (Warm Linen / Graphite Dark)" aria-label="Toggle theme">
-        <span class="theme-icon" id="theme-icon">&#9680;</span>
-        <span class="theme-label" id="theme-label">GRAPHITE</span>
+      <button class="theme-toggle" id="theme-toggle" type="button" title="Toggle theme">
+        <span id="theme-label">LINEN</span>
       </button>
 
       <!-- Uptime Clock -->
-      <div class="uptime" id="uptime" title="System uptime">00:00:00</div>
+      <div class="uptime" id="uptime">00:00:00</div>
 
       <!-- Bot Start/Stop Button -->
-      <button class="bot-toggle" id="bot-toggle" type="button" title="Start or Stop Trading Agent" aria-label="Start or Stop Trading Agent">
-        <span class="toggle-icon" id="toggle-icon">&#9654;</span>
-        <span class="toggle-label" id="toggle-label">START</span>
+      <button class="bot-toggle" id="bot-toggle" type="button">
+        <span id="toggle-icon">&#9654;</span>
+        <span id="toggle-label">START</span>
       </button>
     </div>
   </header>
 
   <div class="app-shell">
 
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar" aria-label="Dashboard navigation and metadata">
-      <div class="side-box">
-        <div class="side-box-title">NAVIGATION</div>
-        <nav class="side-nav">
-          <a href="#sec-overview"><span class="nav-arrow">&raquo;</span> Overview</a>
-          <a href="#sec-intent"><span class="nav-arrow">&raquo;</span> Bot Intent</a>
-          <a href="#sec-chart"><span class="nav-arrow">&raquo;</span> P&amp;L Chart</a>
-          <a href="#sec-positions"><span class="nav-arrow">&raquo;</span> Positions</a>
-          <a href="#sec-markets"><span class="nav-arrow">&raquo;</span> Markets</a>
-          <a href="#sec-log"><span class="nav-arrow">&raquo;</span> Trade Log</a>
-          <a href="#sec-stats"><span class="nav-arrow">&raquo;</span> Statistics</a>
-        </nav>
-      </div>
-
+    <!-- Slim Sidebar -->
+    <aside class="sidebar">
       <div class="side-box">
         <div class="side-box-title">SYSTEM INFO</div>
         <ul class="side-info">
           <li><span>Build</span><span>v2.5.0</span></li>
-          <li><span>Mode</span><span id="environment-mode" class="mode-pill">CONNECTING</span></li>
+          <li><span>Mode</span><span id="environment-mode" class="mode-pill">DEMO</span></li>
           <li><span>Engine</span><span>KB-CORE</span></li>
           <li><span>Session</span><span id="uptime-mirror" class="mono">--</span></li>
         </ul>
       </div>
 
-      <div class="side-box side-blurb">
-        <div class="side-box-title">ABOUT</div>
-        <p>KALSHIBOT scans live BTC/USD spot feeds against Kalshi 15-minute contracts, flags statistical edge, and manages risk automatically.</p>
+      <div class="side-box">
+        <div class="side-box-title">NAVIGATION</div>
+        <nav class="side-nav">
+          <a href="#sec-overview">&raquo; Metrics &amp; Watchdog</a>
+          <a href="#sec-intent">&raquo; Model &amp; Intent</a>
+          <a href="#sec-chart">&raquo; Charts &amp; Candles</a>
+          <a href="#sec-markets">&raquo; Kalshi 15M Strikes</a>
+          <a href="#sec-log">&raquo; Executions &amp; Stats</a>
+        </nav>
+      </div>
+
+      <div class="side-box">
+        <div class="side-box-title">SAFETY STATUS</div>
+        <ul class="side-info">
+          <li><span>Circuit</span><span id="side-circuit" class="mono positive">ARMED</span></li>
+          <li><span>Max Drawdown</span><span class="mono">10.0%</span></li>
+          <li><span>Max Trade Risk</span><span class="mono">1.0%</span></li>
+        </ul>
       </div>
     </aside>
 
-    <!-- Main Grid -->
+    <!-- Edge-to-Edge Grid -->
     <main class="grid">
 
-      <!-- Row 1: Key Metrics -->
-      <section class="panel metric-panel" id="panel-btc" aria-labelledby="label-btc">
-        <div class="metric-label" id="label-btc">BTC / USD SPOT</div>
-        <div class="metric-value mono" id="btc-price">--</div>
-        <div class="metric-sub" id="btc-source">Waiting for feed...</div>
+      <!-- SYSTEM & HEALTH WATCHDOG STRIP (Replaces running PowerShell commands!) -->
+      <section class="panel col-12" id="sec-overview">
+        <div class="panel-header">
+          <span class="panel-title">SYSTEM HEALTH &amp; SAFETY WATCHDOG (LIVE DIAGNOSTICS)</span>
+          <span class="panel-badge mono" id="watchdog-overall">ALL SYSTEMS NORMAL</span>
+        </div>
+        <div class="watchdog-grid">
+          <div class="watchdog-card" title="Node process memory consumption">
+            <span class="watchdog-label">PROCESS RAM</span>
+            <span class="watchdog-value" id="watchdog-ram">-- MB (STABLE)</span>
+          </div>
+          <div class="watchdog-card" title="In-flight pending order validation">
+            <span class="watchdog-label">PENDING ORDERS</span>
+            <span class="watchdog-value" id="watchdog-pending">0 PENDING (CLEAN)</span>
+          </div>
+          <div class="watchdog-card" title="Consecutive execution rejections before safety halt">
+            <span class="watchdog-label">REJECTION STREAK</span>
+            <span class="watchdog-value" id="watchdog-failures">0 / 5 (SAFE)</span>
+          </div>
+          <div class="watchdog-card" title="Settlement Reference SQLite database tick count">
+            <span class="watchdog-label">INDEX SQLITE DB</span>
+            <span class="watchdog-value" id="watchdog-db">-- SAMPLES (WARMING)</span>
+          </div>
+          <div class="watchdog-card" title="Live Basis Spread between Coinbase spot and Binance">
+            <span class="watchdog-label">COINBASE / BINANCE BASIS</span>
+            <span class="watchdog-value" id="watchdog-basis">-- BPS (0.0 BPS)</span>
+          </div>
+        </div>
       </section>
 
-      <section class="panel metric-panel" id="panel-pnl" aria-labelledby="label-pnl">
-        <div class="metric-label" id="label-pnl">REALIZED P&amp;L</div>
+      <!-- Row 1: Key Metric Cards (Expanded with Live Coinbase + Basis Spread) -->
+      <section class="panel col-3 metric-panel">
+        <div class="metric-label">COINBASE BTC/USD (LIVE SPOT)</div>
+        <div class="metric-value mono" id="btc-price">--</div>
+        <div class="metric-sub" id="btc-source">Bid: -- | Ask: --</div>
+      </section>
+
+      <section class="panel col-3 metric-panel">
+        <div class="metric-label">REALIZED P&amp;L</div>
         <div class="metric-value mono" id="total-pnl">$0.00</div>
         <div class="metric-sub" id="win-loss">0W / 0L (0.0% Win Rate)</div>
       </section>
 
-      <section class="panel metric-panel" id="panel-roi" aria-labelledby="label-roi">
-        <div class="metric-label" id="label-roi">ROI</div>
+      <section class="panel col-3 metric-panel">
+        <div class="metric-label">SESSION ROI</div>
         <div class="metric-value mono" id="roi-value">0.0%</div>
         <div class="metric-sub" id="trades-per-hour">0 trades/hr</div>
       </section>
 
-      <section class="panel metric-panel" id="panel-balance" aria-labelledby="label-balance">
-        <div class="metric-label" id="label-balance">ACCOUNT BALANCE</div>
+      <section class="panel col-3 metric-panel">
+        <div class="metric-label">ACCOUNT BALANCE</div>
         <div class="metric-value mono" id="balance-value">$0.00</div>
         <div class="metric-sub" id="balance-available">$0.00 available</div>
       </section>
 
-      <a id="sec-overview" class="anchor"></a>
-      <a id="sec-intent" class="anchor"></a>
-
-      <!-- Row 2: Bot Intent + Model -->
-      <section class="panel wide-panel" id="panel-intent" aria-labelledby="label-intent">
+      <!-- Row 2: Model Intent -->
+      <section class="panel col-12" id="sec-intent">
         <div class="panel-header">
-          <div class="panel-header-left">
-            <span class="panel-icon">&#9881;</span>
-            <span class="panel-title" id="label-intent">BOT INTENT &amp; MODEL STATE</span>
-          </div>
+          <span class="panel-title">BOT INTENT &amp; SETTLEMENT MODEL STATE</span>
           <span class="status-badge" id="bot-status">INITIALIZING</span>
         </div>
-        <div class="intent-body">
-          <div class="intent-message" id="intent-message">Starting up engine...</div>
-          
-          <div class="intent-details">
-            <div class="intent-detail">
-              <span class="detail-label">ACTION</span>
-              <span class="detail-value mono" id="intent-action">--</span>
-            </div>
-            <div class="intent-detail">
-              <span class="detail-label">MODEL P(UP)</span>
-              <span class="detail-value mono" id="intent-prob">--</span>
-            </div>
-            <div class="intent-detail">
-              <span class="detail-label">EDGE</span>
-              <span class="detail-value mono" id="intent-edge">--</span>
-            </div>
-            <div class="intent-detail">
-              <span class="detail-label">SPOT MOVE</span>
-              <span class="detail-value mono" id="intent-move">--</span>
-            </div>
-            <div class="intent-detail">
-              <span class="detail-label">VOLATILITY</span>
-              <span class="detail-value mono" id="intent-vol">--</span>
-            </div>
-            <div class="intent-detail intent-time-box">
-              <span class="detail-label">TIME LEFT</span>
-              <span class="detail-value mono" id="intent-time">--</span>
-            </div>
-            <div class="intent-detail">
-              <span class="detail-label">1H TREND</span>
-              <span class="detail-value" id="intent-trend">--</span>
-            </div>
+        <div class="intent-details">
+          <div class="intent-detail">
+            <span class="detail-label">ACTION</span>
+            <span class="detail-value mono" id="intent-action">--</span>
+          </div>
+          <div class="intent-detail">
+            <span class="detail-label">MODEL P(UP)</span>
+            <span class="detail-value mono" id="intent-prob">--</span>
+          </div>
+          <div class="intent-detail">
+            <span class="detail-label">EDGE</span>
+            <span class="detail-value mono" id="intent-edge">--</span>
+          </div>
+          <div class="intent-detail">
+            <span class="detail-label">SPOT MOVE</span>
+            <span class="detail-value mono" id="intent-move">--</span>
+          </div>
+          <div class="intent-detail">
+            <span class="detail-label">VOLATILITY (SIGMA)</span>
+            <span class="detail-value mono" id="intent-vol">--</span>
+          </div>
+          <div class="intent-detail">
+            <span class="detail-label">TIME LEFT</span>
+            <span class="detail-value mono" id="intent-time">--</span>
+          </div>
+          <div class="intent-detail">
+            <span class="detail-label">1H TREND</span>
+            <span class="detail-value" id="intent-trend">--</span>
           </div>
         </div>
       </section>
 
-      <a id="sec-chart" class="anchor"></a>
-
-      <!-- Row 3: P&L Chart + Open Positions -->
-      <section class="panel chart-panel" aria-labelledby="label-chart">
+      <!-- Row 3: Dual Charts (P&L Equity OR Live Coinbase vs Kalshi Strike) -->
+      <section class="panel col-8" id="sec-chart">
         <div class="panel-header">
-          <div class="panel-header-left">
-            <span class="panel-icon">&#128200;</span>
-            <span class="panel-title" id="label-chart">P&amp;L PERFORMANCE CHART</span>
+          <span class="panel-title">VISUAL TERMINAL &amp; REAL-TIME CHARTS</span>
+          <div class="chart-tabs">
+            <button class="chart-tab-btn active" id="btn-chart-pnl" type="button">P&amp;L EQUITY</button>
+            <button class="chart-tab-btn" id="btn-chart-btc" type="button">COINBASE BTC vs STRIKE</button>
           </div>
-          <span class="panel-badge mono" id="chart-total">$0.00</span>
         </div>
         <div class="chart-container">
           <canvas id="pnl-chart"></canvas>
         </div>
       </section>
 
-      <a id="sec-positions" class="anchor"></a>
-
-      <section class="panel positions-panel" aria-labelledby="label-positions">
+      <!-- Open Positions Card -->
+      <section class="panel col-4">
         <div class="panel-header">
-          <div class="panel-header-left">
-            <span class="panel-icon">&#128188;</span>
-            <span class="panel-title" id="label-positions">OPEN POSITIONS</span>
-          </div>
+          <span class="panel-title">OPEN POSITIONS</span>
           <span class="panel-badge mono" id="pos-count">0</span>
         </div>
-        <div class="positions-list" id="positions-list">
-          <div class="empty-state">No open positions currently active</div>
+        <div class="positions-list" id="positions-list" style="max-height: 200px; overflow-y: auto; padding: 6px;">
+          <div class="empty-state" style="text-align: center; padding: 20px; color: var(--text-muted);">No open positions currently active</div>
         </div>
       </section>
 
-      <a id="sec-markets" class="anchor"></a>
-
-      <!-- Row 4: Active Markets Table -->
-      <section class="panel full-panel" aria-labelledby="label-markets">
+      <!-- Row 4: Deep Active Kalshi Contracts Table -->
+      <section class="panel col-12" id="sec-markets">
         <div class="panel-header">
-          <div class="panel-header-left">
-            <span class="panel-icon">&#9671;</span>
-            <span class="panel-title" id="label-markets">ACTIVE 15-MINUTE MARKETS</span>
-          </div>
-          <span class="panel-badge mono" id="market-count">0</span>
+          <span class="panel-title">ACTIVE KALSHI 15-MINUTE CONTRACTS (DEEP MARKET VIEW)</span>
+          <span class="panel-badge mono" id="market-count">0 MARKETS</span>
         </div>
         <div class="markets-table-wrap">
-          <table class="markets-table" id="markets-table" aria-label="Active Kalshi contracts">
+          <table class="markets-table" id="markets-table">
             <thead>
               <tr>
-                <th scope="col">TICKER</th>
-                <th scope="col">YES BID / ASK</th>
-                <th scope="col">NO BID / ASK</th>
-                <th scope="col">COMBINED</th>
-                <th scope="col">TIME LEFT</th>
-                <th scope="col">STATUS</th>
+                <th>TICKER</th>
+                <th>FLOOR STRIKE</th>
+                <th>SPOT DISTANCE</th>
+                <th>YES BID / ASK</th>
+                <th>NO BID / ASK</th>
+                <th>COMBINED</th>
+                <th>TIME LEFT</th>
+                <th>MODEL P(UP)</th>
+                <th>LIVE EDGE</th>
+                <th>STATUS</th>
               </tr>
             </thead>
             <tbody id="markets-body">
               <tr>
-                <td colspan="6" class="empty-state">Scanning for open contract strikes...</td>
+                <td colspan="10" style="text-align:center; padding: 16px; color: var(--text-muted);">Scanning Kalshi order books...</td>
               </tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <a id="sec-log" class="anchor"></a>
-
-      <!-- Row 5: Trade Log + Accessible Statistics -->
-      <section class="panel log-panel" aria-labelledby="label-log">
+      <!-- Row 5: Trade Log + Quantitative Stats -->
+      <section class="panel col-6" id="sec-log">
         <div class="panel-header">
-          <div class="panel-header-left">
-            <span class="panel-icon">&#128221;</span>
-            <span class="panel-title" id="label-log">EXECUTION &amp; TRADE LOG</span>
-          </div>
+          <span class="panel-title">EXECUTION &amp; TRADE LOG</span>
           <span class="panel-badge mono" id="log-count">0</span>
         </div>
-        <div class="trade-log" id="trade-log" role="log" aria-live="polite">
-          <div class="empty-state">No trade executions logged in this session yet</div>
+        <div class="trade-log" id="trade-log">
+          <div style="text-align: center; padding: 16px; color: var(--text-muted);">No trades executed yet</div>
         </div>
       </section>
 
-      <a id="sec-stats" class="anchor"></a>
-
-      <!-- Upgraded Accessible Statistics Panel -->
-      <section class="panel stats-panel" aria-labelledby="label-stats">
+      <section class="panel col-6">
         <div class="panel-header">
-          <div class="panel-header-left">
-            <span class="panel-icon">&#128202;</span>
-            <span class="panel-title" id="label-stats">QUANTITATIVE STATISTICS</span>
-          </div>
-          <span class="panel-pill">SESSION METRICS</span>
+          <span class="panel-title">SESSION RISK &amp; STATS</span>
+          <span class="panel-badge mono" id="stat-winrate">0% WIN</span>
         </div>
-        
-        <div class="stats-container" role="region" aria-label="Trading Performance Statistics">
-          
-          <!-- Category 1: Performance & Quality -->
-          <div class="stats-category">
-            <div class="category-header">
-              <span class="category-bullet">&#9658;</span>
-              <span class="category-title">PERFORMANCE &amp; RATIOS</span>
-            </div>
-            <div class="stats-subgrid">
-              <div class="stat-card" title="Percentage of closed trades with positive return">
-                <span class="stat-label">Win Rate</span>
-                <span class="stat-value mono" id="stat-winrate">0%</span>
-              </div>
-              <div class="stat-card" title="Gross Profits divided by Gross Losses">
-                <span class="stat-label">Profit Factor</span>
-                <span class="stat-value mono" id="stat-profitfactor">--</span>
-              </div>
-              <div class="stat-card" title="Largest single winning trade">
-                <span class="stat-label">Best Trade</span>
-                <span class="stat-value positive mono" id="stat-best">$0.00</span>
-              </div>
-              <div class="stat-card" title="Largest single losing trade">
-                <span class="stat-label">Worst Trade</span>
-                <span class="stat-value negative mono" id="stat-worst">$0.00</span>
-              </div>
-              <div class="stat-card" title="Average dollar gain on winning trades">
-                <span class="stat-label">Avg Win</span>
-                <span class="stat-value positive mono" id="stat-avgwin">$0.00</span>
-              </div>
-              <div class="stat-card" title="Average dollar loss on losing trades">
-                <span class="stat-label">Avg Loss</span>
-                <span class="stat-value negative mono" id="stat-avgloss">$0.00</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Category 2: Activity & Volume -->
-          <div class="stats-category">
-            <div class="category-header">
-              <span class="category-bullet">&#9658;</span>
-              <span class="category-title">ACTIVITY &amp; EXECUTION</span>
-            </div>
-            <div class="stats-subgrid">
-              <div class="stat-card" title="Total number of completed buy/sell trades">
-                <span class="stat-label">Total Trades</span>
-                <span class="stat-value mono" id="stat-trades">0</span>
-              </div>
-              <div class="stat-card" title="Total traded dollar volume in contracts">
-                <span class="stat-label">Total Volume</span>
-                <span class="stat-value mono" id="stat-volume">$0.00</span>
-              </div>
-              <div class="stat-card" title="Average trade frequency per hour">
-                <span class="stat-label">Trades / Hour</span>
-                <span class="stat-value mono" id="stat-tph">0</span>
-              </div>
-              <div class="stat-card" title="Current consecutive winning trades">
-                <span class="stat-label">Win Streak</span>
-                <span class="stat-value mono" id="stat-streak">0</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Category 3: Live Risk & Strategy -->
-          <div class="stats-category">
-            <div class="category-header">
-              <span class="category-bullet">&#9658;</span>
-              <span class="category-title">RISK &amp; ACTIVE STRATEGY</span>
-            </div>
-            <div class="stats-subgrid">
-              <div class="stat-card" title="Average statistical edge over Kalshi orderbook">
-                <span class="stat-label">Avg Edge</span>
-                <span class="stat-value mono" id="stat-avgedge">0%</span>
-              </div>
-              <div class="stat-card" title="Currently open contracts in portfolio">
-                <span class="stat-label">Open Positions</span>
-                <span class="stat-value mono" id="stat-open">0</span>
-              </div>
-              <div class="stat-card" title="Mark-to-market unrealized profit/loss">
-                <span class="stat-label">Unrealized P&amp;L</span>
-                <span class="stat-value mono" id="stat-unrealized">$0.00</span>
-              </div>
-              <div class="stat-card strategy-card" title="Active model execution policy">
-                <span class="stat-label">Strategy Mode</span>
-                <span class="stat-value stat-strategy-badge" id="stat-strategy">--</span>
-              </div>
-            </div>
-          </div>
-
+        <div class="watchdog-grid" style="border: none; padding: 8px;">
+          <div class="watchdog-card"><span class="watchdog-label">PROFIT FACTOR</span><span class="watchdog-value" id="stat-profitfactor">--</span></div>
+          <div class="watchdog-card"><span class="watchdog-label">AVG WIN / LOSS</span><span class="watchdog-value" id="stat-avgwin">$0.00 / $0.00</span></div>
+          <div class="watchdog-card"><span class="watchdog-label">TOTAL VOLUME</span><span class="watchdog-value" id="stat-volume">$0.00</span></div>
+          <div class="watchdog-card"><span class="watchdog-label">TRADES / HOUR</span><span class="watchdog-value" id="stat-tph">0</span></div>
+          <div class="watchdog-card"><span class="watchdog-label">UNREALIZED P&amp;L</span><span class="watchdog-value" id="stat-unrealized">$0.00</span></div>
         </div>
       </section>
 
     </main>
   </div>
 
-  <!-- Page Footer -->
   <footer class="page-footer">
-    <div class="footer-line">KALSHIBOT MISSION CONTROL &copy; 2026 &middot; Automated High-Frequency Settlement Terminal</div>
-    <div class="footer-sub mono">Sub-second Coinbase Reference Calibration &middot; Native WebSocket Execution Grid</div>
+    <div>KALSHIBOT MISSION CONTROL &middot; Edge-to-Edge Quantitative Execution Terminal</div>
+    <div class="mono">Sub-second Coinbase Calibration &middot; Native WebSocket Bridge</div>
   </footer>
 
 </div>
 
-  <!-- Main Backend Socket Bridge -->
-  <script type="module" src="js/app.js"></script>
-
-  <!-- Resilient Live Countdown & Accessibility Enhancement Engine -->
-  <script>
-    (function () {
-      // 1. Mirror uptime counter
-      setInterval(function () {
-        var src = document.getElementById('uptime');
-        var dst = document.getElementById('uptime-mirror');
-        if (src && dst && src.textContent) dst.textContent = src.textContent;
-      }, 1000);
-
-      // 2. Theme switcher (persists to localStorage)
-      var themeToggle = document.getElementById('theme-toggle');
-      var themeLabel = document.getElementById('theme-label');
-      var html = document.documentElement;
-
-      var savedTheme = localStorage.getItem('kb-theme') || 'linen';
-      setTheme(savedTheme);
-
-      if (themeToggle) {
-        themeToggle.addEventListener('click', function () {
-          var next = html.getAttribute('data-theme') === 'dark' ? 'linen' : 'dark';
-          setTheme(next);
-        });
-      }
-
-      function setTheme(theme) {
-        html.setAttribute('data-theme', theme);
-        localStorage.setItem('kb-theme', theme);
-        if (themeLabel) themeLabel.textContent = theme === 'dark' ? 'LINEN' : 'GRAPHITE';
-      }
-
-      // 3. Resilient Time Left Countdown Manager
-      // Solves the "time left not showing" bug permanently
-      function formatMs(ms) {
-        if (ms <= 0) return '<span class="time-settling">00m 00s (SETTLING)</span>';
-        var totalSec = Math.floor(ms / 1000);
-        var m = Math.floor(totalSec / 60);
-        var s = totalSec % 60;
-        var sStr = (s < 10 ? '0' : '') + s;
-        var mStr = (m < 10 ? '0' : '') + m;
-
-        if (m < 1) {
-          return '<span class="time-warning mono">' + mStr + 'm ' + sStr + 's</span>';
-        }
-        return '<span class="time-normal mono">' + mStr + 'm ' + sStr + 's</span>';
-      }
-
-      function parseAnyTime(val) {
-        if (!val || val === '--' || val === 'Waiting...' || val === 'N/A') return null;
-        var str = String(val).trim();
-
-        // ISO timestamp or date string
-        if (str.includes('-') && (str.includes('T') || str.includes(':'))) {
-          var parsed = Date.parse(str);
-          if (Number.isFinite(parsed)) return parsed;
-        }
-
-        // Numeric string (epoch ms or seconds)
-        var num = Number(str);
-        if (Number.isFinite(num) && num > 0) {
-          // Epoch ms
-          if (num > 1e11) return num;
-          // Seconds from now
-          if (num < 1e7) return Date.now() + (num * 1000);
-          // Epoch seconds
-          return num * 1000;
-        }
-
-        // Matches strings like "12m 30s" or "450s"
-        var mMatch = str.match(/(\d+)\s*m/i);
-        var sMatch = str.match(/(\d+)\s*s/i);
-        if (mMatch || sMatch) {
-          var sec = (mMatch ? parseInt(mMatch[1], 10) * 60 : 0) + (sMatch ? parseInt(sMatch[1], 10) : 0);
-          if (sec > 0) return Date.now() + (sec * 1000);
-        }
-        return null;
-      }
-
-      // Global Ticker Interval (runs every 500ms)
-      setInterval(function () {
-        var now = Date.now();
-
-        // Check Intent Time
-        var intentEl = document.getElementById('intent-time');
-        if (intentEl) {
-          var target = intentEl.dataset.targetMs ? Number(intentEl.dataset.targetMs) : parseAnyTime(intentEl.textContent);
-          if (target && Number.isFinite(target)) {
-            intentEl.dataset.targetMs = target;
-            var remaining = target - now;
-            intentEl.innerHTML = formatMs(remaining);
-          } else {
-            // Fallback: If empty, calculate time remaining in current 15m Kalshi cycle
-            var cycleMs = 15 * 60 * 1000;
-            var cycleRemaining = cycleMs - (now % cycleMs);
-            intentEl.innerHTML = formatMs(cycleRemaining) + ' <small class="cycle-hint">(cycle)</small>';
-          }
-        }
-
-        // Check Active Markets Table
-        var marketRows = document.querySelectorAll('#markets-body tr');
-        marketRows.forEach(function (row) {
-          var cells = row.querySelectorAll('td');
-          if (cells.length >= 5) {
-            var timeCell = cells[4]; // 5th column: TIME LEFT
-            var targetMs = timeCell.dataset.targetMs ? Number(timeCell.dataset.targetMs) : parseAnyTime(timeCell.textContent);
-            if (targetMs && Number.isFinite(targetMs)) {
-              timeCell.dataset.targetMs = targetMs;
-              timeCell.innerHTML = formatMs(targetMs - now);
-            }
-          }
-        });
-      }, 500);
-
-      // Listen for text updates from app.js to catch new timestamps
-      var intentElem = document.getElementById('intent-time');
-      if (intentElem && window.MutationObserver) {
-        var obs = new MutationObserver(function () {
-          var raw = intentElem.textContent;
-          if (raw && !raw.includes('m') && !raw.includes('s')) {
-            var parsed = parseAnyTime(raw);
-            if (parsed) intentElem.dataset.targetMs = parsed;
-          }
-        });
-        obs.observe(intentElem, { childList: true, characterData: true, subtree: true });
-      }
-    })();
-  </script>
+<script type="module" src="js/app.js"></script>
 </body>
 </html>
