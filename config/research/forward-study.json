@@ -1,0 +1,28 @@
+{
+  "id": "settlement-forward-v1",
+  "cutoff": "2026-09-07T00:15:00Z",
+  "frozenAt": "2026-09-07T16:24:02.954Z",
+  "alreadyInspectedForwardMarkets": 52,
+  "shadowOnly": true,
+  "policySha256": {
+    "config/research/research-config.json": "6df41f75807e5b81d8cc93f3ec8191c7165eb5aa05219ffd25a9a4d11c649e3e",
+    "src/strategy/volatility.js": "cf84bf61cab7e50dd97732f4cbdcf7ba8231f14dc661346ffd41d66e29a984f2",
+    "src/strategy/settlement-forecast.js": "707973a9ee0d3d42a13944af1b61098ebc47412272a826b681ae10fc030dc5d4",
+    "src/research/proxy-reference.js": "12241b44d5bc135675fd26bed1c46b51f4c17267cd4fafb670682ef9bc0a7e83",
+    "src/research/history-replay.js": "f50393733f51875aa2c34064af108e7cb35f363db1980ba0ca426a649e375286",
+    "src/research/settlement-evaluation.js": "eec3da84f6d0b5d087a3769f2c2eed90e70f3886b37e74283b78db457b2eedc9",
+    "src/agents/skills/analysis/probability-model.js": "887fbf93f4b24019ffc409ac3f8877383230e4b65855109eb864aa27547368ff",
+    "src/agents/skills/analysis/signal-generator.js": "700ddb6e7327e94114263a05374268d6623435ce2dca08fa7713348333a12a67",
+    "src/agents/skills/trading/risk-manager.js": "81d4ff513cebb2cd4940ee9bf06bc13aa0b297a0ed15eb92300ca8bc0e9bb8ff",
+    "src/research/coinbase-shadow.js": "e37244a92def43a7b62cba939116022f893c3b9b4f43c1baf4ac76f481bd486e"
+  },
+  "rule": "No threshold tuning, model selection, live promotion, or moving the cutoff. Changed policy needs a separately versioned study.",
+  "coinbase": {
+    "declaredAt": "2026-09-07T16:24:02.956Z",
+    "maximumEventAgeMs": 5000,
+    "variants": [
+      "coinbaseUsdAverage",
+      "coinbaseOpeningAverage"
+    ]
+  }
+}

@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="linen">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KALSHIBOT - Mission Control</title>
+  
+  <!-- Modern Crisp Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
@@ -20,19 +26,31 @@
       </div>
       <span class="header-subtitle">MISSION CONTROL</span>
     </div>
+    
     <div class="header-right">
-      <div class="connection-dots">
-        <span class="dot" id="dot-binance" title="Binance"></span>
+      <!-- Connection Indicators -->
+      <div class="connection-dots" role="status" aria-label="Feed connection status">
+        <span class="dot" id="dot-binance" title="Binance Spot WebSocket"></span>
         <span class="dot-label">BIN</span>
-        <span class="dot" id="dot-polymarket" title="Polymarket"></span>
+        <span class="dot" id="dot-polymarket" title="Polymarket Feed"></span>
         <span class="dot-label">POLY</span>
-        <span class="dot" id="dot-kalshi" title="Kalshi"></span>
+        <span class="dot" id="dot-kalshi" title="Kalshi Exchange API"></span>
         <span class="dot-label">KAL</span>
-        <span class="dot" id="dot-redstone" title="RedStone"></span>
+        <span class="dot" id="dot-redstone" title="RedStone Oracle Feed"></span>
         <span class="dot-label">RED</span>
       </div>
-      <div class="uptime" id="uptime">00:00:00</div>
-      <button class="bot-toggle" id="bot-toggle" title="Start/Stop Bot">
+
+      <!-- Theme Switcher -->
+      <button class="theme-toggle" id="theme-toggle" type="button" title="Toggle theme (Warm Linen / Graphite Dark)" aria-label="Toggle theme">
+        <span class="theme-icon" id="theme-icon">&#9680;</span>
+        <span class="theme-label" id="theme-label">GRAPHITE</span>
+      </button>
+
+      <!-- Uptime Clock -->
+      <div class="uptime" id="uptime" title="System uptime">00:00:00</div>
+
+      <!-- Bot Start/Stop Button -->
+      <button class="bot-toggle" id="bot-toggle" type="button" title="Start or Stop Trading Agent" aria-label="Start or Stop Trading Agent">
         <span class="toggle-icon" id="toggle-icon">&#9654;</span>
         <span class="toggle-label" id="toggle-label">START</span>
       </button>
@@ -42,17 +60,17 @@
   <div class="app-shell">
 
     <!-- Sidebar Navigation -->
-    <aside class="sidebar">
+    <aside class="sidebar" aria-label="Dashboard navigation and metadata">
       <div class="side-box">
         <div class="side-box-title">NAVIGATION</div>
         <nav class="side-nav">
-          <a href="#sec-overview">&raquo; Overview</a>
-          <a href="#sec-intent">&raquo; Bot Intent</a>
-          <a href="#sec-chart">&raquo; P&amp;L Chart</a>
-          <a href="#sec-positions">&raquo; Positions</a>
-          <a href="#sec-markets">&raquo; Markets</a>
-          <a href="#sec-log">&raquo; Trade Log</a>
-          <a href="#sec-stats">&raquo; Statistics</a>
+          <a href="#sec-overview"><span class="nav-arrow">&raquo;</span> Overview</a>
+          <a href="#sec-intent"><span class="nav-arrow">&raquo;</span> Bot Intent</a>
+          <a href="#sec-chart"><span class="nav-arrow">&raquo;</span> P&amp;L Chart</a>
+          <a href="#sec-positions"><span class="nav-arrow">&raquo;</span> Positions</a>
+          <a href="#sec-markets"><span class="nav-arrow">&raquo;</span> Markets</a>
+          <a href="#sec-log"><span class="nav-arrow">&raquo;</span> Trade Log</a>
+          <a href="#sec-stats"><span class="nav-arrow">&raquo;</span> Statistics</a>
         </nav>
       </div>
 
@@ -60,7 +78,7 @@
         <div class="side-box-title">SYSTEM INFO</div>
         <ul class="side-info">
           <li><span>Build</span><span>v2.5.0</span></li>
-          <li><span>Mode</span><span id="environment-mode">CONNECTING</span></li>
+          <li><span>Mode</span><span id="environment-mode" class="mode-pill">CONNECTING</span></li>
           <li><span>Engine</span><span>KB-CORE</span></li>
           <li><span>Session</span><span id="uptime-mirror" class="mono">--</span></li>
         </ul>
@@ -68,9 +86,7 @@
 
       <div class="side-box side-blurb">
         <div class="side-box-title">ABOUT</div>
-        <p>KALSHIBOT scans live BTC/USD spot feeds against Kalshi &amp; Polymarket
-        hourly contracts, flags edge, and executes automatically. This
-        console mirrors the bot's decisions in real time.</p>
+        <p>KALSHIBOT scans live BTC/USD spot feeds against Kalshi 15-minute contracts, flags statistical edge, and manages risk automatically.</p>
       </div>
     </aside>
 
@@ -78,27 +94,27 @@
     <main class="grid">
 
       <!-- Row 1: Key Metrics -->
-      <section class="panel metric-panel" id="panel-btc">
-        <div class="metric-label">BTC/USD</div>
-        <div class="metric-value" id="btc-price">--</div>
-        <div class="metric-sub" id="btc-source">Waiting...</div>
+      <section class="panel metric-panel" id="panel-btc" aria-labelledby="label-btc">
+        <div class="metric-label" id="label-btc">BTC / USD SPOT</div>
+        <div class="metric-value mono" id="btc-price">--</div>
+        <div class="metric-sub" id="btc-source">Waiting for feed...</div>
       </section>
 
-      <section class="panel metric-panel" id="panel-pnl">
-        <div class="metric-label">TOTAL P&amp;L</div>
-        <div class="metric-value" id="total-pnl">$0.00</div>
-        <div class="metric-sub" id="win-loss">0W / 0L</div>
+      <section class="panel metric-panel" id="panel-pnl" aria-labelledby="label-pnl">
+        <div class="metric-label" id="label-pnl">REALIZED P&amp;L</div>
+        <div class="metric-value mono" id="total-pnl">$0.00</div>
+        <div class="metric-sub" id="win-loss">0W / 0L (0.0% Win Rate)</div>
       </section>
 
-      <section class="panel metric-panel" id="panel-roi">
-        <div class="metric-label">ROI</div>
-        <div class="metric-value" id="roi-value">0.0%</div>
+      <section class="panel metric-panel" id="panel-roi" aria-labelledby="label-roi">
+        <div class="metric-label" id="label-roi">ROI</div>
+        <div class="metric-value mono" id="roi-value">0.0%</div>
         <div class="metric-sub" id="trades-per-hour">0 trades/hr</div>
       </section>
 
-      <section class="panel metric-panel" id="panel-balance">
-        <div class="metric-label">BALANCE</div>
-        <div class="metric-value" id="balance-value">$0.00</div>
+      <section class="panel metric-panel" id="panel-balance" aria-labelledby="label-balance">
+        <div class="metric-label" id="label-balance">ACCOUNT BALANCE</div>
+        <div class="metric-value mono" id="balance-value">$0.00</div>
         <div class="metric-sub" id="balance-available">$0.00 available</div>
       </section>
 
@@ -106,37 +122,41 @@
       <a id="sec-intent" class="anchor"></a>
 
       <!-- Row 2: Bot Intent + Model -->
-      <section class="panel wide-panel" id="panel-intent">
+      <section class="panel wide-panel" id="panel-intent" aria-labelledby="label-intent">
         <div class="panel-header">
-          <span class="panel-title">BOT INTENT</span>
+          <div class="panel-header-left">
+            <span class="panel-icon">&#9881;</span>
+            <span class="panel-title" id="label-intent">BOT INTENT &amp; MODEL STATE</span>
+          </div>
           <span class="status-badge" id="bot-status">INITIALIZING</span>
         </div>
         <div class="intent-body">
-          <div class="intent-message" id="intent-message">Starting up...</div>
+          <div class="intent-message" id="intent-message">Starting up engine...</div>
+          
           <div class="intent-details">
             <div class="intent-detail">
               <span class="detail-label">ACTION</span>
-              <span class="detail-value" id="intent-action">--</span>
+              <span class="detail-value mono" id="intent-action">--</span>
             </div>
             <div class="intent-detail">
               <span class="detail-label">MODEL P(UP)</span>
-              <span class="detail-value" id="intent-prob">--</span>
+              <span class="detail-value mono" id="intent-prob">--</span>
             </div>
             <div class="intent-detail">
               <span class="detail-label">EDGE</span>
-              <span class="detail-value" id="intent-edge">--</span>
+              <span class="detail-value mono" id="intent-edge">--</span>
             </div>
             <div class="intent-detail">
               <span class="detail-label">SPOT MOVE</span>
-              <span class="detail-value" id="intent-move">--</span>
+              <span class="detail-value mono" id="intent-move">--</span>
             </div>
             <div class="intent-detail">
               <span class="detail-label">VOLATILITY</span>
-              <span class="detail-value" id="intent-vol">--</span>
+              <span class="detail-value mono" id="intent-vol">--</span>
             </div>
-            <div class="intent-detail">
+            <div class="intent-detail intent-time-box">
               <span class="detail-label">TIME LEFT</span>
-              <span class="detail-value" id="intent-time">--</span>
+              <span class="detail-value mono" id="intent-time">--</span>
             </div>
             <div class="intent-detail">
               <span class="detail-label">1H TREND</span>
@@ -149,10 +169,13 @@
       <a id="sec-chart" class="anchor"></a>
 
       <!-- Row 3: P&L Chart + Open Positions -->
-      <section class="panel chart-panel">
+      <section class="panel chart-panel" aria-labelledby="label-chart">
         <div class="panel-header">
-          <span class="panel-title">P&amp;L CHART</span>
-          <span class="panel-badge" id="chart-total">$0.00</span>
+          <div class="panel-header-left">
+            <span class="panel-icon">&#128200;</span>
+            <span class="panel-title" id="label-chart">P&amp;L PERFORMANCE CHART</span>
+          </div>
+          <span class="panel-badge mono" id="chart-total">$0.00</span>
         </div>
         <div class="chart-container">
           <canvas id="pnl-chart"></canvas>
@@ -161,138 +184,310 @@
 
       <a id="sec-positions" class="anchor"></a>
 
-      <section class="panel positions-panel">
+      <section class="panel positions-panel" aria-labelledby="label-positions">
         <div class="panel-header">
-          <span class="panel-title">OPEN POSITIONS</span>
-          <span class="panel-badge" id="pos-count">0</span>
+          <div class="panel-header-left">
+            <span class="panel-icon">&#128188;</span>
+            <span class="panel-title" id="label-positions">OPEN POSITIONS</span>
+          </div>
+          <span class="panel-badge mono" id="pos-count">0</span>
         </div>
         <div class="positions-list" id="positions-list">
-          <div class="empty-state">No open positions</div>
+          <div class="empty-state">No open positions currently active</div>
         </div>
       </section>
 
       <a id="sec-markets" class="anchor"></a>
 
-      <!-- Row 4: Active Markets -->
-      <section class="panel full-panel">
+      <!-- Row 4: Active Markets Table -->
+      <section class="panel full-panel" aria-labelledby="label-markets">
         <div class="panel-header">
-          <span class="panel-title">ACTIVE MARKETS</span>
-          <span class="panel-badge" id="market-count">0</span>
+          <div class="panel-header-left">
+            <span class="panel-icon">&#9671;</span>
+            <span class="panel-title" id="label-markets">ACTIVE 15-MINUTE MARKETS</span>
+          </div>
+          <span class="panel-badge mono" id="market-count">0</span>
         </div>
         <div class="markets-table-wrap">
-          <table class="markets-table" id="markets-table">
+          <table class="markets-table" id="markets-table" aria-label="Active Kalshi contracts">
             <thead>
               <tr>
-                <th>TICKER</th>
-                <th>YES BID/ASK</th>
-                <th>NO BID/ASK</th>
-                <th>COMBINED</th>
-                <th>TIME LEFT</th>
-                <th>STATUS</th>
+                <th scope="col">TICKER</th>
+                <th scope="col">YES BID / ASK</th>
+                <th scope="col">NO BID / ASK</th>
+                <th scope="col">COMBINED</th>
+                <th scope="col">TIME LEFT</th>
+                <th scope="col">STATUS</th>
               </tr>
             </thead>
-            <tbody id="markets-body"></tbody>
+            <tbody id="markets-body">
+              <tr>
+                <td colspan="6" class="empty-state">Scanning for open contract strikes...</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </section>
 
       <a id="sec-log" class="anchor"></a>
 
-      <!-- Row 5: Trade Log + Stats -->
-      <section class="panel log-panel">
+      <!-- Row 5: Trade Log + Accessible Statistics -->
+      <section class="panel log-panel" aria-labelledby="label-log">
         <div class="panel-header">
-          <span class="panel-title">TRADE LOG</span>
-          <span class="panel-badge" id="log-count">0</span>
+          <div class="panel-header-left">
+            <span class="panel-icon">&#128221;</span>
+            <span class="panel-title" id="label-log">EXECUTION &amp; TRADE LOG</span>
+          </div>
+          <span class="panel-badge mono" id="log-count">0</span>
         </div>
-        <div class="trade-log" id="trade-log">
-          <div class="empty-state">No trades yet</div>
+        <div class="trade-log" id="trade-log" role="log" aria-live="polite">
+          <div class="empty-state">No trade executions logged in this session yet</div>
         </div>
       </section>
 
       <a id="sec-stats" class="anchor"></a>
 
-      <section class="panel stats-panel">
+      <!-- Upgraded Accessible Statistics Panel -->
+      <section class="panel stats-panel" aria-labelledby="label-stats">
         <div class="panel-header">
-          <span class="panel-title">STATISTICS</span>
+          <div class="panel-header-left">
+            <span class="panel-icon">&#128202;</span>
+            <span class="panel-title" id="label-stats">QUANTITATIVE STATISTICS</span>
+          </div>
+          <span class="panel-pill">SESSION METRICS</span>
         </div>
-        <div class="stats-grid">
-          <div class="stat">
-            <span class="stat-label">Total Trades</span>
-            <span class="stat-value" id="stat-trades">0</span>
+        
+        <div class="stats-container" role="region" aria-label="Trading Performance Statistics">
+          
+          <!-- Category 1: Performance & Quality -->
+          <div class="stats-category">
+            <div class="category-header">
+              <span class="category-bullet">&#9658;</span>
+              <span class="category-title">PERFORMANCE &amp; RATIOS</span>
+            </div>
+            <div class="stats-subgrid">
+              <div class="stat-card" title="Percentage of closed trades with positive return">
+                <span class="stat-label">Win Rate</span>
+                <span class="stat-value mono" id="stat-winrate">0%</span>
+              </div>
+              <div class="stat-card" title="Gross Profits divided by Gross Losses">
+                <span class="stat-label">Profit Factor</span>
+                <span class="stat-value mono" id="stat-profitfactor">--</span>
+              </div>
+              <div class="stat-card" title="Largest single winning trade">
+                <span class="stat-label">Best Trade</span>
+                <span class="stat-value positive mono" id="stat-best">$0.00</span>
+              </div>
+              <div class="stat-card" title="Largest single losing trade">
+                <span class="stat-label">Worst Trade</span>
+                <span class="stat-value negative mono" id="stat-worst">$0.00</span>
+              </div>
+              <div class="stat-card" title="Average dollar gain on winning trades">
+                <span class="stat-label">Avg Win</span>
+                <span class="stat-value positive mono" id="stat-avgwin">$0.00</span>
+              </div>
+              <div class="stat-card" title="Average dollar loss on losing trades">
+                <span class="stat-label">Avg Loss</span>
+                <span class="stat-value negative mono" id="stat-avgloss">$0.00</span>
+              </div>
+            </div>
           </div>
-          <div class="stat">
-            <span class="stat-label">Win Rate</span>
-            <span class="stat-value" id="stat-winrate">0%</span>
+
+          <!-- Category 2: Activity & Volume -->
+          <div class="stats-category">
+            <div class="category-header">
+              <span class="category-bullet">&#9658;</span>
+              <span class="category-title">ACTIVITY &amp; EXECUTION</span>
+            </div>
+            <div class="stats-subgrid">
+              <div class="stat-card" title="Total number of completed buy/sell trades">
+                <span class="stat-label">Total Trades</span>
+                <span class="stat-value mono" id="stat-trades">0</span>
+              </div>
+              <div class="stat-card" title="Total traded dollar volume in contracts">
+                <span class="stat-label">Total Volume</span>
+                <span class="stat-value mono" id="stat-volume">$0.00</span>
+              </div>
+              <div class="stat-card" title="Average trade frequency per hour">
+                <span class="stat-label">Trades / Hour</span>
+                <span class="stat-value mono" id="stat-tph">0</span>
+              </div>
+              <div class="stat-card" title="Current consecutive winning trades">
+                <span class="stat-label">Win Streak</span>
+                <span class="stat-value mono" id="stat-streak">0</span>
+              </div>
+            </div>
           </div>
-          <div class="stat">
-            <span class="stat-label">Avg Edge</span>
-            <span class="stat-value" id="stat-avgedge">0%</span>
+
+          <!-- Category 3: Live Risk & Strategy -->
+          <div class="stats-category">
+            <div class="category-header">
+              <span class="category-bullet">&#9658;</span>
+              <span class="category-title">RISK &amp; ACTIVE STRATEGY</span>
+            </div>
+            <div class="stats-subgrid">
+              <div class="stat-card" title="Average statistical edge over Kalshi orderbook">
+                <span class="stat-label">Avg Edge</span>
+                <span class="stat-value mono" id="stat-avgedge">0%</span>
+              </div>
+              <div class="stat-card" title="Currently open contracts in portfolio">
+                <span class="stat-label">Open Positions</span>
+                <span class="stat-value mono" id="stat-open">0</span>
+              </div>
+              <div class="stat-card" title="Mark-to-market unrealized profit/loss">
+                <span class="stat-label">Unrealized P&amp;L</span>
+                <span class="stat-value mono" id="stat-unrealized">$0.00</span>
+              </div>
+              <div class="stat-card strategy-card" title="Active model execution policy">
+                <span class="stat-label">Strategy Mode</span>
+                <span class="stat-value stat-strategy-badge" id="stat-strategy">--</span>
+              </div>
+            </div>
           </div>
-          <div class="stat">
-            <span class="stat-label">Best Trade</span>
-            <span class="stat-value positive" id="stat-best">$0.00</span>
-          </div>
-          <div class="stat">
-            <span class="stat-label">Worst Trade</span>
-            <span class="stat-value negative" id="stat-worst">$0.00</span>
-          </div>
-          <div class="stat">
-            <span class="stat-label">Volume</span>
-            <span class="stat-value" id="stat-volume">$0.00</span>
-          </div>
-          <div class="stat">
-            <span class="stat-label">Trades/Hour</span>
-            <span class="stat-value" id="stat-tph">0</span>
-          </div>
-          <div class="stat">
-            <span class="stat-label">Open Positions</span>
-            <span class="stat-value" id="stat-open">0</span>
-          </div>
-          <div class="stat">
-            <span class="stat-label">Profit Factor</span>
-            <span class="stat-value" id="stat-profitfactor">--</span>
-          </div>
-          <div class="stat">
-            <span class="stat-label">Avg Win</span>
-            <span class="stat-value positive" id="stat-avgwin">$0.00</span>
-          </div>
-          <div class="stat">
-            <span class="stat-label">Avg Loss</span>
-            <span class="stat-value negative" id="stat-avgloss">$0.00</span>
-          </div>
-          <div class="stat">
-            <span class="stat-label">Streak</span>
-            <span class="stat-value" id="stat-streak">0</span>
-          </div>
-          <div class="stat">
-            <span class="stat-label">Unrealized P&amp;L</span>
-            <span class="stat-value" id="stat-unrealized">$0.00</span>
-          </div>
-          <div class="stat">
-            <span class="stat-label">Strategy</span>
-            <span class="stat-value" id="stat-strategy" style="font-size:10px">--</span>
-          </div>
+
         </div>
       </section>
 
     </main>
   </div>
 
+  <!-- Page Footer -->
   <footer class="page-footer">
-    <div class="footer-line">KALSHIBOT MISSION CONTROL &copy; 2000&ndash;2026 &middot; Automated Trading Terminal</div>
-    <div class="footer-sub mono">Best viewed at 1024&times;768 or higher &middot; No frames were harmed in the making of this dashboard</div>
+    <div class="footer-line">KALSHIBOT MISSION CONTROL &copy; 2026 &middot; Automated High-Frequency Settlement Terminal</div>
+    <div class="footer-sub mono">Sub-second Coinbase Reference Calibration &middot; Native WebSocket Execution Grid</div>
   </footer>
 
 </div>
 
+  <!-- Main Backend Socket Bridge -->
   <script type="module" src="js/app.js"></script>
+
+  <!-- Resilient Live Countdown & Accessibility Enhancement Engine -->
   <script>
-    // Purely decorative: mirror the uptime counter into the sidebar info box.
-    setInterval(function () {
-      var src = document.getElementById('uptime');
-      var dst = document.getElementById('uptime-mirror');
-      if (src && dst) dst.textContent = src.textContent;
-    }, 1000);
+    (function () {
+      // 1. Mirror uptime counter
+      setInterval(function () {
+        var src = document.getElementById('uptime');
+        var dst = document.getElementById('uptime-mirror');
+        if (src && dst && src.textContent) dst.textContent = src.textContent;
+      }, 1000);
+
+      // 2. Theme switcher (persists to localStorage)
+      var themeToggle = document.getElementById('theme-toggle');
+      var themeLabel = document.getElementById('theme-label');
+      var html = document.documentElement;
+
+      var savedTheme = localStorage.getItem('kb-theme') || 'linen';
+      setTheme(savedTheme);
+
+      if (themeToggle) {
+        themeToggle.addEventListener('click', function () {
+          var next = html.getAttribute('data-theme') === 'dark' ? 'linen' : 'dark';
+          setTheme(next);
+        });
+      }
+
+      function setTheme(theme) {
+        html.setAttribute('data-theme', theme);
+        localStorage.setItem('kb-theme', theme);
+        if (themeLabel) themeLabel.textContent = theme === 'dark' ? 'LINEN' : 'GRAPHITE';
+      }
+
+      // 3. Resilient Time Left Countdown Manager
+      // Solves the "time left not showing" bug permanently
+      function formatMs(ms) {
+        if (ms <= 0) return '<span class="time-settling">00m 00s (SETTLING)</span>';
+        var totalSec = Math.floor(ms / 1000);
+        var m = Math.floor(totalSec / 60);
+        var s = totalSec % 60;
+        var sStr = (s < 10 ? '0' : '') + s;
+        var mStr = (m < 10 ? '0' : '') + m;
+
+        if (m < 1) {
+          return '<span class="time-warning mono">' + mStr + 'm ' + sStr + 's</span>';
+        }
+        return '<span class="time-normal mono">' + mStr + 'm ' + sStr + 's</span>';
+      }
+
+      function parseAnyTime(val) {
+        if (!val || val === '--' || val === 'Waiting...' || val === 'N/A') return null;
+        var str = String(val).trim();
+
+        // ISO timestamp or date string
+        if (str.includes('-') && (str.includes('T') || str.includes(':'))) {
+          var parsed = Date.parse(str);
+          if (Number.isFinite(parsed)) return parsed;
+        }
+
+        // Numeric string (epoch ms or seconds)
+        var num = Number(str);
+        if (Number.isFinite(num) && num > 0) {
+          // Epoch ms
+          if (num > 1e11) return num;
+          // Seconds from now
+          if (num < 1e7) return Date.now() + (num * 1000);
+          // Epoch seconds
+          return num * 1000;
+        }
+
+        // Matches strings like "12m 30s" or "450s"
+        var mMatch = str.match(/(\d+)\s*m/i);
+        var sMatch = str.match(/(\d+)\s*s/i);
+        if (mMatch || sMatch) {
+          var sec = (mMatch ? parseInt(mMatch[1], 10) * 60 : 0) + (sMatch ? parseInt(sMatch[1], 10) : 0);
+          if (sec > 0) return Date.now() + (sec * 1000);
+        }
+        return null;
+      }
+
+      // Global Ticker Interval (runs every 500ms)
+      setInterval(function () {
+        var now = Date.now();
+
+        // Check Intent Time
+        var intentEl = document.getElementById('intent-time');
+        if (intentEl) {
+          var target = intentEl.dataset.targetMs ? Number(intentEl.dataset.targetMs) : parseAnyTime(intentEl.textContent);
+          if (target && Number.isFinite(target)) {
+            intentEl.dataset.targetMs = target;
+            var remaining = target - now;
+            intentEl.innerHTML = formatMs(remaining);
+          } else {
+            // Fallback: If empty, calculate time remaining in current 15m Kalshi cycle
+            var cycleMs = 15 * 60 * 1000;
+            var cycleRemaining = cycleMs - (now % cycleMs);
+            intentEl.innerHTML = formatMs(cycleRemaining) + ' <small class="cycle-hint">(cycle)</small>';
+          }
+        }
+
+        // Check Active Markets Table
+        var marketRows = document.querySelectorAll('#markets-body tr');
+        marketRows.forEach(function (row) {
+          var cells = row.querySelectorAll('td');
+          if (cells.length >= 5) {
+            var timeCell = cells[4]; // 5th column: TIME LEFT
+            var targetMs = timeCell.dataset.targetMs ? Number(timeCell.dataset.targetMs) : parseAnyTime(timeCell.textContent);
+            if (targetMs && Number.isFinite(targetMs)) {
+              timeCell.dataset.targetMs = targetMs;
+              timeCell.innerHTML = formatMs(targetMs - now);
+            }
+          }
+        });
+      }, 500);
+
+      // Listen for text updates from app.js to catch new timestamps
+      var intentElem = document.getElementById('intent-time');
+      if (intentElem && window.MutationObserver) {
+        var obs = new MutationObserver(function () {
+          var raw = intentElem.textContent;
+          if (raw && !raw.includes('m') && !raw.includes('s')) {
+            var parsed = parseAnyTime(raw);
+            if (parsed) intentElem.dataset.targetMs = parsed;
+          }
+        });
+        obs.observe(intentElem, { childList: true, characterData: true, subtree: true });
+      }
+    })();
   </script>
 </body>
 </html>

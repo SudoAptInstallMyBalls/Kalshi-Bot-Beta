@@ -48,6 +48,17 @@ Live and replay use the same function: the population variance of 15 completed o
 
 ## Controlled research
 
+### Coinbase Shadow Settlement Evaluation
+
+The evaluation pipeline supports `--coinbase-shadow <db-path>` to benchmark settlement forecasts and settlement calculations against external, high-frequency Coinbase BTC-USD ticker data.
+
+```powershell
+node scripts/evaluate-settlement-models.js `
+  --index-db data/history/settlement-index.sqlite `
+  --coinbase-shadow data/history/coinbase.sqlite `
+  --forward-after 2026-09-01T00:00:00.000Z
+```
+
 ```powershell
 node scripts/evaluate-settlement-models.js
 ```
@@ -77,6 +88,8 @@ node scripts/evaluate-settlement-models.js --forward-after 2026-09-07T00:15:00Z
 The `forward` section scores markets opening at or after that cutoff. It is empty until the historical databases contain those markets. Fresh data still needs to be collected; elapsed future time cannot be backtested today.
 
 ## Results and checks
+
+For the current free Coinbase collector, frozen forward study, and separate threshold/volatility experiments, see [Free forward study](free-forward-study.md). The results below describe the original implementation run.
 
 The completed run scored 15,674 valid fixed-time forecasts. The four-model matched cohort contains 14,225 forecasts across 2,047 markets:
 

@@ -18,6 +18,7 @@
     "data:record-index": "node scripts/record-settlement-index.js",
     "research:audit": "node scripts/audit-strategy.js",
     "research:walk-forward": "node scripts/walk-forward.js",
+    "data:record-coinbase": "node scripts/record-coinbase.js",
     "demo:telemetry": "node scripts/evaluate-telemetry.js",
     "demo:execution-replay": "node scripts/replay-execution.js",
     "demo:record": "node scripts/record-market-history.js --env .env.demo --environment demo --out data/demo/recording --seconds 86400",
@@ -26,7 +27,9 @@
     "backtest:synthetic": "node scripts/synthetic-backtest.js",
     "check:dashboard": "node --experimental-vm-modules scripts/check-dashboard.js",
     "check:server": "node scripts/check-server.js",
-    "research:compare-entries": "node scripts/compare-entry-policy.js"
+    "research:compare-entries": "node scripts/compare-entry-policy.js",
+    "research:forward": "node scripts/run-forward-study.js",
+    "research:candidates": "node scripts/evaluate-research-candidates.js"
   },
   "keywords": [
     "kalshi",

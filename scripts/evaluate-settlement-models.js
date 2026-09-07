@@ -21,7 +21,7 @@ async function main(args = process.argv.slice(2)) {
     else if (args[i] === '--forward-after' && args[i + 1]) {
       forwardAfter = Date.parse(args[++i]);
       if (!Number.isFinite(forwardAfter)) throw Error('Invalid forward cutoff timestamp');
-    } else throw Error('Usage: evaluate-settlement-models.js [--index-db authorized-history.sqlite] [--forward-after ISO-timestamp]');
+    } else throw Error('Usage: evaluate-settlement-models.js [--index-db authorized-history.sqlite] [--forward-after ISO-timestamp] [--coinbase-shadow]');
   }
   if (indexFile && !fs.existsSync(indexFile)) throw Error('Index database does not exist');
   const h = new Database(path.join(root, 'data/market-history/history.sqlite'), { readonly: true, fileMustExist: true });
@@ -44,6 +44,10 @@ async function main(args = process.argv.slice(2)) {
         shadow = require('../src/research/coinbase-shadow').evaluateCoinbaseShadow(h, coinbase, result.rows, forwardAfter ?? 0);
       } else shadow = { shadowOnly: true, unavailable: 'Coinbase recorder has not created a database' };
     }
+    let bookShadow = null;
+    if (coinbase && coinbase.prepare("SELECT name FROM sqlite_master WHERE name='proxy_quotes'").get()) {
+      bookShadow = require('../src/research/coinbase-book-shadow').evaluateCoinbaseBookShadow(h, coinbase, result.rows, forwardAfter ?? 0);
+    }
     const id = new Date().toISOString().replace(/[:.]/g, '-') + '-' + crypto.randomUUID().slice(0, 8);
     const dir = path.join(root, 'data/research/settlement-evaluations', id);
     fs.mkdirSync(dir, { recursive: true });
@@ -62,8 +66,8 @@ async function main(args = process.argv.slice(2)) {
     const sourceFiles = ['src/strategy/volatility.js', 'src/strategy/settlement-forecast.js', 'src/research/proxy-reference.js',
       'src/research/settlement-evaluation.js', 'src/research/history-replay.js', 'src/agents/skills/analysis/signal-generator.js',
       'src/agents/skills/analysis/probability-model.js', 'src/market-data/settlement-reference.js', 'scripts/evaluate-settlement-models.js'];
-    sourceFiles.push('src/strategy/settlement-number.js', 'src/agents/skills/analysis/ml-signal-scorer.js',
-      'src/agents/skills/trading/risk-manager.js', 'scripts/record-settlement-index.js');
+    sourceFiles.push('src/strategy/settlement-number.js','src/agents/skills/analysis/ml-signal-scorer.js',
+	'src/agents/skills/trading/risk-manager.js','scripts/record-settlement-index.js','src/research/coinbase-shadow.js','src/research/coinbase-recorder.js');
     const manifest = { createdAt: new Date().toISOString(), base, fingerprint: audit.fingerprint,
       quotesSha256: hashQuery(h, 'SELECT * FROM candles WHERE period_minutes=1 ORDER BY ticker,end_period_ts'),
       indexSha256: reference?.db ? hashQuery(reference.db, 'SELECT * FROM index_samples ORDER BY timestamp') : null,
@@ -73,7 +77,7 @@ async function main(args = process.argv.slice(2)) {
       livePromotion: false, freshDataAfter: result.freshDataAfter };
     const { rows, ...summary } = result;
     fs.writeFileSync(path.join(dir, 'forecasts.jsonl'), rows.map(r => JSON.stringify(r)).join('\n') + '\n');
-    fs.writeFileSync(path.join(dir, 'report.json'), JSON.stringify({ manifest, ...summary, coinbaseShadow: shadow, trading: tradeResults }, null, 2));
+    fs.writeFileSync(path.join(dir, 'report.json'), JSON.stringify({ manifest, ...summary, coinbaseShadow: shadow, coinbaseBookShadow: bookShadow, trading: tradeResults }, null, 2));
     fs.writeFileSync(path.join(dir, 'REPORT.md'), ['# Settlement model comparison', '', manifest.limits, '',
       '| Model | Common forecasts | Brier |', '|---|---:|---:|', ...Object.entries(summary.all.models).map(([name, m]) => `| ${name} | ${m.forecasts} | ${m.brier?.toFixed(6)} |`), '',
       'Trading simulation keeps the account risk latch. Forecast evaluation continues over all eligible markets independently.', '',
