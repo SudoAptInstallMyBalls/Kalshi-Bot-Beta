@@ -85,6 +85,13 @@ class RiskManager extends BaseSkill {
   }
 
   _checkSignal(signal, state) {
+    if (this.context?.config?.SETTLEMENT_AWARE) {
+      const ref = signal.forecastContext, now = Date.now();
+      if (ref?.referenceSource !== 'CFB:BRTI' || !Number.isFinite(ref.referenceTimestamp) ||
+          ref.referenceTimestamp > now || now - ref.referenceTimestamp > 3000) {
+        return { approved: false, reason: 'settlement_reference_missing_or_stale' };
+      }
+    }
     const safety = state.safety?.check() || { approved: false, reason: 'safety_unavailable' };
     if (!safety.approved) return safety;
     if (state.stateLoadFailed || state.persistenceFailed) return { approved: false, reason: 'state_persistence_failed' };

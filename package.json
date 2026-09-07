@@ -14,6 +14,8 @@
     "research:replay": "node scripts/replay-history.js",
     "research:prepare": "node scripts/replay-history.js --download-spot",
     "research:evaluate": "node scripts/evaluate-strategies.js",
+    "research:settlement": "node scripts/evaluate-settlement-models.js",
+    "data:record-index": "node scripts/record-settlement-index.js",
     "research:audit": "node scripts/audit-strategy.js",
     "research:walk-forward": "node scripts/walk-forward.js",
     "demo:telemetry": "node scripts/evaluate-telemetry.js",

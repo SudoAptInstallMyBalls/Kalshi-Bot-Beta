@@ -105,11 +105,11 @@ class MLSignalScorer extends BaseSkill {
     // unresolved outcome cannot enter its feature vector, even with fast fills.
 
     return {
-      btcPrice: state.btcPrice.binance || 0,
-      openPrice: state.marketOpenPrices[signal.ticker] || 0,
+      btcPrice: signal.forecastContext?.referencePrice ?? state.btcPrice.binance ?? 0,
+      openPrice: signal.forecastContext?.strike ?? state.marketOpenPrices[signal.ticker] ?? 0,
       timeRemainingMs: market ? market.closeTime - Date.now() : 0,
       totalDurationMs: 900000,
-      sigma: trend.volatility || 0.0015,
+      sigma: signal.forecastContext?.sigma ?? trend.volatility ?? 0.0015,
       trend: trend.trend || 'NEUTRAL',
       trendStrength: trend.trendStrength || 0,
       trendROC: trend.trendROC || 0,

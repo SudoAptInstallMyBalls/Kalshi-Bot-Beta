@@ -113,11 +113,11 @@ class KalshiMarketData extends BaseSkill {
         const ticker = m.ticker;
 
         // 1. Lock onto Kalshi's official target strike price
-        const kalshiTarget = parseFloat(m.floor_strike || m.cap_strike || m.strike_price || 0);
+        const kalshiTarget = Number(m.floor_strike);
         if (kalshiTarget > 0) {
           state.marketOpenPrices[ticker] = kalshiTarget;
-        } else if (!state.marketOpenPrices[ticker] && state.btcPrice.binance) {
-          state.marketOpenPrices[ticker] = state.btcPrice.binance;
+        } else {
+          delete state.marketOpenPrices[ticker];
         }
 
         // 2. Parse decimal dollar fields from Kalshi V2 API
@@ -133,6 +133,8 @@ class KalshiMarketData extends BaseSkill {
           exchangeIndex: m.exchange_index,
           title: m.title,
           targetPrice: kalshiTarget > 0 ? kalshiTarget : null,
+          strikeSource: kalshiTarget > 0 ? 'kalshi' : null,
+          strikeType: m.strike_type,
           openTime: new Date(m.open_time).getTime(),
           closeTime,
           yesBid,
@@ -185,6 +187,8 @@ class KalshiMarketData extends BaseSkill {
         // Keep strike price synchronized
         if (val.targetPrice && val.targetPrice > 0) {
           state.marketOpenPrices[m.ticker] = val.targetPrice;
+        } else {
+          delete state.marketOpenPrices[m.ticker];
         }
         return { ...m, ...val, quoteUpdatedAt: Date.now(), quoteStale: false };
       }

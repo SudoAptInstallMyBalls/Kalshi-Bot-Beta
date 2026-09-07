@@ -42,6 +42,10 @@ const BaseSkill = require('#src/agents/core/base-skill');
 const { takerFee, orderCost, affordableContracts } = require('#src/risk/trading-math');
 
 class SignalGenerator extends BaseSkill {
+  async stop() {
+    this.settlementReference?.close?.();
+    await super.stop();
+  }
   constructor() {
     super({
       name: 'signal-generator',
@@ -114,6 +118,9 @@ class SignalGenerator extends BaseSkill {
   async initialize(context) {
     await super.initialize(context);
     const config = context.config;
+    this.settlementAware = config.SETTLEMENT_AWARE === true;
+    if (this.settlementAware) this.settlementReference = context.settlementReference ||
+      new (require('#src/market-data/settlement-reference').SettlementReference)(config.SETTLEMENT_INDEX_DB);
     this.telemetryEnabled = config.ENABLE_TELEMETRY === true;
     this.maxTradeRiskPct = config.MAX_TRADE_RISK_PCT ?? 1;
     this.executionCostBuffer = (config.ROUND_TRIP_SLIPPAGE_CENTS ?? 1) / 100;
@@ -308,7 +315,7 @@ _getPortfolioExposure(state) {
     const signals = [];
     const count = key => { if (diagnostics) diagnostics[key] = (diagnostics[key] || 0) + 1; };
     const btcPrice = state.btcPrice?.binance;
-    if (!btcPrice) return signals;
+    if (!btcPrice && !this.settlementAware) return signals;
 
     // Running tallies ensure simultaneous signals in one pass cannot blow
     // through EITHER the portfolio cap or any single market's cap.
@@ -342,12 +349,24 @@ _getPortfolioExposure(state) {
       const noInRange = market.noAsk >= this.minContractPrice && market.noAsk <= this.maxContractPrice;
 
       const poly = polySkill ? polySkill.getCachedPrice(market.closeTime) : null;
-      const prob = probModel.calculateImpliedProbability(btcPrice, openPrice, timeRemaining, totalDuration, binanceFeed);
-      const marketMid = (market.yesBid + market.yesAsk) / 2;
+      const estimate = this.settlementAware
+        ? this.settlementReference.getForecast(market, openPrice, now)
+        : probModel.calculateImpliedProbability(btcPrice, openPrice, timeRemaining, totalDuration, binanceFeed);
+      const prob = { ...estimate }; // Blending must not mutate a cached reference forecast.
+      if (this.settlementAware && !prob.ready) {
+        count(prob.reason || 'settlement_reference_unavailable');
+        state.updateIntent?.({ status: 'waiting', message: `Entry blocked: ${prob.reason || 'settlement reference unavailable'}`, action: null });
+        continue;
+      }
+      if (prob.volatilityKnown === false) { count('volatility_unavailable'); continue; }
+	  const marketMid = (market.yesBid + market.yesAsk) / 2;
       if (Number.isFinite(marketMid)) {
         prob.probUp = this.probabilityWeight * prob.probUp + (1 - this.probabilityWeight) * marketMid;
         prob.probDown = 1 - prob.probUp;
       }
+      // Blending must never erase uncertainty in the underlying reference model.
+      const conservativeYes = Math.min(prob.probUp, prob.lowerProbUp ?? prob.probUp);
+      const conservativeNo = Math.min(prob.probDown, 1 - (prob.upperProbUp ?? prob.probUp));
       const trendData = trendSkill.getIndicator() ? trendSkill.getIndicator().getTrend() : {};
 
       state.updateModel({
@@ -364,8 +383,8 @@ _getPortfolioExposure(state) {
       });
 
       const kalshiYesImplied = market.yesAsk;
-      const modelEdgeYes = (prob.probUp - kalshiYesImplied) * 100;
-      const modelEdgeNo = (prob.probDown - market.noAsk) * 100;
+      const modelEdgeYes = (conservativeYes - kalshiYesImplied) * 100;
+      const modelEdgeNo = (conservativeNo - market.noAsk) * 100;
 
       const trendMultYes = trendSkill.getTrendMultiplier('yes');
       const trendMultNo = trendSkill.getTrendMultiplier('no');
@@ -373,19 +392,21 @@ _getPortfolioExposure(state) {
       const adjustedEdgeNo = modelEdgeNo * trendMultNo;
       const currentTrend = trendData.trend || 'NEUTRAL';
       const roundTrip = (ask,bid) => Math.max(0,ask-bid) + takerFee(1,ask,this.feeRate) + takerFee(1,bid,this.feeRate) + this.executionCostBuffer;
-      const netYes = (prob.probUp - market.yesAsk - roundTrip(market.yesAsk,market.yesBid)) * 100;
-      const netNo = (prob.probDown - market.noAsk - roundTrip(market.noAsk,market.noBid)) * 100;
+      const netYes = (conservativeYes - market.yesAsk - roundTrip(market.yesAsk,market.yesBid)) * 100;
+      const netNo = (conservativeNo - market.noAsk - roundTrip(market.noAsk,market.noBid)) * 100;
       const forecastId = this.telemetryEnabled ? crypto.randomUUID() : `research:${market.ticker}:${now}`;
       if (this.telemetryEnabled) require('#src/storage/research-telemetry').record('recordForecast', {
         id: forecastId, ts: now, ticker: market.ticker, close_ms: market.closeTime,
-        p_yes: prob.probUp, spot: btcPrice, strike: openPrice, yes_bid: market.yesBid,
+        p_yes: prob.probUp, spot: prob.referencePrice ?? btcPrice, strike: openPrice, yes_bid: market.yesBid,
         yes_ask: market.yesAsk, sigma: prob.sigma, trend: currentTrend,
       });
       if(this.telemetryEnabled) {
         const feed = binanceFeed;
         require('#src/storage/research-telemetry').record('recordEvent','forecast_context', {
           forecastId,source:feed?.wsConnected ? feed.wsEndpoints?.[feed.currentEndpointIdx] : 'REST fallback',
-          settlementIndex:'not_observed',netYes,netNo,quoteUpdatedAt:market.quoteUpdatedAt,
+          settlementIndex: prob.referenceSource || 'not_observed', referenceTimestamp: prob.referenceTimestamp,
+          basisErrorBps: prob.errorBps, conservativeYes, conservativeNo, knownSettlementSamples: prob.knownCount,
+          netYes,netNo,quoteUpdatedAt:market.quoteUpdatedAt,
           adjustedEdgeYes, adjustedEdgeNo, yesInRange, noInRange,
           minDivergence: this.minDivergence, minNetEdge: this.minNetEdge,
         });
@@ -401,7 +422,7 @@ _getPortfolioExposure(state) {
       if (adjustedEdgeYes > this.minDivergence && yesInRange && netYes > this.minNetEdge) {
         const sizing = this._calculatePositionSize({
           state, ticker: market.ticker, price: market.yesAsk,
-          edge: adjustedEdgeYes, probability: prob.probUp, probModel,
+          edge: adjustedEdgeYes, probability: conservativeYes, probModel,
           committedThisPass, committedForTicker: tickerCommitted(),
         });
 
@@ -414,6 +435,9 @@ _getPortfolioExposure(state) {
             priceCents: market.yesAsk * 100,
             priceDecimal: market.yesAsk, edge: adjustedEdgeYes, contracts: sizing.contracts,
             positionDollars: sizing.dollars, modelProb: prob.probUp,
+            forecastContext: { referencePrice: prob.referencePrice ?? btcPrice, strike: openPrice, sigma: prob.sigma,
+              referenceSource: prob.referenceSource || 'binance', referenceTimestamp: prob.referenceTimestamp ?? now,
+              forecastTimestamp: now, errorBps: prob.errorBps ?? null },
             riskBudget: sizing.riskBudget, bankrollReserve: sizing.reserve,
             reason: `Spot +${(prob.movePct || 0).toFixed(3)}% | Model ${(prob.probUp * 100).toFixed(0)}% vs Kalshi ${(kalshiYesImplied * 100).toFixed(0)}% | 1H: ${currentTrend}`,
             closeTime: market.closeTime, executionMode: 'taker',
@@ -425,7 +449,7 @@ _getPortfolioExposure(state) {
       if (adjustedEdgeNo > this.minDivergence && noInRange && netNo > this.minNetEdge) {
         const sizing = this._calculatePositionSize({
           state, ticker: market.ticker, price: market.noAsk,
-          edge: adjustedEdgeNo, probability: prob.probDown, probModel,
+          edge: adjustedEdgeNo, probability: conservativeNo, probModel,
           committedThisPass, committedForTicker: tickerCommitted(),
         });
 
@@ -438,6 +462,9 @@ _getPortfolioExposure(state) {
             priceCents: market.noAsk * 100,
             priceDecimal: market.noAsk, edge: adjustedEdgeNo, contracts: sizing.contracts,
             positionDollars: sizing.dollars, modelProb: prob.probDown,
+            forecastContext: { referencePrice: prob.referencePrice ?? btcPrice, strike: openPrice, sigma: prob.sigma,
+              referenceSource: prob.referenceSource || 'binance', referenceTimestamp: prob.referenceTimestamp ?? now,
+              forecastTimestamp: now, errorBps: prob.errorBps ?? null },
             riskBudget: sizing.riskBudget, bankrollReserve: sizing.reserve,
             reason: `Spot ${(prob.movePct || 0).toFixed(3)}% | Model ${(prob.probDown * 100).toFixed(0)}% vs Kalshi ${(market.noAsk * 100).toFixed(0)}% | 1H: ${currentTrend}`,
             closeTime: market.closeTime, executionMode: 'taker',
@@ -446,7 +473,8 @@ _getPortfolioExposure(state) {
       }
 
       // 3. POLYMARKET ARBITRAGE (If reference spread exists)
-      if (poly) {
+      // A different settlement reference is not a validated arbitrage leg.
+      if (poly && !this.settlementAware) {
         const polyEdgeYes = (poly.upMid - market.yesAsk) * 100;
         if (polyEdgeYes > this.minEdge * 1.5 && yesInRange &&
             polyEdgeYes - takerFee(1, market.yesAsk, this.feeRate) * 100 > this.minNetEdge) {

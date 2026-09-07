@@ -46,6 +46,9 @@ const config = {
   KELLY_FRACTION: envNumber('KELLY_FRACTION', 0.08, { min: 0, max: 1 }),
   TAKER_FEE_RATE: envNumber('TAKER_FEE_RATE', 0.07, { min: 0, max: 1 }),
   MODEL_PROBABILITY_WEIGHT: envNumber('MODEL_PROBABILITY_WEIGHT', 1, { min: 0, max: 1 }),
+  // Live entries require the actual settlement index by default. No proxy is promoted here.
+  SETTLEMENT_AWARE: process.env.SETTLEMENT_AWARE !== 'false',
+  SETTLEMENT_INDEX_DB: process.env.SETTLEMENT_INDEX_DB || require('path').join(process.env.BOT_DATA_DIR || require('./paths').dataDir, 'settlement-index.sqlite'),
   MIN_NET_EDGE: envNumber('MIN_NET_EDGE', 0, { min: 0, max: 100 }),
   MAX_POSITION_SIZE: envNumber('MAX_POSITION_SIZE', 5, { min: 0 }),
   ENABLE_TELEMETRY: true,

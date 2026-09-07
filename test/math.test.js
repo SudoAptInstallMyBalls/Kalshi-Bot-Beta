@@ -60,3 +60,19 @@ test('position sizing rounds down and respects remaining market capacity', () =>
   close(result.dollars, 2.47);
   assert.equal(generator._calculatePositionSize({ state, ticker: 'BTC', price: 0 }).contracts, 0);
 });
+
+test('unknown volatility reaches the signal generator guard instead of silently trading a fallback', () => {
+  for (const sigma of [null, undefined, NaN, Infinity, 0, -1]) {
+    assert.equal(model.calculateImpliedProbability(100, 100, 600000, 900000, { getRecentVolatility: () => sigma }).volatilityKnown, false);
+  }
+  assert.equal(model.calculateImpliedProbability(100, 100, 600000, 900000, { getRecentVolatility: () => .002 }).volatilityKnown, true);
+  const generator = new SignalGenerator();
+  generator.context = { registry: new Map([
+    ['probability-model', model], ['binance-price-feed', { getFeed: () => ({ getRecentVolatility: () => null }) }],
+  ]) };
+  const diagnostics = {};
+  const signals = generator._generateSignals([{ ticker: 'BTC', openTime: 0, closeTime: 900000, yesAsk: .5, noAsk: .5 }],
+    { btcPrice: { binance: 100 }, marketOpenPrices: { BTC: 100 } }, 60000, diagnostics);
+  assert.deepEqual(signals, []);
+  assert.equal(diagnostics.volatility_unavailable, 1);
+});

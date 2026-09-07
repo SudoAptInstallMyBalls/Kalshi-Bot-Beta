@@ -69,7 +69,7 @@ class ProbabilityModel extends BaseSkill {
 
   calculateImpliedProbability(currentPrice, openPrice, timeRemainingMs, totalDurationMs, binanceFeed) {
     if (!currentPrice || !openPrice || openPrice === 0) {
-      return { probUp: 0.5, probDown: 0.5, move: 0, movePct: 0, z: 0, sigma: 0.0015, remainingSigma: 0.0015 };
+      return { probUp: 0.5, probDown: 0.5, move: 0, movePct: 0, z: 0, sigma: 0.0015, remainingSigma: 0.0015, volatilityKnown: false };
     }
 
     const move = (currentPrice - openPrice) / openPrice;
@@ -78,9 +78,10 @@ class ProbabilityModel extends BaseSkill {
     
     // Fetch realized volatility from Binance tick buffer with fallback
     const measuredSigma = binanceFeed && typeof binanceFeed.getRecentVolatility === 'function'
-      ? binanceFeed.getRecentVolatility(totalDurationSec)
-      : 0.0015;
-    const sigma = Number.isFinite(measuredSigma) && measuredSigma > 0 ? measuredSigma : 0.0015;
+		? binanceFeed.getRecentVolatility(totalDurationSec)
+		: null;
+	const volatilityKnown = Number.isFinite(measuredSigma) && measuredSigma > 0;
+	const sigma = volatilityKnown ? measuredSigma : 0.0015;
 
     const remainingSigma = Math.max(0.0001, sigma * Math.sqrt(timeRemaining));
 
@@ -93,6 +94,7 @@ class ProbabilityModel extends BaseSkill {
         z: move > 0 ? 8 : -8,
         sigma,
         remainingSigma,
+        volatilityKnown,
       };
     }
 
@@ -108,6 +110,7 @@ class ProbabilityModel extends BaseSkill {
       z,
       sigma,
       remainingSigma,
+      volatilityKnown,
     };
   }
 

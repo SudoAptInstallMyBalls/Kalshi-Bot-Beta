@@ -123,7 +123,7 @@ async fetchMarket(ticker) {
       const m = resp.data.market;
 
       // 1. Extract Kalshi's official target / strike price
-      const targetPrice = parseFloat(m.floor_strike || m.cap_strike || m.strike_price || 0);
+      const targetPrice = Number(m.floor_strike);
 
       // 2. Support both new (*_dollars) and legacy (*_cents) Kalshi API fields
       const yesBid = m.yes_bid_dollars != null ? parseFloat(m.yes_bid_dollars) : (m.yes_bid != null ? m.yes_bid / 100 : 0);
@@ -154,6 +154,8 @@ async fetchMarket(ticker) {
         status: m.status,
         result: m.result,
         targetPrice: targetPrice > 0 ? targetPrice : null,
+        strikeSource: Number.isFinite(targetPrice) && targetPrice > 0 ? 'kalshi' : null,
+        strikeType: m.strike_type,
         yesBid,
         yesAsk,
         noBid,

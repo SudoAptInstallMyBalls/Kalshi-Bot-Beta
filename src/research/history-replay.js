@@ -2,6 +2,7 @@
 const SignalGenerator = require('#src/agents/skills/analysis/signal-generator');
 const ProbabilityModel = require('#src/agents/skills/analysis/probability-model');
 const { MLPipeline } = require('#src/ml/ml-pipeline');
+const { minuteVolatility } = require('#src/strategy/volatility');
 
 function fee(contracts, price, rate) {
   return Math.ceil((rate * contracts * price * (1 - price)) * 100 - 1e-10) / 100;
@@ -35,9 +36,7 @@ function spotContext(rows, index, strategy) {
   const last = slice.at(-1).close, past = slice[Math.max(0, slice.length - 31)].close;
   const roc = (last / past - 1) * 100, threshold = strategy.TREND_ROC_THRESHOLD ?? 0.02;
   const trend = fast > slow && roc > threshold ? 'BULLISH' : fast < slow && roc < -threshold ? 'BEARISH' : 'NEUTRAL';
-  const returns = slice.slice(-16).slice(1).map((r, i) => Math.log(r.close / slice.slice(-16)[i].close));
-  const mean = returns.reduce((a, b) => a + b, 0) / returns.length;
-  const sigma = Math.max(0.0001, Math.sqrt(returns.reduce((a, b) => a + (b - mean) ** 2, 0) / returns.length * 15));
+  const sigma = minuteVolatility(slice, 900);
   return { price: last, sigma, trend, strength: Math.min(Math.abs(fast - slow) / slow / 0.005, 1), roc, warmup: true };
 }
 
@@ -70,7 +69,10 @@ async function replay(history, spotRows, config, { modelPath, adverse = false, t
       return aligned ? 1 + (config.strategy.TREND_BOOST ?? 0.25) : 1 - (config.strategy.TREND_PENALTY ?? 0.40);
     } }],
   ]);
-  await generator.initialize({ registry, config: { ...config.strategy, TAKER_FEE_RATE: config.feeRate } });
+  const settlementReference = config.strategy.SETTLEMENT_AWARE
+    ? new (require('./proxy-reference').ProxyReference)(history.prepare('SELECT * FROM markets ORDER BY close_time,ticker').all(), spotRows)
+    : undefined;
+  await generator.initialize({ registry, settlementReference, config: { ...config.strategy, TAKER_FEE_RATE: config.feeRate } });
   const pipeline = new MLPipeline({ modelPath, config: { ML_RESEARCH_ONLY: true } });
   const samples = [], audit = { markets: markets.length, eligibleMarkets: 0, missingCandles: 0,
     missingSpot: 0, invalidMarkets: 0, invalidQuotes: 0, rejectedEntries: 0, noSignal: 0,
@@ -125,8 +127,8 @@ async function replay(history, spotRows, config, { modelPath, adverse = false, t
       if (candidate || fillTime >= close) continue;
       const signal = generator._generateSignals([market], state, ts, audit.entryFilters)[0];
       if (!signal) continue;
-      const context = { btcPrice: currentSpot.price, openPrice: m.floor_strike,
-        timeRemainingMs: close - ts, totalDurationMs: close - open, sigma: currentSpot.sigma,
+      const context = { btcPrice: signal.forecastContext?.referencePrice ?? currentSpot.price, openPrice: m.floor_strike,
+        timeRemainingMs: close - ts, totalDurationMs: close - open, sigma: signal.forecastContext?.sigma ?? currentSpot.sigma,
         trend: currentSpot.trend, trendStrength: currentSpot.strength, trendROC: currentSpot.roc,
         yesAsk: market.yesAsk, yesBid: market.yesBid, noAsk: market.noAsk, noBid: market.noBid,
         recentWinRate: samples.length ? wins / samples.length : 0.5,

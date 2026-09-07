@@ -34,6 +34,8 @@ async function main() {
       ['no_trend_boost', { TREND_ENABLED: false }],
       ['market_blend_75', { MODEL_PROBABILITY_WEIGHT: 0.75 }],
       ['market_blend_50', { MODEL_PROBABILITY_WEIGHT: 0.5 }],
+	  ['market_blend_25', { MODEL_PROBABILITY_WEIGHT: 0.25 }],
+	  ['market_blend_0', { MODEL_PROBABILITY_WEIGHT: 0 }],
       ['eight_minute_window', { TRADING_WINDOW: 8 }],
       ['ten_point_edge', { MIN_DIVERGENCE: 10 }],
       ['twenty_point_edge', { MIN_DIVERGENCE: 20 }],

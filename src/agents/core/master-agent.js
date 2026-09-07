@@ -427,6 +427,13 @@ class MasterAgent extends EventEmitter {
           missing_strike: 'missing strike', price_out_of_range: 'price outside entry limits',
           edge_below_threshold: 'edge below threshold', net_edge_below_threshold: 'edge insufficient after costs',
           entry_candidate: 'candidate did not produce an affordable order',
+          index_feed_missing: 'authorized BRTI feed is not connected',
+          index_feed_stale: 'BRTI feed is stale', index_feed_error: 'BRTI feed read failed',
+          index_volatility_warmup: 'BRTI completed-minute history is warming up',
+          missing_index_samples: 'settlement averaging samples are incomplete',
+          official_strike_required: 'official Kalshi strike metadata is missing',
+          historical_index_not_live: 'historical index data cannot authorize live entries',
+		  volatility_unavailable: 'volatility not yet measured (warming up)',
         };
         const reasons = Object.entries(ctx.diagnostics || {}).filter(([, n]) => n > 0)
           .map(([key]) => labels[key] || key);
