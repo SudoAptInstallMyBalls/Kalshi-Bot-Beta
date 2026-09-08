@@ -29,6 +29,7 @@
     "check:server": "node scripts/check-server.js",
     "research:compare-entries": "node scripts/compare-entry-policy.js",
     "research:forward": "node scripts/run-forward-study.js",
+    "research:freeze": "node scripts/freeze-forward-study.js",
     "research:candidates": "node scripts/evaluate-research-candidates.js"
   },
   "keywords": [

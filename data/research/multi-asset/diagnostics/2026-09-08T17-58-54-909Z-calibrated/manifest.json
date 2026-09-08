@@ -1,0 +1,16 @@
+{
+  "id": "multi-asset-calibration-v1",
+  "declaredAt": "2026-09-08T17:58:54.291Z",
+  "scope": "Latest fixed five-asset backtest; train-only isotonic calibration and asset-specific volatility settings.",
+  "volatilityReturns": {
+    "BTC": 15,
+    "ETH": 15,
+    "SOL": 30,
+    "XRP": 30,
+    "DOGE": 30
+  },
+  "calibration": "PAVA isotonic fit on development rows only; validation and test labels are never used to fit it.",
+  "livePromotion": false,
+  "sourceBacktest": "C:\\Users\\imadr\\Desktop\\kalshibot-main\\data\\research\\multi-asset\\backtests\\2026-09-08T17-56-59-774Z",
+  "sourceSha256": "228d6a606c5670ef94864628c538bd86856d54aabca7de9aa163290b58131ede"
+}

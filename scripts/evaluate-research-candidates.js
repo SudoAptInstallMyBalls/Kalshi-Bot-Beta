@@ -1,6 +1,6 @@
 const fs = require('fs'), path = require('path'), crypto = require('crypto'), D = require('better-sqlite3');
 const { root } = require('../src/config/paths');
-const { verify } = require('../src/research/forward-study');
+const { verify, outputPaths, parseStudyArgs } = require('../src/research/forward-study');
 const { replay } = require('../src/research/candidate-replay');
 const { CandidateReference } = require('../src/research/candidate-reference');
 const { evaluateForecasts, comparison } = require('../src/research/settlement-evaluation');
@@ -10,14 +10,15 @@ const variants = [
   ['basis_p90', { RESEARCH_BASIS_QUANTILE: .90 }], ['volatility_60_returns', { RESEARCH_VOLATILITY_RETURNS: 60 }],
   ['combined', { MIN_DIVERGENCE: 10, TRADING_WINDOW: 8, RESEARCH_BASIS_QUANTILE: .90, RESEARCH_VOLATILITY_RETURNS: 60 }],
 ];
-async function main() {
-  const study = verify(), h = new D(path.join(root, 'data/market-history/history.sqlite'), { readonly: true }), s = new D(path.join(root, 'data/research/research.sqlite'), { readonly: true });
+async function main(args = process.argv.slice(2)) {
+  const version = parseStudyArgs(args), study = verify(version);
+  const h = new D(path.join(root, 'data/market-history/history.sqlite'), { readonly: true }), s = new D(path.join(root, 'data/research/research.sqlite'), { readonly: true });
   try {
     h.exec('BEGIN'); s.exec('BEGIN');
     const markets = h.prepare("SELECT * FROM markets WHERE result IN ('yes','no') ORDER BY open_time,ticker").all();
     const spot = s.prepare('SELECT available_ms,close FROM spot_candles ORDER BY available_ms').all();
     const base = JSON.parse(fs.readFileSync(path.join(root, 'config/research/research-config.json')));
-    const id = new Date().toISOString().replace(/[:.]/g, '-'), dir = path.join(root, 'data/research/candidate-evaluations', id);
+    const id = new Date().toISOString().replace(/[:.]/g, '-') + '-' + crypto.randomUUID().slice(0, 8), dir = path.join(outputPaths(version).candidates, id);
     fs.mkdirSync(dir, { recursive: true });
     const manifest = { declaredAt: new Date().toISOString(), variants, base, frozenBaseline: study.id,
       limit: 'Exploratory on already-inspected data; not statistical evidence of alpha. No live promotion. Keep cost, sizing and drawdown safeguards.',
@@ -42,6 +43,7 @@ async function main() {
       console.log(JSON.stringify({ name, trades: trading.normal.trades, pnl: trading.normal.pnl, adverse: trading.adverse.pnl,
         brier: result.forecasts.models.candidate.brier }));
     }
+    verify(version);
     fs.writeFileSync(path.join(dir, 'report.json'), JSON.stringify({ manifest, results, livePromotion: false }, null, 2));
     fs.writeFileSync(path.join(dir, 'REPORT.md'), ['# Exploratory candidates', '', manifest.limit, '',
       '| Candidate | Trades | Normal P&L | Adverse P&L | Brier |', '|---|---:|---:|---:|---:|',

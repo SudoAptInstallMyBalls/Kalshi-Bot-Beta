@@ -3,6 +3,7 @@ const path = require('path');
 const crypto = require('crypto');
 const Database = require('better-sqlite3');
 const { root } = require('../src/config/paths');
+const { verify, outputPaths, studyVersion } = require('../src/research/forward-study');
 const { evaluateForecasts } = require('../src/research/settlement-evaluation');
 const { replay } = require('../src/research/history-replay');
 const { analyzeSettlementBasis } = require('../src/research/settlement-basis');
@@ -14,15 +15,19 @@ function hashQuery(db, sql) {
 }
 
 async function main(args = process.argv.slice(2)) {
-  let indexFile, forwardAfter = null, coinbaseShadow = false;
+  let indexFile, forwardAfter = null, coinbaseShadow = false, version;
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--coinbase-shadow') coinbaseShadow = true;
+    else if (args[i] === '--study' && !version && args[i + 1]) version = studyVersion(args[++i]);
     else if (args[i] === '--index-db' && args[i + 1]) indexFile = path.resolve(args[++i]);
     else if (args[i] === '--forward-after' && args[i + 1]) {
       forwardAfter = Date.parse(args[++i]);
       if (!Number.isFinite(forwardAfter)) throw Error('Invalid forward cutoff timestamp');
-    } else throw Error('Usage: evaluate-settlement-models.js [--index-db authorized-history.sqlite] [--forward-after ISO-timestamp] [--coinbase-shadow]');
+    } else throw Error('Usage: evaluate-settlement-models.js [--study v2 | --forward-after ISO-timestamp] [--index-db authorized-history.sqlite] [--coinbase-shadow]');
   }
+  if (version && forwardAfter !== null) throw Error('A study cutoff cannot be overridden');
+  const study = version ? verify(version) : null;
+  if (study) forwardAfter = Date.parse(study.cutoff);
   if (indexFile && !fs.existsSync(indexFile)) throw Error('Index database does not exist');
   const h = new Database(path.join(root, 'data/market-history/history.sqlite'), { readonly: true, fileMustExist: true });
   let s, reference, coinbase;
@@ -35,7 +40,7 @@ async function main(args = process.argv.slice(2)) {
     const audit = analyzeSettlementBasis([...markets].sort((a, b) => a.close_time.localeCompare(b.close_time)), spot);
     if (audit.dataQuality.official.disagree.length || audit.dataQuality.official.rawFieldMismatches.length) throw Error('Official settlement integrity check failed');
     reference = indexFile ? new SettlementReference(indexFile, { allowHistorical: true }) : null;
-    const result = evaluateForecasts(h, spot, { indexReference: reference, forwardAfter });
+    const result = evaluateForecasts(h, spot, { indexReference: reference, forwardAfter, forwardOnly: Boolean(study) });
     let shadow = null;
     if (coinbaseShadow) {
       const file = path.join(root, 'data/research/free-feed/coinbase.sqlite');
@@ -49,7 +54,7 @@ async function main(args = process.argv.slice(2)) {
       bookShadow = require('../src/research/coinbase-book-shadow').evaluateCoinbaseBookShadow(h, coinbase, result.rows, forwardAfter ?? 0);
     }
     const id = new Date().toISOString().replace(/[:.]/g, '-') + '-' + crypto.randomUUID().slice(0, 8);
-    const dir = path.join(root, 'data/research/settlement-evaluations', id);
+    const dir = path.join(study ? outputPaths(version).evaluations : path.join(root, 'data/research/settlement-evaluations'), id);
     fs.mkdirSync(dir, { recursive: true });
     const base = JSON.parse(fs.readFileSync(path.join(root, 'config/research/research-config.json')));
     const tradeResults = {};
@@ -58,7 +63,8 @@ async function main(args = process.argv.slice(2)) {
       tradeResults[name] = {};
       for (const adverse of [false, true]) {
         const r = await replay(h, spot, { ...base, strategy: { ...base.strategy, SETTLEMENT_AWARE: aware } },
-          { modelPath: path.join(dir, 'unused-model.json'), adverse });
+          { modelPath: path.join(dir, 'unused-model.json'), adverse,
+            tickers: study ? new Set(markets.filter(m => Date.parse(m.open_time) >= forwardAfter).map(m => m.ticker)) : null });
         tradeResults[name][adverse ? 'adverse' : 'normal'] = { trades: r.samples.length, pnl: r.pnl,
           maxDrawdown: r.maxDrawdown, maxMarkedDrawdown: r.maxMarkedDrawdown, riskLatched: r.riskLatched, audit: r.audit };
       }
@@ -69,19 +75,23 @@ async function main(args = process.argv.slice(2)) {
     sourceFiles.push('src/strategy/settlement-number.js','src/agents/skills/analysis/ml-signal-scorer.js',
 	'src/agents/skills/trading/risk-manager.js','scripts/record-settlement-index.js','src/research/coinbase-shadow.js','src/research/coinbase-recorder.js');
     const manifest = { createdAt: new Date().toISOString(), base, fingerprint: audit.fingerprint,
+      studyId: study?.id ?? null, cutoff: study?.cutoff ?? null, policySha256: study?.policySha256 ?? null,
+      evaluationScope: study ? 'Only markets opening at or after the declared cutoff; prior data is calibration context only.' : 'Retrospective comparison',
 	  basisErrorBps: audit.absoluteSpotMinusOfficialBps, // {count,min,median,mean,p95,max} — what's actually driving the entry guard
       quotesSha256: hashQuery(h, 'SELECT * FROM candles WHERE period_minutes=1 ORDER BY ticker,end_period_ts'),
       indexSha256: reference?.db ? hashQuery(reference.db, 'SELECT * FROM index_samples ORDER BY timestamp') : null,
       codeSha256: Object.fromEntries(sourceFiles.map(file => [file, crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex')])),
       selection: 'No candidate selection or live promotion. Fixed variants, fixed minute offsets, chronological 60/20/20 report blocks.',
-      limits: 'Retrospective data already inspected. Forecasts within markets are correlated. Proxy assumes opening basis persists, with trailing absolute residual stress; 95th percentile is empirical, not a guaranteed confidence bound. Historical settlement_ts is assumed public availability, not local historical receipt time. BRTI observations require both event and receipt timestamps. Proxy cannot observe the final settlement minute.',
+      limits: (study ? 'Policy declared before the fixed evaluation cutoff; results are as-of replays on subsequently settled markets. ' : 'Retrospective data already inspected. ') +
+        'Forecasts within markets are correlated. Proxy assumes opening basis persists, with trailing absolute residual stress; 95th percentile is empirical, not a guaranteed confidence bound. Historical settlement_ts is assumed public availability, not local historical receipt time. BRTI observations require both event and receipt timestamps. Proxy cannot observe the final settlement minute.',
       livePromotion: false, freshDataAfter: result.freshDataAfter };
     const { rows, ...summary } = result;
+    if (study) verify(version);
     fs.writeFileSync(path.join(dir, 'forecasts.jsonl'), rows.map(r => JSON.stringify(r)).join('\n') + '\n');
     fs.writeFileSync(path.join(dir, 'report.json'), JSON.stringify({ manifest, ...summary, coinbaseShadow: shadow, coinbaseBookShadow: bookShadow, trading: tradeResults }, null, 2));
     fs.writeFileSync(path.join(dir, 'REPORT.md'), ['# Settlement model comparison', '', manifest.limits, '',
       '| Model | Common forecasts | Brier |', '|---|---:|---:|', ...Object.entries(summary.all.models).map(([name, m]) => `| ${name} | ${m.forecasts} | ${m.brier?.toFixed(6)} |`), '',
-      'Trading simulation keeps the account risk latch. Forecast evaluation continues over all eligible markets independently.', '',
+      'Trading simulation keeps the account risk latch. Forecast evaluation continues over eligible markets independently.', '',
       ...Object.entries(tradeResults).map(([name, v]) => `${name}: ${v.normal.trades} trades, normal P&L ${v.normal.pnl.toFixed(3)}, adverse P&L ${v.adverse.pnl.toFixed(3)}.`), '',
       `Fresh data must be after ${result.freshDataAfter}. No live promotion.`, '', 'See report.json for fixed-time coverage, calibration bins, temporal blocks, source hashes and risk rejection counts.'].join('\n'));
     console.log(JSON.stringify({ directory: dir, forecasts: rows.length,

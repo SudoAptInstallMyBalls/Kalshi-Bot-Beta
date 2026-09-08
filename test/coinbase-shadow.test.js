@@ -52,7 +52,7 @@ describe('CoinbaseRecorder: record() ingestion invariants', () => {
     assert.equal(count, 0);
   });
 
-  it('strictly rejects ticks timestamped in the future (event > received)', () => {
+  it('rejects ticks beyond the bounded future-clock tolerance', () => {
     const futureTick = {
       type: 'ticker',
       product_id: 'BTC-USD',

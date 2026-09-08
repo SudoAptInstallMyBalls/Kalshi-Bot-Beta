@@ -34,3 +34,9 @@ The remaining architecture and ML scaling suggestions were evaluated, not turned
 The full suite reports 125 passing tests and one frozen-forward-study hash failure. The signal-generator hash already differs from the pinned study in the original HEAD (checked against both LF and CRLF encodings); this change also alters pinned replay and risk-manager source files. The guard is preserved, as are the original study manifest and research JSON files. Continuing that study with modified source requires a separately versioned study; this patch does not silently rebaseline it.
 
 The local better-sqlite3 binary was rebuilt for Windows before running database tests. The isolated idle-server smoke check passes. The dashboard smoke check passes after supplying the browser performance global and updating its obsolete environment/message/disconnect assertions to the current status and market display handlers. It also verifies that combined asks are no longer styled as an executable opportunity.
+
+## Versioning follow-up
+
+The separate v2 study is now declared in config/research/forward-study-v2.json, with a prospective cutoff of 2026-09-08T00:45:00.000Z. V1's original manifest, source hashes and historical outputs are unchanged. Tests now separately verify declaration integrity and rejection of source drift, rather than incorrectly requiring v2 code to match v1. All 137 tests, the dashboard smoke check and the isolated idle-server smoke check pass. V2 verification succeeds; v1 source verification continues to reject this changed checkout.
+
+Run `npm run research:forward -- --study v2` for the new version. Its initial run reported waiting for the cutoff. Each version has separate report, refresh, lock and candidate paths. The v2 evaluator scores only post-cutoff markets in both forecast and trading results, retaining earlier data solely as calibration context. See free-forward-study.md for verification and future version creation commands.

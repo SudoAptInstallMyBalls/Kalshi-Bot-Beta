@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "multi-asset-calibration-v1",
+  "declaredAt": "2026-09-08T17:15:00.000Z",
+  "source": "multi-asset backtest generated from the fixed 60-day backfill",
+  "volatilityReturns": {"BTC": 15, "ETH": 15, "SOL": 30, "XRP": 30, "DOGE": 30},
+  "calibration": "PAVA isotonic calibration fit on the development block only; validation and test labels are not used during fitting.",
+  "roundingUnits": {"BTC": 0.01, "ETH": 0.01, "SOL": 0.0001, "XRP": 0.0001, "DOGE": 0.0000001},
+  "shadowOnly": true,
+  "livePromotion": false,
+  "rule": "This experiment may diagnose and score calibration but cannot change BTC v3, loosen entry gates, or submit orders. Coinbase USD is a public proxy and not the CF Benchmarks settlement index."
+}

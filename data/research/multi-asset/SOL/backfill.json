@@ -1,0 +1,32 @@
+{
+  "asset": "SOL",
+  "completedAt": "2026-09-08T17:53:14.395Z",
+  "from": "2026-07-10T16:30:00.000Z",
+  "to": "2026-09-08T16:30:00.000Z",
+  "markets": 5690,
+  "expectedSlots": 5760,
+  "complete": 5678,
+  "incomplete": [
+    "KXSOL15M-26JUL300645-45",
+    "KXSOL15M-26JUL300630-30",
+    "KXSOL15M-26JUL300615-15",
+    "KXSOL15M-26JUL300600-00",
+    "KXSOL15M-26JUL300545-45",
+    "KXSOL15M-26JUL300530-30",
+    "KXSOL15M-26JUL300515-15",
+    "KXSOL15M-26JUL291400-00",
+    "KXSOL15M-26JUL221500-00",
+    "KXSOL15M-26JUL200530-30",
+    "KXSOL15M-26JUL130615-15",
+    "KXSOL15M-26JUL121100-00"
+  ],
+  "reference": {
+    "stored": 86574,
+    "expected": 86580,
+    "gaps": 6,
+    "downloaded": 1794,
+    "from": 1783690200000,
+    "to": 1788885000000,
+    "source": "coinbase:SOL-USD:1m"
+  }
+}

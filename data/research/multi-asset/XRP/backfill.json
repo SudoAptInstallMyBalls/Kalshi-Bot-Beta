@@ -1,0 +1,30 @@
+{
+  "asset": "XRP",
+  "completedAt": "2026-09-08T17:53:31.480Z",
+  "from": "2026-07-10T16:30:00.000Z",
+  "to": "2026-09-08T16:30:00.000Z",
+  "markets": 5690,
+  "expectedSlots": 5760,
+  "complete": 5680,
+  "incomplete": [
+    "KXXRP15M-26JUL300645-45",
+    "KXXRP15M-26JUL300630-30",
+    "KXXRP15M-26JUL300615-15",
+    "KXXRP15M-26JUL300600-00",
+    "KXXRP15M-26JUL300545-45",
+    "KXXRP15M-26JUL300530-30",
+    "KXXRP15M-26JUL300515-15",
+    "KXXRP15M-26JUL240615-15",
+    "KXXRP15M-26JUL240245-45",
+    "KXXRP15M-26JUL150845-45"
+  ],
+  "reference": {
+    "stored": 86534,
+    "expected": 86580,
+    "gaps": 46,
+    "downloaded": 6554,
+    "from": 1783690200000,
+    "to": 1788885000000,
+    "source": "coinbase:XRP-USD:1m"
+  }
+}

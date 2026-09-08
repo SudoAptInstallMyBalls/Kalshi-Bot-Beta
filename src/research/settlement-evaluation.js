@@ -24,10 +24,13 @@ function comparison(rows, keys) {
 }
 
 // Forecasts do not depend on positions, fills, balance, exits, or the account risk latch.
-function evaluateForecasts(history, spot, { indexReference, forwardAfter = null } = {}) {
+function evaluateForecasts(history, spot, { indexReference, forwardAfter = null, forwardOnly = false } = {}) {
   if (forwardAfter !== null && !Number.isFinite(forwardAfter)) throw Error('Invalid forward cutoff');
-  const markets = history.prepare("SELECT * FROM markets WHERE result IN ('yes','no') ORDER BY open_time,ticker").all();
-  const proxy = new ProxyReference(markets, spot), model = new ProbabilityModel();
+  if (forwardOnly && forwardAfter === null) throw Error('Prospective evaluation requires a cutoff');
+  const historyMarkets = history.prepare("SELECT * FROM markets WHERE result IN ('yes','no') ORDER BY open_time,ticker").all();
+  const markets = forwardOnly ? historyMarkets.filter(m => Date.parse(m.open_time) >= forwardAfter) : historyMarkets;
+  // Earlier observations may calibrate as-of forecasts but never enter prospective scores.
+  const proxy = new ProxyReference(historyMarkets, spot), model = new ProbabilityModel();
   const indices = new Map(spot.map((r, i) => [r.available_ms, i]));
   const candles = history.prepare('SELECT * FROM candles WHERE ticker=? AND period_minutes=1 ORDER BY end_period_ts');
   const rows = [], skipped = {}, indexUnavailable = {};
@@ -76,6 +79,6 @@ function evaluateForecasts(history, spot, { indexReference, forwardAfter = null 
       comparison: comparison(rows, ['rawTerminal', 'proxyTerminal', 'officialIndexAverage', 'marketMidpoint']) },
     forward: forwardAfter === null ? null : { after: new Date(forwardAfter).toISOString(),
       comparison: comparison(rows.filter(r => r.openTime >= forwardAfter), keys) },
-    freshDataAfter: markets.at(-1)?.close_time ?? null };
+    freshDataAfter: forwardOnly ? new Date(forwardAfter).toISOString() : markets.at(-1)?.close_time ?? null };
 }
 module.exports = { evaluateForecasts, score, comparison, OFFSETS };

@@ -2,11 +2,12 @@
 const fs = require('fs');
 const path = require('path');
 const { root } = require('../src/config/paths');
-const { verify } = require('../src/research/forward-study');
+const { verify, outputPaths, parseStudyArgs } = require('../src/research/forward-study');
 const { HistoryStore, PublicHistoryClient } = require('../src/research/market-history');
 const { openResearch, downloadSpot } = require('../src/research/research-data');
-async function refresh({ client = new PublicHistoryClient(), now = Date.now() } = {}) {
-  const study = verify(), cutoff = Date.parse(study.cutoff);
+async function refresh({ client = new PublicHistoryClient(), now = Date.now(), version = 'v1' } = {}) {
+  const study = verify(version), cutoff = Date.parse(study.cutoff), outputs = outputPaths(version);
+  if (now < cutoff) return { studyId: study.id, status: 'waiting_for_cutoff', cutoff: study.cutoff };
   const h = new HistoryStore(path.join(root, 'data/market-history/history.sqlite'));
   let s, selected = 0, downloaded = 0;
   try {
@@ -17,7 +18,7 @@ async function refresh({ client = new PublicHistoryClient(), now = Date.now() } 
         for (const m of page) {
           if (!m.ticker?.startsWith('KXBTC15M-') || !['yes', 'no'].includes(m.result) || seen.has(m.ticker)) continue;
           const open = Date.parse(m.open_time), close = Date.parse(m.close_time);
-          if (open < cutoff || close > now - 120000 || close - open !== 900000) continue;
+          if (!Number.isFinite(open) || !Number.isFinite(close) || open < cutoff || close > now - 120000 || close - open !== 900000) continue;
           seen.add(m.ticker); selected++; h.market(m, source);
           const cs = h.db.prepare('SELECT end_period_ts FROM candles WHERE ticker=? AND period_minutes=1 ORDER BY end_period_ts').all(m.ticker);
           if (cs.length === 15 && cs.every((c, i) => c.end_period_ts * 1000 === open + (i + 1) * 60000)) continue;
@@ -30,12 +31,19 @@ async function refresh({ client = new PublicHistoryClient(), now = Date.now() } 
     }
     const range = h.db.prepare("SELECT min(open_time) first,max(close_time) last FROM markets WHERE result IN ('yes','no')").get();
     s = openResearch(path.join(root, 'data/research/research.sqlite'));
-    const spot = await downloadSpot(s, Date.parse(range.first) - 3 * 3600000, Date.parse(range.last));
+    const spot = range.first && range.last
+      ? await downloadSpot(s, Date.parse(range.first) - 3 * 3600000, Date.parse(range.last))
+      : { status: 'waiting_for_settled_markets' };
     const summary = { completedAt: new Date().toISOString(), selected, marketsWithCandlesDownloaded: downloaded, lastClose: range.last, spot, studyId: study.id };
-    fs.writeFileSync(path.join(root, 'data/research/forward-refresh.json'), JSON.stringify(summary, null, 2));
+    verify(version);
+    fs.mkdirSync(outputs.directory, { recursive: true });
+    fs.writeFileSync(outputs.refresh, JSON.stringify(summary, null, 2));
     console.log(JSON.stringify(summary));
     return summary;
   } finally { s?.close(); h.close(); }
 }
-if (require.main === module) refresh().catch(e => { console.error(e.message); process.exitCode = 1; });
+if (require.main === module) {
+  Promise.resolve().then(() => refresh({ version: parseStudyArgs(process.argv.slice(2)) }))
+    .catch(e => { console.error(e.message); process.exitCode = 1; });
+}
 module.exports = { refresh };

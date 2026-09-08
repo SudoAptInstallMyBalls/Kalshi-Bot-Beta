@@ -1,0 +1,127 @@
+[
+  {
+    "asset": "BTC",
+    "complete": 5683,
+    "incomplete": 7,
+    "kalshi": {
+      "n": 85254,
+      "missingQuoteRows": 0
+    },
+    "spotSources": [
+      {
+        "source": "binance:BTCUSDT:1m",
+        "n": 86580
+      }
+    ],
+    "integrity": [
+      {
+        "quick_check": "ok"
+      }
+    ],
+    "spotIntegrity": [
+      {
+        "quick_check": "ok"
+      }
+    ]
+  },
+  {
+    "asset": "ETH",
+    "complete": 5682,
+    "incomplete": 8,
+    "kalshi": {
+      "n": 85253,
+      "missingQuoteRows": 0
+    },
+    "spotSources": [
+      {
+        "source": "binance:ETHUSDT:1m",
+        "n": 86580
+      }
+    ],
+    "integrity": [
+      {
+        "quick_check": "ok"
+      }
+    ],
+    "spotIntegrity": [
+      {
+        "quick_check": "ok"
+      }
+    ]
+  },
+  {
+    "asset": "SOL",
+    "complete": 5678,
+    "incomplete": 12,
+    "kalshi": {
+      "n": 85249,
+      "missingQuoteRows": 0
+    },
+    "spotSources": [
+      {
+        "source": "binance:SOLUSDT:1m",
+        "n": 86581
+      }
+    ],
+    "integrity": [
+      {
+        "quick_check": "ok"
+      }
+    ],
+    "spotIntegrity": [
+      {
+        "quick_check": "ok"
+      }
+    ]
+  },
+  {
+    "asset": "XRP",
+    "complete": 5680,
+    "incomplete": 10,
+    "kalshi": {
+      "n": 85251,
+      "missingQuoteRows": 0
+    },
+    "spotSources": [
+      {
+        "source": "binance:XRPUSDT:1m",
+        "n": 86583
+      }
+    ],
+    "integrity": [
+      {
+        "quick_check": "ok"
+      }
+    ],
+    "spotIntegrity": [
+      {
+        "quick_check": "ok"
+      }
+    ]
+  },
+  {
+    "asset": "DOGE",
+    "complete": 5682,
+    "incomplete": 8,
+    "kalshi": {
+      "n": 85253,
+      "missingQuoteRows": 0
+    },
+    "spotSources": [
+      {
+        "source": "binance:DOGEUSDT:1m",
+        "n": 86586
+      }
+    ],
+    "integrity": [
+      {
+        "quick_check": "ok"
+      }
+    ],
+    "spotIntegrity": [
+      {
+        "quick_check": "ok"
+      }
+    ]
+  }
+]

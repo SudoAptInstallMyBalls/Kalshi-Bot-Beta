@@ -1,0 +1,147 @@
+[
+  {
+    "asset": "BTC",
+    "completedAt": "2026-09-08T17:52:52.517Z",
+    "from": "2026-07-10T16:30:00.000Z",
+    "to": "2026-09-08T16:30:00.000Z",
+    "markets": 5690,
+    "expectedSlots": 5760,
+    "complete": 5683,
+    "incomplete": [
+      "KXBTC15M-26JUL300645-45",
+      "KXBTC15M-26JUL300630-30",
+      "KXBTC15M-26JUL300615-15",
+      "KXBTC15M-26JUL300600-00",
+      "KXBTC15M-26JUL300545-45",
+      "KXBTC15M-26JUL300530-30",
+      "KXBTC15M-26JUL300515-15"
+    ],
+    "reference": {
+      "stored": 86580,
+      "expected": 86580,
+      "gaps": 0,
+      "downloaded": 0,
+      "from": 1783690200000,
+      "to": 1788885000000,
+      "source": "coinbase:BTC-USD:1m"
+    }
+  },
+  {
+    "asset": "ETH",
+    "completedAt": "2026-09-08T17:53:01.982Z",
+    "from": "2026-07-10T16:30:00.000Z",
+    "to": "2026-09-08T16:30:00.000Z",
+    "markets": 5690,
+    "expectedSlots": 5760,
+    "complete": 5682,
+    "incomplete": [
+      "KXETH15M-26JUL300645-45",
+      "KXETH15M-26JUL300630-30",
+      "KXETH15M-26JUL300615-15",
+      "KXETH15M-26JUL300600-00",
+      "KXETH15M-26JUL300545-45",
+      "KXETH15M-26JUL300530-30",
+      "KXETH15M-26JUL300515-15",
+      "KXETH15M-26JUL150900-00"
+    ],
+    "reference": {
+      "stored": 86580,
+      "expected": 86580,
+      "gaps": 0,
+      "downloaded": 0,
+      "from": 1783690200000,
+      "to": 1788885000000,
+      "source": "coinbase:ETH-USD:1m"
+    }
+  },
+  {
+    "asset": "SOL",
+    "completedAt": "2026-09-08T17:53:14.395Z",
+    "from": "2026-07-10T16:30:00.000Z",
+    "to": "2026-09-08T16:30:00.000Z",
+    "markets": 5690,
+    "expectedSlots": 5760,
+    "complete": 5678,
+    "incomplete": [
+      "KXSOL15M-26JUL300645-45",
+      "KXSOL15M-26JUL300630-30",
+      "KXSOL15M-26JUL300615-15",
+      "KXSOL15M-26JUL300600-00",
+      "KXSOL15M-26JUL300545-45",
+      "KXSOL15M-26JUL300530-30",
+      "KXSOL15M-26JUL300515-15",
+      "KXSOL15M-26JUL291400-00",
+      "KXSOL15M-26JUL221500-00",
+      "KXSOL15M-26JUL200530-30",
+      "KXSOL15M-26JUL130615-15",
+      "KXSOL15M-26JUL121100-00"
+    ],
+    "reference": {
+      "stored": 86574,
+      "expected": 86580,
+      "gaps": 6,
+      "downloaded": 1794,
+      "from": 1783690200000,
+      "to": 1788885000000,
+      "source": "coinbase:SOL-USD:1m"
+    }
+  },
+  {
+    "asset": "XRP",
+    "completedAt": "2026-09-08T17:53:31.480Z",
+    "from": "2026-07-10T16:30:00.000Z",
+    "to": "2026-09-08T16:30:00.000Z",
+    "markets": 5690,
+    "expectedSlots": 5760,
+    "complete": 5680,
+    "incomplete": [
+      "KXXRP15M-26JUL300645-45",
+      "KXXRP15M-26JUL300630-30",
+      "KXXRP15M-26JUL300615-15",
+      "KXXRP15M-26JUL300600-00",
+      "KXXRP15M-26JUL300545-45",
+      "KXXRP15M-26JUL300530-30",
+      "KXXRP15M-26JUL300515-15",
+      "KXXRP15M-26JUL240615-15",
+      "KXXRP15M-26JUL240245-45",
+      "KXXRP15M-26JUL150845-45"
+    ],
+    "reference": {
+      "stored": 86534,
+      "expected": 86580,
+      "gaps": 46,
+      "downloaded": 6554,
+      "from": 1783690200000,
+      "to": 1788885000000,
+      "source": "coinbase:XRP-USD:1m"
+    }
+  },
+  {
+    "asset": "DOGE",
+    "completedAt": "2026-09-08T17:55:10.589Z",
+    "from": "2026-07-10T16:30:00.000Z",
+    "to": "2026-09-08T16:30:00.000Z",
+    "markets": 5690,
+    "expectedSlots": 5760,
+    "complete": 5682,
+    "incomplete": [
+      "KXDOGE15M-26AUG110530-30",
+      "KXDOGE15M-26JUL300645-45",
+      "KXDOGE15M-26JUL300630-30",
+      "KXDOGE15M-26JUL300615-15",
+      "KXDOGE15M-26JUL300600-00",
+      "KXDOGE15M-26JUL300545-45",
+      "KXDOGE15M-26JUL300530-30",
+      "KXDOGE15M-26JUL300515-15"
+    ],
+    "reference": {
+      "stored": 78111,
+      "expected": 86580,
+      "gaps": 8469,
+      "downloaded": 68631,
+      "from": 1783690200000,
+      "to": 1788885000000,
+      "source": "coinbase:DOGE-USD:1m"
+    }
+  }
+]

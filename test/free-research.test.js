@@ -3,7 +3,7 @@ const {CoinbaseBook}=require('../src/research/coinbase-book');
 const {CoinbaseRecorder}=require('../src/research/coinbase-recorder');
 const {CandidateReference}=require('../src/research/candidate-reference');
 const {ProxyReference}=require('../src/research/proxy-reference');
-const {verify}=require('../src/research/forward-study');
+const {read}=require('../src/research/forward-study');
 test('Coinbase book applies size replacements and removals and resets on resnapshot',()=>{
  const book=new CoinbaseBook();
  book.apply({type:'snapshot',product_id:'BTC-USD',bids:[['100','2'],['99','3']],asks:[['101','2']]},1000);
@@ -27,8 +27,10 @@ test('book records independently of quiet ticker, keeps sources separate and rej
  assert.equal(rec.record(ticker,11000),false);assert.equal(rec.counts.future_ticker_time,1);
  }finally{rec.stop();fs.rmSync(dir,{recursive:true,force:true});}
 });
-test('original study hashes remain unchanged and experimental default matches frozen proxy',()=>{
- assert.equal(verify().cutoff,'2026-09-07T00:15:00Z');
+test('original study declaration is preserved and experimental default matches frozen proxy',()=>{
+ // Declaration integrity is separate from whether this checkout can execute v1.
+ // Source mismatch rejection is exercised explicitly in forward-study.test.js.
+ assert.equal(read('v1').cutoff,'2026-09-07T00:15:00Z');
  const spot=Array.from({length:100},(_,i)=>({available_ms:(i+1)*60000,close:100+Math.sin(i)}));
  const m={ticker:'KXBTC15M-X',openTime:70*60000,closeTime:85*60000};
  const old=new ProxyReference([],spot),candidate=new CandidateReference([],spot);

@@ -4,6 +4,7 @@ const path = require('path');
 const Database = require('better-sqlite3');
 const WebSocket = require('ws');
 const { CoinbaseBook } = require('./coinbase-book');
+const { MAX_FUTURE_SKEW_MS } = require('./coinbase-time');
 class CoinbaseRecorder {
   constructor(filename, { Socket = WebSocket, clock = Date.now } = {}) {
     fs.mkdirSync(path.dirname(path.resolve(filename)), { recursive: true });
@@ -22,10 +23,11 @@ class CoinbaseRecorder {
     if (message.type !== 'ticker' || message.product_id !== 'BTC-USD') return false;
     const event = Date.parse(message.time), price = Number(message.price), bid = Number(message.best_bid), ask = Number(message.best_ask);
     if (![event, received, price, bid, ask].every(Number.isFinite) || price <= 0 || bid <= 0 || ask < bid ||
-        event > received || received - event > 5000 || event < (this.lastEvent ?? -Infinity)) {
-      const reason = event > received ? 'future_ticker_time' : received - event > 5000 ? 'stale_ticker' : 'invalid_or_out_of_order_ticker';
+        event > received + MAX_FUTURE_SKEW_MS || received - event > 5000 || event < (this.lastEvent ?? -Infinity)) {
+      const reason = event > received + MAX_FUTURE_SKEW_MS ? 'future_ticker_time' : received - event > 5000 ? 'stale_ticker' : 'invalid_or_out_of_order_ticker';
       this.counts[reason] = (this.counts[reason] || 0) + 1; return false;
     }
+    if (event > received) this.counts.tolerated_future_ticker = (this.counts.tolerated_future_ticker || 0) + 1;
     this.lastEvent = event;
     // First observed ticker in each receipt second is immutable and was actually available then.
     return this.insert.run(Math.floor(received / 1000) * 1000, event, received, price, bid, ask, 'coinbase:BTC-USD:ticker', JSON.stringify(message)).changes > 0;
@@ -37,9 +39,10 @@ class CoinbaseRecorder {
     const second = Math.floor(received / 1000) * 1000;
     if (second === this.lastQuoteSecond) return;
     const q = this.book.quote();
-    if (!q || q.event > received || received - q.event > 5000) {
+    if (!q || q.event > received + MAX_FUTURE_SKEW_MS || received - q.event > 5000) {
       this.counts.stale_or_future_book = (this.counts.stale_or_future_book || 0) + 1; return;
     }
+    if (q.event > received) this.counts.tolerated_future_book = (this.counts.tolerated_future_book || 0) + 1;
     this.insertQuote.run(second, q.event, received, q.price, q.bid, q.ask, 'coinbase:BTC-USD:book-midpoint', JSON.stringify(q));
     this.lastQuoteSecond = second; this.lastQuote = received; this.retryMs = 1000;
   }
@@ -62,7 +65,7 @@ class CoinbaseRecorder {
         const m = JSON.parse(bytes.toString()); this.lastMessage = this.clock();
         this.counts[m.type] = (this.counts[m.type] || 0) + 1;
         if (m.type === 'error') { this.event('server_error', String(m.message)); ws.terminate(); return; }
-        if (this.record(m)) this.retryMs = 1000;
+        if (this.record(m, this.lastMessage)) this.retryMs = 1000;
         this.recordBook(m, this.lastMessage);
       } catch (e) { this.event('record_error', e.message); ws.terminate(); }
     });
@@ -71,7 +74,8 @@ class CoinbaseRecorder {
     this.watchdog = setInterval(() => {
       const now = this.clock();
       if (now - this.lastHealth >= 60000) { this.event('health', JSON.stringify({ counts: this.counts, messageAgeMs: now - this.lastMessage, quoteAgeMs: now - this.lastQuote })); this.counts = {}; this.lastHealth = now; }
-      if (now - this.lastMessage > 15000 || now - this.lastQuote > 30000 || now - this.lastPong > 30000) {
+      // Quote rejection is a data-quality problem, not a broken transport.
+      if (now - this.lastMessage > 15000 || now - this.lastPong > 30000) {
         this.event('watchdog_timeout', JSON.stringify({ messageAgeMs: now - this.lastMessage, quoteAgeMs: now - this.lastQuote, pongAgeMs: now - this.lastPong }));
         ws.terminate();
       } else if (ws.readyState === 1) ws.ping();

@@ -1,0 +1,23 @@
+{"studyId":"settlement-forward-v2","status":"waiting_for_cutoff","cutoff":"2026-09-08T00:15:00.000Z"}
+✔ registered v3 verifies the current checkout and pins new helpers and study entrypoints (27.1857ms)
+✔ version parser requires valid explicit selectors and refuses duplicates and path traversal (0.1958ms)
+✔ new versions declare a future cutoff, pin source and never overwrite earlier manifests (21.0528ms)
+✔ new study refuses retrospective cutoffs, missing versions and legacy refreezing (2.4864ms)
+✔ declaration edits, added source files and removed source files fail verification (11.7448ms)
+✔ new hashes tolerate checkout line endings but still reject code changes (8.1256ms)
+✔ legacy declaration stays byte-identical and v1 still rejects source mismatches (18.1178ms)
+✔ runner waits before the cutoff without fetching data or overwriting any report (8.3704ms)
+✔ runner selects the same version for refresh and evaluation and isolates results (27.3287ms)
+✔ runner rechecks source after refresh and never advances latest on failure (14.3349ms)
+✔ prospective forecast scores exclude earlier markets but retain prior calibration context (4.4977ms)
+✔ asset recorders isolate products and preserve sub-dollar precision (11.9753ms)
+✔ collection CLI rejects accidental unbounded downloads and unknown arguments (0.2779ms)
+✔ Coinbase candle normalization keeps one-minute availability semantics (0.1397ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 235.2559

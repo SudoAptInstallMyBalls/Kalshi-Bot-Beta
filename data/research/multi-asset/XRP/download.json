@@ -1,0 +1,15 @@
+{
+  "asset": "XRP",
+  "completedAt": "2026-09-08T16:38:28.341Z",
+  "days": 7,
+  "selected": 664,
+  "complete": 664,
+  "incomplete": 0,
+  "reference": {
+    "stored": 10258,
+    "downloaded": 9258,
+    "from": 1788269700000,
+    "to": 1788885180000
+  },
+  "purpose": "Exploratory historical collection; not a frozen forward study or a profitability result"
+}

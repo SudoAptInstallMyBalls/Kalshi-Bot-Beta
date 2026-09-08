@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "multi-asset-diagnostic-v1",
+  "declaredAt": "2026-09-08T17:10:00.000Z",
+  "dataScope": "The fixed 60-day exploratory backfill recorded in data/research/multi-asset/backfill-request.json.",
+  "assets": ["BTC", "ETH", "SOL", "XRP", "DOGE"],
+  "models": ["rawTerminal", "proxyTerminal", "proxyAverage", "marketMidpoint"],
+  "thresholds": {
+    "minDivergenceProbabilityPoints": 15,
+    "minEdgeProbabilityPoints": 10,
+    "minContractPriceCents": 35,
+    "maxContractPriceCents": 65,
+    "entryWindowMinutes": 4,
+    "feeRate": 0.07,
+    "slippageCents": 1
+  },
+  "rule": "Retrospective diagnosis only. Do not tune thresholds from the test block, promote a candidate, or submit orders. All costs are charged at entry; no fill probability, queue position, or depth is inferred from minute candles.",
+  "roundingUnits": {"BTC": 0.01, "ETH": 0.01, "SOL": 0.0001, "XRP": 0.0001, "DOGE": 0.0000001}
+}

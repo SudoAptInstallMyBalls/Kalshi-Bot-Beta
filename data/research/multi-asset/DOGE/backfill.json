@@ -1,0 +1,28 @@
+{
+  "asset": "DOGE",
+  "completedAt": "2026-09-08T17:55:10.589Z",
+  "from": "2026-07-10T16:30:00.000Z",
+  "to": "2026-09-08T16:30:00.000Z",
+  "markets": 5690,
+  "expectedSlots": 5760,
+  "complete": 5682,
+  "incomplete": [
+    "KXDOGE15M-26AUG110530-30",
+    "KXDOGE15M-26JUL300645-45",
+    "KXDOGE15M-26JUL300630-30",
+    "KXDOGE15M-26JUL300615-15",
+    "KXDOGE15M-26JUL300600-00",
+    "KXDOGE15M-26JUL300545-45",
+    "KXDOGE15M-26JUL300530-30",
+    "KXDOGE15M-26JUL300515-15"
+  ],
+  "reference": {
+    "stored": 78111,
+    "expected": 86580,
+    "gaps": 8469,
+    "downloaded": 68631,
+    "from": 1783690200000,
+    "to": 1788885000000,
+    "source": "coinbase:DOGE-USD:1m"
+  }
+}
