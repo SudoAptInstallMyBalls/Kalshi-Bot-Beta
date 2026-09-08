@@ -82,6 +82,9 @@ class PositionManager extends BaseSkill {
     this.normalFillCheckDelayMs = 1500;
     this._settlementTimers = new Map();
     this._settlementAttempts = new Map();
+    this._exitTimers = new Map();
+    this._exitAttempts = new Map();
+    this._exitReconciliations = new Map();
     this._stopped = false;
   }
 
@@ -160,12 +163,84 @@ class PositionManager extends BaseSkill {
     this._settlementTimers.set(orderId, timer);
   }
 
-  async start() { this._stopped = false; await super.start(); }
+  scheduleExitReconciliation(orderId, delayMs) {
+    if (this._stopped || this._exitTimers.has(orderId)) return;
+    const attempts = this._exitAttempts.get(orderId) || 0;
+    if (attempts >= (this.context.config?.EXIT_RECONCILIATION_MAX_ATTEMPTS ?? 60)) {
+      this.context.registry.get('state-manager').botState.safety?.halt('exit_reconciliation_retries_exhausted');
+      return;
+    }
+    const timer = setTimeout(() => {
+      this._exitTimers.delete(orderId);
+      this.reconcileExitById(orderId);
+    }, delayMs ?? Math.min(300000, 5000 * 2 ** Math.min(6, attempts)));
+    timer.unref?.();
+    this._exitTimers.set(orderId, timer);
+  }
+
+  reconcileExitById(orderId) {
+    if (this._stopped) return Promise.resolve();
+    if (this._exitReconciliations.has(orderId)) return this._exitReconciliations.get(orderId);
+    const pending = this._requeryExit(orderId).catch(err => {
+      console.error(`[PositionManager] Exit reconciliation failed for ${orderId}: ${err.message}`);
+    }).finally(() => {
+      this._exitReconciliations.delete(orderId);
+      const position = this.context.registry.get('state-manager').botState.openPositions.find(p => p.orderId === orderId);
+      if (position?.exitOrder || position?.exitSubmissionUnknown) this.scheduleExitReconciliation(orderId);
+      else {
+        this._exitAttempts.delete(orderId);
+        clearTimeout(this._exitTimers.get(orderId));
+        this._exitTimers.delete(orderId);
+      }
+    });
+    this._exitReconciliations.set(orderId, pending);
+    return pending;
+  }
+
+  async _requeryExit(orderId) {
+    const state = this.context.registry.get('state-manager').botState;
+    const position = state.openPositions.find(p => p.orderId === orderId);
+    if (!position || this._exiting?.has(orderId)) return;
+    const attempts = this._exitAttempts.get(orderId) || 0;
+    if (attempts >= (this.context.config?.EXIT_RECONCILIATION_MAX_ATTEMPTS ?? 60)) return;
+    this._exitAttempts.set(orderId, attempts + 1);
+    const client = this.context.registry.get('kalshi-market-data').getClient();
+    if (position.exitSubmissionUnknown) {
+      // Legacy markers without an identity require manual reconciliation.
+      if (!position.exitClientOrderId) throw new Error('Unknown exit has no persisted client order id');
+      const order = await client.findOrderByClientId(position.ticker, position.exitClientOrderId);
+      if (!order) return;
+      if (order.client_order_id !== position.exitClientOrderId || order.ticker !== position.ticker || !order.order_id) {
+        throw new Error('Exit lookup identity mismatch');
+      }
+      const requested = position.exitRequested;
+      if (!Number.isFinite(requested) || requested <= 0) throw new Error('Unknown exit requested quantity');
+      position.exitOrder = { id: order.order_id, requested };
+      delete position.exitSubmissionUnknown;
+      state.saveNow();
+    }
+    if (position.exitOrder) {
+      await this._executeTakeProfit({ orderId, ticker: position.ticker, side: position.side,
+        contracts: position.filledContracts ?? position.contracts, sellPriceCents: 1,
+        reason: 'Scheduled exit reconciliation', reconcileOnly: true });
+    }
+  }
+
+  async start() {
+    this._stopped = false;
+    await super.start();
+    for (const position of this.context.registry.get('state-manager').botState.openPositions) {
+      if (position.exitOrder || position.exitSubmissionUnknown) this.scheduleExitReconciliation(position.orderId);
+    }
+  }
 
   async stop() {
     this._stopped = true;
     for (const timer of this._settlementTimers.values()) clearTimeout(timer);
     this._settlementTimers.clear();
+    for (const timer of this._exitTimers.values()) clearTimeout(timer);
+    this._exitTimers.clear();
+    await Promise.all(this._exitReconciliations.values());
     await super.stop();
   }
 
@@ -217,14 +292,18 @@ class PositionManager extends BaseSkill {
           // Persist an unknown-submission marker before POST. A crash or timeout
           // must not result in another sell whose predecessor may still be live.
           position.exitSubmissionUnknown = true;
+          position.exitClientOrderId = require('crypto').randomUUID();
+          position.exitRequested = remaining;
           state.saveNow();
           try {
-            order = await client.sellPosition(tp.ticker, tp.side, remaining, priceCents);
+            order = await client.sellPosition(tp.ticker, tp.side, remaining, priceCents, position.exitClientOrderId);
           } catch (err) {
             // Only a definite rejection of THIS POST proves there is no exit order.
             // Timeouts and failures while observing an accepted order remain unknown.
             if (require('#src/execution/order-rejection').isDefiniteRejection(err)) {
               delete position.exitSubmissionUnknown;
+              delete position.exitClientOrderId;
+              delete position.exitRequested;
               state.saveNow();
             }
             throw err;
@@ -259,6 +338,8 @@ class PositionManager extends BaseSkill {
           remaining -= filledThisAttempt;
         }
         delete position.exitOrder;
+        delete position.exitClientOrderId;
+        delete position.exitRequested;
         // Commit each terminal order before another POST, including partials.
         const result = this._reconcileExit(tp, filledThisAttempt, totals.gross - totals.fees, remaining, null);
         state.saveNow();
@@ -272,6 +353,7 @@ class PositionManager extends BaseSkill {
       state.saveNow();
     } finally {
       this._exiting.delete(tp.orderId);
+      if (position.exitOrder || position.exitSubmissionUnknown) this.scheduleExitReconciliation(tp.orderId);
     }
 
     return this._reconcileExit(tp, totalFilled, totalProceedsCents, remaining, lastError);

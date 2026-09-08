@@ -27,6 +27,8 @@ class MLWriteBuffer {
   }
 
   flush() {
+    // better-sqlite3 commits synchronously and atomically. Timer/immediate
+    // callbacks cannot interleave here; a failed transaction retains the queue.
     if (!this.features.length && !this.predictions.length) return;
     this.db.writeMLBatch(this.features, this.predictions);
     this.features.length = 0;

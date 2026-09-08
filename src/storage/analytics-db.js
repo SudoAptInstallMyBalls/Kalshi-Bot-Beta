@@ -299,8 +299,15 @@ class AnalyticsDB {
 
   // ===== Orders / Fills / Snapshots (unchanged behavior) =====
 
+  _orderNumber(value) {
+    const number = Number(value ?? 0);
+    if (!Number.isFinite(number) || number < 0) throw new Error('Invalid numeric order audit field');
+    return number;
+  }
+
   logOrder(order, signalId = null) {
     try {
+      order = require('#src/execution/kalshi-order').normalizeOrder(order);
       const now = Date.now();
       this._insertOrder.run(
         now,
@@ -310,12 +317,12 @@ class AnalyticsDB {
         order.ticker,
         order.side,
         order.action || 'buy',
-        order.price_cents || 0,
-        order.count || 0,
+        this._orderNumber(order.price_cents),
+        this._orderNumber(order.count ?? order.initial_count),
         order.status || 'pending',
-        order.fill_count || 0,
-        order.taker_fill_cost || 0,
-        order.taker_fees || 0,
+        this._orderNumber(order.fill_count),
+        this._orderNumber(order.taker_fill_cost),
+        this._orderNumber(order.taker_fees),
         order.close_time || null,
         now,
         now
@@ -327,7 +334,7 @@ class AnalyticsDB {
 
   updateOrder(orderId, status, fillCount, takerFillCost = 0, takerFees = 0) {
     try {
-      this._updateOrder.run(status, fillCount, takerFillCost, takerFees, Date.now(), orderId);
+      this._updateOrder.run(status, this._orderNumber(fillCount), this._orderNumber(takerFillCost), this._orderNumber(takerFees), Date.now(), orderId);
     } catch (err) {
       console.error('[DB] updateOrder error:', err.message);
     }
@@ -374,6 +381,7 @@ class AnalyticsDB {
       );
     } catch (err) {
       console.error('[DB] logFeatures error:', err.message);
+      throw err;
     }
   }
 
@@ -389,7 +397,7 @@ class AnalyticsDB {
       return result.changes > 0;
     } catch (err) {
       console.error('[DB] updateFeatureLabel error:', err.message);
-      return false;
+      throw err;
     }
   }
 
@@ -399,7 +407,7 @@ class AnalyticsDB {
       return rows.map(r => ({ ts: r.ts, ticker: r.ticker, outcome_ms: r.outcome_ts, features: JSON.parse(r.features), label: r.label }));
     } catch (err) {
       console.error('[DB] getTrainingData error:', err.message);
-      return [];
+      throw err;
     }
   }
 

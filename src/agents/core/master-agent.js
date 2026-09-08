@@ -46,10 +46,12 @@ class MasterAgent extends EventEmitter {
     this.orchestrator = new Orchestrator(this.registry);
 
     this.running = false;
-    this._scanInterval = null;
-    this._takeProfitInterval = null;
-    this._discoveryInterval = null;
-    this._balanceInterval = null;
+    const ScheduledTask = require('./scheduled-task');
+    const tasks = require('./periodic-tasks');
+    this._periodicTasks = Object.fromEntries(Object.entries({ Scan: 2000, TakeProfit: 3000, Discovery: 15000, BalanceRefresh: 15000 })
+      .map(([name, interval]) => [name, new ScheduledTask(() => tasks[`run${name}`](this), interval)]));
+    this._scanDone = Promise.resolve();
+    this._takeProfitDone = Promise.resolve();
 
     this._registerSkills();
     this.state.safety = new TradingSafety(this.state, config);
@@ -216,6 +218,10 @@ class MasterAgent extends EventEmitter {
     this.state.safety.entriesEnabled = true;
     this.running = true;
     this.log('MasterAgent starting — initializing skills');
+    const defaults = require('#src/config/defaults');
+    const effective = { ...defaults, ...Object.fromEntries(Object.entries(this.config).filter(([, value]) => typeof value === 'number' || typeof value === 'boolean')) };
+    effective.MAX_LOSS_PER_POSITION = this.config.MAX_LOSS_PER_POSITION ?? Math.min(3, effective.MAX_POSITION_SIZE * 0.60);
+    this.log(`Effective strategy/risk config: ${JSON.stringify(effective)}`);
 
     const stateManager = this.registry.get('state-manager');
     stateManager.botState.updateIntent({
@@ -297,10 +303,7 @@ class MasterAgent extends EventEmitter {
     }
 
     // Start periodic auto-trade loops
-    this._scanInterval = setInterval(() => this._runScan(), 2000);
-    this._takeProfitInterval = setInterval(() => this._runTakeProfit(), 3000);
-    this._discoveryInterval = setInterval(() => this._runDiscovery(), 15000);
-    this._balanceInterval = setInterval(() => this._runBalanceRefresh(), 15000);
+    for (const task of Object.values(this._periodicTasks)) task.start();
 
     stateManager.botState.updateIntent({
       status: 'scanning',
@@ -357,183 +360,31 @@ class MasterAgent extends EventEmitter {
    * Main auto-trade loop. Runs every 2 seconds:
    *   refresh markets → generate signals → risk check → execute orders
    */
-  async _runScan() {
-    if (this._scanRunning || !this.running) return;
-    const safety = this.state.safety.check();
-    if (!safety.approved) {
-      this.state.safety.publish(safety.reason);
-      return;
-    }
-    this._scanRunning = true;
-    let scanDone;
-    this._scanDone = new Promise(resolve => { scanDone = resolve; });
-
-    const state = this.state;
-
-    try {
-      const result = await this.orchestrator.dispatch({
-        action: 'scan-and-trade',
-        workflow: 'scan-and-trade',
-        params: {},
-      });
-
-      if (!result.success) {
-        if (result.failedStep) {
-          this.log(`Scan workflow failed at step '${result.failedStep}': ${result.stepResults?.find(s => !s.success)?.error || 'unknown'}`, 'ERROR');
-        }
-        return;
-      }
-
-      // Extract results from workflow context to update UI intent
-      const ctx = result.context || {};
-      const signals = ctx.signals || [];
-      const executedSignals = ctx.executedSignals || [];
-      const totalExecuted = ctx.totalExecuted || 0;
-      const afterScan = state.safety.check();
-      if (!afterScan.approved) {
-        state.safety.publish(afterScan.reason);
-        return;
-      }
-
-      if (signals.length > 0) {
-        const best = signals[0];
-        state.updateIntent({
-          status: totalExecuted > 0 ? 'executing' : 'signal_detected',
-          message: totalExecuted > 0
-            ? `Executed ${totalExecuted} trade(s)`
-            : `${best.type}: ${best.reason}`,
-          lastSignal: best,
-          modelProbability: best.modelProb,
-          currentEdge: best.edge,
-          action: `BUY ${best.side.toUpperCase()} @ ${best.priceCents}c`,
-        });
-
-        // Log signal activity
-        if (totalExecuted > 0) {
-          for (const exec of executedSignals) {
-            if (exec.status === 'executed') {
-              this.log(`Order accepted: ${exec.signal} → ${exec.orderId} (fills tracked separately)`, 'SUCCESS');
-            } else if (exec.status === 'blocked') {
-              this.log(`Blocked: ${exec.signal} (${exec.reason})`, 'WARN');
-            } else if (exec.status === 'error') {
-              this.log(`Execution error: ${exec.signal} — ${exec.error}`, 'ERROR');
-            }
-          }
-        }
-      } else {
-        const labels = {
-          outside_entry_window: `outside minutes ${this.config.ENTRY_START_MINUTES ?? 0}–${this.config.TRADING_WINDOW ?? 4} after open / within ${this.config.ENTRY_CLOSE_BUFFER_SECONDS ?? 30}s of close`,
-          stale_quote: 'stale quotes', missing_quote: 'missing quotes', invalid_quote: 'invalid quotes',
-          missing_strike: 'missing strike', price_out_of_range: 'price outside entry limits',
-          edge_below_threshold: 'edge below threshold', net_edge_below_threshold: 'edge insufficient after costs',
-          entry_candidate: 'candidate did not produce an affordable order',
-          index_feed_missing: 'authorized BRTI feed is not connected',
-          index_feed_stale: 'BRTI feed is stale', index_feed_error: 'BRTI feed read failed',
-          index_volatility_warmup: 'BRTI completed-minute history is warming up',
-          missing_index_samples: 'settlement averaging samples are incomplete',
-          official_strike_required: 'official Kalshi strike metadata is missing',
-          historical_index_not_live: 'historical index data cannot authorize live entries',
-		  volatility_unavailable: 'volatility not yet measured (warming up)',
-        };
-        const reasons = Object.entries(ctx.diagnostics || {}).filter(([, n]) => n > 0)
-          .map(([key]) => labels[key] || key);
-        state.updateIntent({
-          status: 'scanning',
-          message: reasons.length ? `No entry: ${reasons.join('; ')}` : 'Scanning for opportunities...',
-          currentEdge: null,
-          action: null,
-        });
-      }
-    } catch (err) {
-      this.log(`Scan error: ${err.message}`, 'ERROR');
-    } finally {
-      this._scanRunning = false;
-      scanDone();
-    }
+  _runScan() {
+    return this._periodicTasks?.Scan.run() ?? require("./periodic-tasks").runScan(this);
   }
 
   /**
    * Take-profit loop. Runs every 3 seconds for open positions.
    * Sells positions that hit >15% gain or >50% of max possible gain.
    */
-  async _runTakeProfit() {
-    if (!this.running || this._takeProfitRunning || this.state.safety.authFailed) return;
-    const state = this.state;
-    if (!state || state.openPositions.length === 0) return;
-    this._takeProfitRunning = true;
-    let takeProfitDone;
-    this._takeProfitDone = new Promise(resolve => { takeProfitDone = resolve; });
-
-    try {
-      // Pausing entry scans must not strand exits with stale cached quotes.
-      if (!state.safety.check().approved) {
-        await this.orchestrator.dispatch({ action: 'refresh-markets', params: {} });
-      }
-      const result = await this.orchestrator.dispatch({
-        action: 'check-take-profit',
-        workflow: 'check-take-profit',
-        params: {},
-      });
-
-      if (!result.success) return;
-
-      const ctx = result.context || {};
-      const tpSignals = ctx.takeProfitSignals || [];
-      const tpResults = ctx.results || [];
-
-      for (let i = 0; i < tpResults.length; i++) {
-        const tp = tpSignals[i];
-        const res = tpResults[i];
-        if (!tp) continue;
-
-        if (res.status === 'sold') {
-          state.updateIntent({
-            status: 'taking_profit',
-            message: `Take profit on ${tp.ticker}`,
-            action: `SELL ${tp.side.toUpperCase()} @ ${tp.sellPriceCents}c`,
-          });
-          this.log(
-            `Take profit: ${tp.ticker} ${tp.side} @ ${tp.sellPriceCents}c (+${tp.profitPct.toFixed(1)}%) | P&L: ${res.pnl >= 0 ? '+' : ''}$${res.pnl.toFixed(2)}`,
-            res.pnl >= 0 ? 'SUCCESS' : 'WARN'
-          );
-        } else if (res.status === 'error') {
-          this.log(`Take profit error: ${tp.ticker} — ${res.error}`, 'ERROR');
-        }
-      }
-    } catch (err) {
-      this.log(`Take profit error: ${err.message}`, 'ERROR');
-    } finally {
-      this._takeProfitRunning = false;
-      takeProfitDone();
-    }
+  _runTakeProfit() {
+    return this._periodicTasks?.TakeProfit.run() ?? require("./periodic-tasks").runTakeProfit(this);
   }
 
   /**
    * Market discovery. Runs every 15 seconds.
    * Finds new active contracts in the KXBTC15M series.
    */
-  async _runDiscovery() {
-    if (!this.running || this.state.safety.authFailed) return;
-    try {
-      const result = await this.orchestrator.dispatch({ action: 'discover-markets', params: {} });
-      if (result.success && result.count > 0) {
-        this.log(`Tracking ${result.count} markets (${this.config.SERIES_TICKER})`);
-      }
-    } catch (err) {
-      this.log(`Discovery error: ${err.message}`, 'ERROR');
-    }
+  _runDiscovery() {
+    return this._periodicTasks?.Discovery.run() ?? require("./periodic-tasks").runDiscovery(this);
   }
 
   /**
    * Balance refresh. Runs every 15 seconds.
    */
-  async _runBalanceRefresh() {
-    if (!this.running || this.state.safety.authFailed) return;
-    try {
-      await this.orchestrator.dispatch({ action: 'fetch-balance', params: {} });
-    } catch (err) {
-      this.log(`Balance refresh error: ${err.message}`, 'WARN');
-    }
+  _runBalanceRefresh() {
+    return this._periodicTasks?.BalanceRefresh.run() ?? require("./periodic-tasks").runBalanceRefresh(this);
   }
 
   // ===== Shutdown =====
@@ -542,14 +393,7 @@ class MasterAgent extends EventEmitter {
     this.running = false;
     this.state.safety.entriesEnabled = false;
 
-    if (this._scanInterval) clearInterval(this._scanInterval);
-    if (this._takeProfitInterval) clearInterval(this._takeProfitInterval);
-    if (this._discoveryInterval) clearInterval(this._discoveryInterval);
-    if (this._balanceInterval) clearInterval(this._balanceInterval);
-    this._scanInterval = null;
-    this._takeProfitInterval = null;
-    this._discoveryInterval = null;
-    this._balanceInterval = null;
+    await Promise.all(Object.values(this._periodicTasks || {}).map(task => task.stop()));
 
     // Drain work already in flight before stopping the scorer's write buffer.
     await Promise.all([this._scanDone, this._takeProfitDone]);

@@ -28,6 +28,7 @@ test('session baseline excludes persisted historical PnL; drawdown halves once a
   const state = setup({}, () => now);
   const risk = new RiskManager();
   risk.maxRiskFraction = 1; // Isolate session multiplier from the separately tested equity cap.
+  risk.maxPositionSize = 25; // Isolate the multiplier from the fee-inclusive $5 default.
   assert.equal(risk._checkSignal(signal, state).contracts, 10);
   state.stats.totalPnL = 189;
   assert.equal(risk._checkSignal(signal, state).contracts, 5);

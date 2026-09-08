@@ -52,6 +52,7 @@ test('risk budget includes open, pending and same-pass portfolio/ticker exposure
 
 test('position sizing rounds down and respects remaining market capacity', () => {
   const generator = new SignalGenerator();
+  generator.maxTradeRiskPct = 1; // Isolate market capacity from the canonical 1% equity cap.
   generator.useKelly = false;
   const state = { balance: { available: 100, total: 100 },
     openPositions: [{ ticker: 'BTC', contracts: 30, priceDecimal: 0.5 }], pendingOrders: [] };

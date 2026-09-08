@@ -17,6 +17,7 @@ class KalshiClient {
     if (!this.privateKeyPem) {
       // Support a base64-encoded key supplied through the local environment.
       if (process.env.KALSHI_PRIVATE_KEY_BASE64) {
+        console.warn('[Kalshi] Using KALSHI_PRIVATE_KEY_BASE64 credentials; this overrides KALSHI_PRIVATE_KEY_PATH.');
         this.privateKeyPem = Buffer.from(process.env.KALSHI_PRIVATE_KEY_BASE64, 'base64').toString('utf8');
       } else {
         const keyPath = this.config.KALSHI_PRIVATE_KEY_PATH || './kalshi_private_key.pem';
@@ -239,6 +240,29 @@ async fetchMarket(ticker) {
     return normalizeOrder(resp.data.order || resp.data);
   }
 
+  async findOrderByClientId(ticker, clientOrderId) {
+    if (!ticker || !clientOrderId) throw new Error('Order lookup requires ticker and client order id');
+    const matches = new Map(), seen = new Set();
+    let cursor;
+    do {
+      const response = await this.get(`/trade-api/v2/portfolio/orders?ticker=${encodeURIComponent(ticker)}&limit=100` +
+        (cursor ? `&cursor=${encodeURIComponent(cursor)}` : ''));
+      if (!Array.isArray(response.data.orders)) throw new Error('Missing orders array');
+      for (const order of response.data.orders) {
+        if (order.client_order_id === clientOrderId && order.ticker === ticker) {
+          if (!order.order_id) throw new Error('Matched order missing identity');
+          matches.set(order.order_id, normalizeOrder(order));
+        }
+      }
+      cursor = response.data.cursor;
+      if (cursor && seen.has(cursor)) throw new Error('Repeated orders cursor');
+      if (cursor) seen.add(cursor);
+    } while (cursor);
+    if (matches.size > 1) throw new Error('Ambiguous client order identity');
+    // Absence (including historical cutoff) never proves a POST was rejected.
+    return matches.values().next().value || null;
+  }
+
   async cancelOrder(orderId, ticker) {
     ticker ||= [...(this.state.pendingOrders || []), ...(this.state.openPositions || [])]
       .find(p => p.orderId === orderId || p.exitOrder?.id === orderId)?.ticker;
@@ -280,7 +304,7 @@ async fetchMarket(ticker) {
   }
 
   // Sell existing position (for take-profit before settlement)
-  async sellPosition(ticker, side, count, priceCents) {
+  async sellPosition(ticker, side, count, priceCents, clientOrderId = crypto.randomUUID()) {
     const isYes = side === 'yes';
     const bookSide = isYes ? 'ask' : 'bid';
     const priceDollars = isYes
@@ -289,7 +313,7 @@ async fetchMarket(ticker) {
 
     const orderData = {
       ticker,
-      client_order_id: crypto.randomUUID ? crypto.randomUUID() : `sell-${Date.now()}`,
+      client_order_id: clientOrderId,
       side: bookSide,
       count: Number(count).toFixed(2),
       price: priceDollars,

@@ -27,13 +27,19 @@ class Telemetry {
   }
   close() {this.db.close();}
 }
-let instance;
-function telemetry() {
-  return instance ||= new Telemetry(path.join(process.env.BOT_DATA_DIR || require('#src/config/paths').dataDir,'telemetry.sqlite'));
+const instances = new Map();
+function telemetry(directory = process.env.BOT_DATA_DIR || require('#src/config/paths').dataDir) {
+  const file = path.resolve(directory, 'telemetry.sqlite');
+  if (!instances.get(file)?.db.open) instances.set(file, new Telemetry(file));
+  return instances.get(file);
+}
+function close() {
+  for (const instance of instances.values()) if (instance.db.open) instance.close();
+  instances.clear();
 }
 // Diagnostics never turn a successful exchange response into a failed submission.
 function record(method,...args) {
   try {telemetry()[method](...args);} catch(e) {console.error('[Telemetry] Recording failed:',e.message);}
 }
 async function resolveOne(client){try{await telemetry().resolveOne(client);}catch(e){console.error('[Telemetry] Settlement lookup failed:',e.message);}}
-module.exports={Telemetry,record,resolveOne};
+module.exports={Telemetry,telemetry,close,record,resolveOne};

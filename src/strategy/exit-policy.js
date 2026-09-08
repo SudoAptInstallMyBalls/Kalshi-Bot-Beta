@@ -3,15 +3,6 @@ function generateExitSignals(policy, openPositions, kalshiMarkets, now = Date.no
     const signals = [];
 
     for (const pos of openPositions) {
-      // NOTE: this exemption path has no producer in this file — DUAL_SIDE
-      // signals aren't generated anywhere, so isDualSide is never true today.
-      // Left in place for forward-compatibility; do not rely on it as a
-      // safety mechanism until a DUAL_SIDE producer exists and its
-      // interaction with OrderExecutor's leg-cancellation logic is confirmed.
-      if (pos.isDualSide && pos.dualSideComplete === true) {
-        continue;
-      }
-
       const market = kalshiMarkets.find(m => m.ticker === pos.ticker);
       if (!market) continue;
       if (market.quoteStale) continue;

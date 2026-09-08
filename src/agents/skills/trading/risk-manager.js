@@ -1,3 +1,5 @@
+const { REJECTION_REASONS } = require('#src/risk/rejection-reasons');
+const DEFAULTS = require('#src/config/defaults');
 /**
  * RiskManager Skill
  *
@@ -23,18 +25,18 @@ class RiskManager extends BaseSkill {
 
     this.maxOpenPositions = 10;
     this.maxPerContract = 1;
-    this.maxPositionSize = 25;
+    this.maxPositionSize = DEFAULTS.MAX_POSITION_SIZE;
     this.feeRate = 0.07;
     this.maxRiskFraction = 0.01;
   }
 
   async initialize(context) {
     await super.initialize(context);
-    this.maxOpenPositions = context.config.MAX_TOTAL_OPEN_POSITIONS ?? 10;
-    this.maxPerContract = context.config.MAX_POSITIONS_PER_CONTRACT ?? 1;
-    this.maxPositionSize = context.config.MAX_POSITION_SIZE ?? 25;
-    this.feeRate = context.config.TAKER_FEE_RATE ?? 0.07;
-    this.maxRiskFraction = context.config.MAX_TRADE_RISK_PCT ?? 0.01;
+    this.maxOpenPositions = context.config.MAX_TOTAL_OPEN_POSITIONS ?? DEFAULTS.MAX_TOTAL_OPEN_POSITIONS;
+    this.maxPerContract = context.config.MAX_POSITIONS_PER_CONTRACT ?? DEFAULTS.MAX_POSITIONS_PER_CONTRACT;
+    this.maxPositionSize = context.config.MAX_POSITION_SIZE ?? DEFAULTS.MAX_POSITION_SIZE;
+    this.feeRate = context.config.TAKER_FEE_RATE ?? DEFAULTS.TAKER_FEE_RATE;
+    this.maxRiskFraction = context.config.MAX_TRADE_RISK_PCT ?? DEFAULTS.MAX_TRADE_RISK_PCT;
   }
 
   async handleTask(task) {
@@ -89,41 +91,41 @@ class RiskManager extends BaseSkill {
       const ref = signal.forecastContext, now = Date.now();
       if (ref?.referenceSource !== 'CFB:BRTI' || !Number.isFinite(ref.referenceTimestamp) ||
           ref.referenceTimestamp > now || now - ref.referenceTimestamp > 3000) {
-        return { approved: false, reason: 'settlement_reference_missing_or_stale' };
+        return { approved: false, reason: REJECTION_REASONS.SETTLEMENT_REFERENCE_MISSING_OR_STALE };
       }
     }
-    const safety = state.safety?.check() || { approved: false, reason: 'safety_unavailable' };
+    const safety = state.safety?.check() || { approved: false, reason: REJECTION_REASONS.SAFETY_UNAVAILABLE };
     if (!safety.approved) return safety;
-    if (state.stateLoadFailed || state.persistenceFailed) return { approved: false, reason: 'state_persistence_failed' };
-    if (state.pendingOrders.some(p => p.submissionUnknown)) return { approved: false, reason: 'entry_submission_unknown' };
+    if (state.stateLoadFailed || state.persistenceFailed) return { approved: false, reason: REJECTION_REASONS.STATE_PERSISTENCE_FAILED };
+    if (state.pendingOrders.some(p => p.submissionUnknown)) return { approved: false, reason: REJECTION_REASONS.ENTRY_SUBMISSION_UNKNOWN };
     if (state.btcPrice?.lastUpdate != null && Date.now() - state.btcPrice.lastUpdate > 10000) {
-      return { approved: false, reason: 'stale_spot_price' };
+      return { approved: false, reason: REJECTION_REASONS.STALE_SPOT_PRICE };
     }
     if (state.openPositions.some(p => p.exitOrder || p.exitSubmissionUnknown)) {
-      return { approved: false, reason: 'exit_reconciliation_pending' };
+      return { approved: false, reason: REJECTION_REASONS.EXIT_RECONCILIATION_PENDING };
     }
     const market = state.activeMarkets?.find(m => m.ticker === signal.ticker);
     if (market?.quoteStale || (market?.quoteUpdatedAt != null && Date.now() - market.quoteUpdatedAt > 10000)) {
-      return { approved: false, reason: 'stale_market_quote' };
+      return { approved: false, reason: REJECTION_REASONS.STALE_MARKET_QUOTE };
     }
     const price = signal.priceDecimal != null ? Number(signal.priceDecimal) : Number(signal.priceCents) / 100;
     const adjustment = signal.mlAdjustment ?? 1;
     if (!Number.isFinite(price) || price <= 0 || price >= 1 ||
         !Number.isInteger(signal.contracts) || signal.contracts <= 0 ||
         !Number.isFinite(adjustment) || adjustment < 0 || signal.mlBlocked) {
-      return { approved: false, reason: 'invalid_signal' };
+      return { approved: false, reason: REJECTION_REASONS.INVALID_SIGNAL };
     }
     // Apply influence once, at the execution boundary, keeping all dollar caps.
     const equity = Number(state.balance.equity ?? state.balance.total ?? state.balance.available);
-    if (!Number.isFinite(equity) || equity <= 0) return { approved: false, reason: 'equity_unavailable' };
+    if (!Number.isFinite(equity) || equity <= 0) return { approved: false, reason: REJECTION_REASONS.EQUITY_UNAVAILABLE };
     const riskCap = affordableContracts(equity * this.maxRiskFraction, price, this.feeRate);
     const contracts = Math.min(riskCap, Math.floor(signal.contracts * adjustment * safety.sizeMultiplier),
       affordableContracts(Math.min(this.maxPositionSize * safety.sizeMultiplier, signal.riskBudget ?? Infinity), price, this.feeRate));
-    if (contracts < 1) return { approved: false, reason: riskCap < 1 ? 'one_contract_exceeds_equity_risk_cap' : 'size_below_one_contract' };
+    if (contracts < 1) return { approved: false, reason: riskCap < 1 ? REJECTION_REASONS.ONE_CONTRACT_EXCEEDS_EQUITY_RISK_CAP : REJECTION_REASONS.SIZE_BELOW_ONE_CONTRACT };
     // Check total position limits (pending + open)
     const totalExposure = state.openPositions.length + state.pendingOrders.length;
     if (totalExposure >= this.maxOpenPositions) {
-      return { approved: false, reason: 'max_positions' };
+      return { approved: false, reason: REJECTION_REASONS.MAX_POSITIONS };
     }
 
     // Check per-contract limits
@@ -132,19 +134,19 @@ class RiskManager extends BaseSkill {
       ...state.pendingOrders.filter(p => p.ticker === signal.ticker),
     ];
     if (existingOnTicker.length >= this.maxPerContract) {
-      return { approved: false, reason: 'per_contract_cap' };
+      return { approved: false, reason: REJECTION_REASONS.PER_CONTRACT_CAP };
     }
 
     // Check balance
     const cost = orderCost(contracts, price, this.feeRate);
     if (cost > state.balance.available) {
-      return { approved: false, reason: 'insufficient_balance' };
+      return { approved: false, reason: REJECTION_REASONS.INSUFFICIENT_BALANCE };
     }
 
     // Check cumulative ticker exposure
     const existingCost = existingOnTicker.reduce((sum, p) => sum + (p.totalCost || p.reservedCost || 0), 0);
     if (existingCost + cost > this.maxPositionSize * 1.5) {
-      return { approved: false, reason: 'ticker_exposure_cap' };
+      return { approved: false, reason: REJECTION_REASONS.TICKER_EXPOSURE_CAP };
     }
 
     return { approved: true, contracts, cost, price, existingExposure: existingCost };

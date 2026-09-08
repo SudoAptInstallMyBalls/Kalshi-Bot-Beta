@@ -18,6 +18,7 @@
  */
 
 const axios = require('axios');
+console.warn('[SYNTHETIC RESEARCH ONLY] Simulated Kalshi prices can materially overstate profitability. These results cannot validate live trading. Use npm run research:replay for recorded market data.');
 
 // ===== Configuration =====
 const CONFIG = {

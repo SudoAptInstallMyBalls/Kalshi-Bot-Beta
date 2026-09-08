@@ -34,6 +34,18 @@ test('older persisted pending rows do not double existing positions after upgrad
   assert.equal(state.openPositions[0].filledContracts, 6);
 });
 
+test('restart restores legacy pending fills without a position exactly once', async () => {
+  const { state, manager, pending } = fixture({ getOrder: async () => ({ status: 'resting', fill_count: '4.00' }) });
+  pending.placedAt = Date.now();
+  state.pendingOrders = [JSON.parse(JSON.stringify(pending))];
+  await manager.poll();
+  await manager.poll();
+  assert.equal(state.openPositions.length, 1);
+  assert.equal(state.openPositions[0].filledContracts, 4);
+  assert.equal(state.openPositions[0].totalCost, 2);
+  assert.equal(state.pendingOrders[0].processedFillCount, 4);
+});
+
 test('cancel race retains actual fills, fees and cost basis; balance comes from account', async () => {
   let balanceFetches = 0;
   const { state, manager, pending } = fixture({ cancelOrder: async () => {},

@@ -207,7 +207,7 @@ function updateMarkets(markets, currentSpotPrice) {
       '  <td class="mono ' + distClass + '">' + distStr + '</td>',
       '  <td>' + cents(m.yesBid) + ' / ' + cents(m.yesAsk) + '</td>',
       '  <td>' + cents(m.noBid) + ' / ' + cents(m.noAsk) + '</td>',
-      '  <td class="' + (combined < 0.98 ? 'positive' : '') + '">' + (combined * 100).toFixed(0) + '¢</td>',
+      '  <td title="Combined asks only; paired-leg arbitrage is not supported">' + (combined * 100).toFixed(0) + '¢</td>',
       '  <td>' + escapeHtml(timeStr) + '</td>',
       '  <td>' + (m.modelProb ? (m.modelProb * 100).toFixed(1) + '%' : '--') + '</td>',
       '  <td class="mono ' + edgeClass + '">' + (edge ? (edge >= 0 ? '+' : '') + edge.toFixed(1) + '%' : '--') + '</td>',

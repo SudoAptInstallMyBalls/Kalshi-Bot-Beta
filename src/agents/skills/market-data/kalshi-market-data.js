@@ -29,6 +29,7 @@ class KalshiMarketData extends BaseSkill {
     this.slotDuration = 900;
     this._marketCache = { data: [], ts: 0 };
     this._marketCacheTTL = 3000;
+    this._quoteRetries = new Map();
   }
 
   async initialize(context) {
@@ -175,15 +176,20 @@ class KalshiMarketData extends BaseSkill {
       await require('#src/storage/research-telemetry').resolveOne(this.client);
     }
     const markets = state.activeMarkets;
+    const active = new Set(markets.map(m => m.ticker));
+    for (const ticker of this._quoteRetries.keys()) if (!active.has(ticker)) this._quoteRetries.delete(ticker);
     if (markets.length === 0) return { markets: [], count: 0 };
 
+    const now = Date.now();
+    const due = markets.map(m => (this._quoteRetries.get(m.ticker)?.nextAttempt ?? 0) <= now);
     const results = await Promise.allSettled(
-      markets.map(m => this.client.fetchMarket(m.ticker))
+      markets.map((m, i) => due[i] ? this.client.fetchMarket(m.ticker) : Promise.resolve(null))
     );
 
     const refreshed = markets.map((m, i) => {
       if (results[i].status === 'fulfilled' && results[i].value) {
         const val = results[i].value;
+        this._quoteRetries.delete(m.ticker);
         // Keep strike price synchronized
         if (val.targetPrice && val.targetPrice > 0) {
           state.marketOpenPrices[m.ticker] = val.targetPrice;
@@ -191,6 +197,10 @@ class KalshiMarketData extends BaseSkill {
           delete state.marketOpenPrices[m.ticker];
         }
         return { ...m, ...val, quoteUpdatedAt: Date.now(), quoteStale: false };
+      }
+      if (due[i]) {
+        const failures = Math.min(6, (this._quoteRetries.get(m.ticker)?.failures || 0) + 1);
+        this._quoteRetries.set(m.ticker, { failures, nextAttempt: Date.now() + Math.min(60000, 2000 * 2 ** (failures - 1)) });
       }
       return { ...m, quoteStale: true };
     });

@@ -190,7 +190,6 @@ class OrderManager {
         entryTime: pendingOrder.placedAt,
         closeTime: pendingOrder.closeTime,
         status: 'filled',
-        isDualSide: pendingOrder.isDualSide || false,
       };
 
       this.state.addPosition(position);

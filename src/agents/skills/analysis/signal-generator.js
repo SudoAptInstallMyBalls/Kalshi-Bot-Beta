@@ -1,3 +1,5 @@
+const { REJECTION_REASONS } = require('#src/risk/rejection-reasons');
+const DEFAULTS = require('#src/config/defaults');
 /**
  * SignalGenerator Skill (Production Hardened v2)
  *
@@ -6,11 +8,7 @@
  *  2. POLY_ARB    — Polymarket fair value exceeds Kalshi ask
  *
  * NOTE: DUAL_SIDE (YES + NO ask < $1 guaranteed profit) is NOT implemented here.
- * The exit engine still has an `isDualSide` / `dualSideComplete` exemption path,
- * but nothing in this file ever sets those fields — it's currently dead code.
- * Wiring up a real DUAL_SIDE strategy safely requires knowing how OrderExecutor
- * pairs and fills two legs (and whether it cancels a sibling order when one leg
- * gets stopped out). Don't ship a producer for this signal until that's confirmed.
+ * All positions use the same exit policy; there is no paired-leg exemption.
  *
  * Fixes vs. previous revision:
  *  1. Running committedThisPass accumulator (portfolio-wide) — unchanged, correct.
@@ -69,16 +67,16 @@ class SignalGenerator extends BaseSkill {
     // =========================
     // ENTRY SETTINGS
     // =========================
-    this.minEdge = 8.0;
-    this.minDivergence = 8.0;
-    this.kellyFraction = 0.25;
-    this.maxTradeRiskPct = 1;
+    this.minEdge = DEFAULTS.MIN_EDGE;
+    this.minDivergence = DEFAULTS.MIN_DIVERGENCE;
+    this.kellyFraction = DEFAULTS.KELLY_FRACTION;
+    this.maxTradeRiskPct = DEFAULTS.MAX_TRADE_RISK_PCT;
     this.executionCostBuffer = 0.01;
     this.useKelly = true;
-    this.maxPositionSize = 5;
-    this.tradingWindow = 10 * 60 * 1000;
-    this.minContractPrice = 0.30;
-    this.maxContractPrice = 0.75;
+    this.maxPositionSize = DEFAULTS.MAX_POSITION_SIZE;
+    this.tradingWindow = DEFAULTS.TRADING_WINDOW * 60 * 1000;
+    this.minContractPrice = DEFAULTS.MIN_CONTRACT_PRICE / 100;
+    this.maxContractPrice = DEFAULTS.MAX_CONTRACT_PRICE / 100;
     this.feeRate = 0.07;
     this.probabilityWeight = 1;
     this.minNetEdge = 0;
@@ -122,45 +120,45 @@ class SignalGenerator extends BaseSkill {
     if (this.settlementAware) this.settlementReference = context.settlementReference ||
       new (require('#src/market-data/settlement-reference').SettlementReference)(config.SETTLEMENT_INDEX_DB);
     this.telemetryEnabled = config.ENABLE_TELEMETRY === true;
-    this.maxTradeRiskPct = config.MAX_TRADE_RISK_PCT ?? 1;
-    this.executionCostBuffer = (config.ROUND_TRIP_SLIPPAGE_CENTS ?? 1) / 100;
+    this.maxTradeRiskPct = config.MAX_TRADE_RISK_PCT ?? DEFAULTS.MAX_TRADE_RISK_PCT;
+    this.executionCostBuffer = (config.ROUND_TRIP_SLIPPAGE_CENTS ?? DEFAULTS.ROUND_TRIP_SLIPPAGE_CENTS) / 100;
 
-    this.minEdge = config.MIN_EDGE ?? 8.0;
-    this.minDivergence = config.MIN_DIVERGENCE ?? 8.0;
-    this.kellyFraction = config.KELLY_FRACTION ?? 0.25;
+    this.minEdge = config.MIN_EDGE ?? DEFAULTS.MIN_EDGE;
+    this.minDivergence = config.MIN_DIVERGENCE ?? DEFAULTS.MIN_DIVERGENCE;
+    this.kellyFraction = config.KELLY_FRACTION ?? DEFAULTS.KELLY_FRACTION;
     this.useKelly = config.USE_KELLY_SIZING !== false;
-    this.maxPositionSize = config.MAX_POSITION_SIZE ?? 5;
-    this.tradingWindow = (config.TRADING_WINDOW ?? 10) * 60 * 1000;
-    this.entryStartMs = (config.ENTRY_START_MINUTES ?? 0) * 60 * 1000;
-    this.entryCloseBufferMs = (config.ENTRY_CLOSE_BUFFER_SECONDS ?? 30) * 1000;
-    this.minContractPrice = (config.MIN_CONTRACT_PRICE ?? 30) / 100;
-    this.maxContractPrice = (config.MAX_CONTRACT_PRICE ?? 75) / 100;
-    this.feeRate = config.TAKER_FEE_RATE ?? 0.07;
-    this.probabilityWeight = config.MODEL_PROBABILITY_WEIGHT ?? 1;
-    this.minNetEdge = config.MIN_NET_EDGE ?? 0;
+    this.maxPositionSize = config.MAX_POSITION_SIZE ?? DEFAULTS.MAX_POSITION_SIZE;
+    this.tradingWindow = (config.TRADING_WINDOW ?? DEFAULTS.TRADING_WINDOW) * 60 * 1000;
+    this.entryStartMs = (config.ENTRY_START_MINUTES ?? DEFAULTS.ENTRY_START_MINUTES) * 60 * 1000;
+    this.entryCloseBufferMs = (config.ENTRY_CLOSE_BUFFER_SECONDS ?? DEFAULTS.ENTRY_CLOSE_BUFFER_SECONDS) * 1000;
+    this.minContractPrice = (config.MIN_CONTRACT_PRICE ?? DEFAULTS.MIN_CONTRACT_PRICE) / 100;
+    this.maxContractPrice = (config.MAX_CONTRACT_PRICE ?? DEFAULTS.MAX_CONTRACT_PRICE) / 100;
+    this.feeRate = config.TAKER_FEE_RATE ?? DEFAULTS.TAKER_FEE_RATE;
+    this.probabilityWeight = config.MODEL_PROBABILITY_WEIGHT ?? DEFAULTS.MODEL_PROBABILITY_WEIGHT;
+    this.minNetEdge = config.MIN_NET_EDGE ?? DEFAULTS.MIN_NET_EDGE;
 
-    this.bankrollReservePct = config.BANKROLL_RESERVE_PCT ?? 0.30;
-    this.maxPortfolioExposurePct = config.MAX_PORTFOLIO_EXPOSURE_PCT ?? 0.50;
-    this.maxMarketExposurePct = config.MAX_MARKET_EXPOSURE_PCT ?? 0.25;
-    this.maxPortfolioExposureDollars = config.MAX_PORTFOLIO_EXPOSURE_DOLLARS ?? 50;
+    this.bankrollReservePct = config.BANKROLL_RESERVE_PCT ?? DEFAULTS.BANKROLL_RESERVE_PCT;
+    this.maxPortfolioExposurePct = config.MAX_PORTFOLIO_EXPOSURE_PCT ?? DEFAULTS.MAX_PORTFOLIO_EXPOSURE_PCT;
+    this.maxMarketExposurePct = config.MAX_MARKET_EXPOSURE_PCT ?? DEFAULTS.MAX_MARKET_EXPOSURE_PCT;
+    this.maxPortfolioExposureDollars = config.MAX_PORTFOLIO_EXPOSURE_DOLLARS ?? DEFAULTS.MAX_PORTFOLIO_EXPOSURE_DOLLARS;
 
-    this.stopLossPct = config.STOP_LOSS_PCT ?? 40;
+    this.stopLossPct = config.STOP_LOSS_PCT ?? DEFAULTS.STOP_LOSS_PCT;
     // Default emergency stop to 60% of max position size — meaningfully WORSE
     // than the soft stop's 40%, so the soft stop (with grace period) remains
     // the primary lever for your typical (max-size) position, and emergency
     // only fires for losses beyond what the soft stop would already catch.
     this.maxLossPerPosition = config.MAX_LOSS_PER_POSITION ?? Math.min(3.0, this.maxPositionSize * 0.60);
-    this.stopLossGracePeriodMs = (config.STOP_LOSS_GRACE_SECONDS ?? 30) * 1000;
-    this.stopLossMinTimeRemaining = (config.STOP_LOSS_MIN_TIME_REMAINING ?? 45) * 1000;
-    this.emergencyStopGraceMs = (config.EMERGENCY_STOP_GRACE_SECONDS ?? 3) * 1000;
+    this.stopLossGracePeriodMs = (config.STOP_LOSS_GRACE_SECONDS ?? DEFAULTS.STOP_LOSS_GRACE_SECONDS) * 1000;
+    this.stopLossMinTimeRemaining = (config.STOP_LOSS_MIN_TIME_REMAINING ?? DEFAULTS.STOP_LOSS_MIN_TIME_REMAINING) * 1000;
+    this.emergencyStopGraceMs = (config.EMERGENCY_STOP_GRACE_SECONDS ?? DEFAULTS.EMERGENCY_STOP_GRACE_SECONDS) * 1000;
 
     this.enableScalping = config.ENABLE_SCALPING !== false;
-    this.scalpTakeProfitPct = config.SCALP_TAKE_PROFIT_PCT ?? 15;
-    this.scalpMinHoldMs = (config.SCALP_MIN_HOLD_SECONDS ?? 15) * 1000;
-    this.scalpQuickProfitPct = config.SCALP_QUICK_PROFIT_PCT ?? 25;
+    this.scalpTakeProfitPct = config.SCALP_TAKE_PROFIT_PCT ?? DEFAULTS.SCALP_TAKE_PROFIT_PCT;
+    this.scalpMinHoldMs = (config.SCALP_MIN_HOLD_SECONDS ?? DEFAULTS.SCALP_MIN_HOLD_SECONDS) * 1000;
+    this.scalpQuickProfitPct = config.SCALP_QUICK_PROFIT_PCT ?? DEFAULTS.SCALP_QUICK_PROFIT_PCT;
 
-    this.takeProfitPct = config.TAKE_PROFIT_PCT ?? 35;
-    this.takeProfitGainFraction = config.TAKE_PROFIT_GAIN_FRACTION ?? 0.50;
+    this.takeProfitPct = config.TAKE_PROFIT_PCT ?? DEFAULTS.TAKE_PROFIT_PCT;
+    this.takeProfitGainFraction = config.TAKE_PROFIT_GAIN_FRACTION ?? DEFAULTS.TAKE_PROFIT_GAIN_FRACTION;
   }
 
   async handleTask(task) {
@@ -294,7 +292,7 @@ _getPortfolioExposure(state) {
     const contracts = affordableContracts(positionDollars, price, this.feeRate);
     if(contracts<1 && this.telemetryEnabled) {
       const reason=orderCost(1,price,this.feeRate)>(state.balance.equity??budget.totalBalance)*this.maxTradeRiskPct
-        ? 'one_contract_exceeds_equity_risk_cap':'sizing_budget_below_one_contract';
+        ? REJECTION_REASONS.ONE_CONTRACT_EXCEEDS_EQUITY_RISK_CAP:'sizing_budget_below_one_contract';
       require('#src/storage/research-telemetry').record('recordEvent','sizing_rejection',{ticker,price,positionDollars,reason});
       state.updateIntent?.({status:'waiting',message:`Entry skipped: ${reason}`,action:null});
     }
@@ -333,17 +331,17 @@ _getPortfolioExposure(state) {
     };
 
     for (const market of kalshiMarkets) {
-      if (market.quoteStale) { count('stale_quote'); continue; }
+      if (market.quoteStale) { count(REJECTION_REASONS.STALE_QUOTE); continue; }
       const timeRemaining = market.closeTime - now;
       const totalDuration = market.closeTime - market.openTime;
       const timeSinceOpen = now - market.openTime;
 
-      if (!require('#src/strategy/entry-window').isEntryTime(now, market, this.entryStartMs ?? 0, this.tradingWindow, this.entryCloseBufferMs ?? 30000)) { count('outside_entry_window'); continue; }
+      if (!require('#src/strategy/entry-window').isEntryTime(now, market, this.entryStartMs ?? 0, this.tradingWindow, this.entryCloseBufferMs ?? 30000)) { count(REJECTION_REASONS.OUTSIDE_ENTRY_WINDOW); continue; }
 
       const openPrice = state.marketOpenPrices[market.ticker];
-      if (!openPrice) { count('missing_strike'); continue; }
-      if (!market.yesAsk || !market.noAsk) { count('missing_quote'); continue; }
-      if (![market.yesAsk, market.noAsk].every(v => Number.isFinite(v) && v > 0 && v < 1)) { count('invalid_quote'); continue; }
+      if (!openPrice) { count(REJECTION_REASONS.MISSING_STRIKE); continue; }
+      if (!market.yesAsk || !market.noAsk) { count(REJECTION_REASONS.MISSING_QUOTE); continue; }
+      if (![market.yesAsk, market.noAsk].every(v => Number.isFinite(v) && v > 0 && v < 1)) { count(REJECTION_REASONS.INVALID_QUOTE); continue; }
 
       const yesInRange = market.yesAsk >= this.minContractPrice && market.yesAsk <= this.maxContractPrice;
       const noInRange = market.noAsk >= this.minContractPrice && market.noAsk <= this.maxContractPrice;
@@ -357,11 +355,11 @@ _getPortfolioExposure(state) {
 		: probModel.calculateImpliedProbability(btcPrice, openPrice, timeRemaining, totalDuration, binanceFeed);
       const prob = { ...estimate }; // Blending must not mutate a cached reference forecast.
       if (this.settlementAware && !prob.ready) {
-        count(prob.reason || 'settlement_reference_unavailable');
+        count(prob.reason || REJECTION_REASONS.SETTLEMENT_REFERENCE_UNAVAILABLE);
         state.updateIntent?.({ status: 'waiting', message: `Entry blocked: ${prob.reason || 'settlement reference unavailable'}`, action: null });
         continue;
       }
-      if (prob.volatilityKnown === false) { count('volatility_unavailable'); continue; }
+      if (prob.volatilityKnown === false) { count(REJECTION_REASONS.VOLATILITY_UNAVAILABLE); continue; }
 	  const marketMid = (market.yesBid + market.yesAsk) / 2;
       if (Number.isFinite(marketMid)) {
         prob.probUp = this.probabilityWeight * prob.probUp + (1 - this.probabilityWeight) * marketMid;
@@ -415,8 +413,8 @@ _getPortfolioExposure(state) {
         });
       }
       for (const [inRange, edge, net] of [[yesInRange, adjustedEdgeYes, netYes], [noInRange, adjustedEdgeNo, netNo]]) {
-        count(!inRange ? 'price_out_of_range' : edge <= this.minDivergence ? 'edge_below_threshold' :
-          net <= this.minNetEdge ? 'net_edge_below_threshold' : 'entry_candidate');
+        count(!inRange ? REJECTION_REASONS.PRICE_OUT_OF_RANGE : edge <= this.minDivergence ? REJECTION_REASONS.EDGE_BELOW_THRESHOLD :
+          net <= this.minNetEdge ? REJECTION_REASONS.NET_EDGE_BELOW_THRESHOLD : REJECTION_REASONS.ENTRY_CANDIDATE);
       }
 
       const tickerCommitted = () => committedByTicker.get(market.ticker) || 0;

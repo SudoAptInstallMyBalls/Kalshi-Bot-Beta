@@ -14,6 +14,7 @@ function setup(t, client) {
   state.openPositions = [{ orderId: 'entry', ticker: 'BTC', side: 'yes', contracts: 10, filledContracts: 10,
     priceDecimal: 0.5, totalCost: 5 }];
   const pm = new PositionManager();
+  t.after(() => pm.stop());
   pm.normalFillCheckDelayMs = 0;
   pm.context = { registry: { get: name => name === 'state-manager' ? { botState: state } : { getClient: () => client } } };
   return { pm, state, tp: { orderId: 'entry', ticker: 'BTC', side: 'yes', contracts: 10, sellPriceCents: 70, reason: 'test' } };
@@ -26,6 +27,107 @@ test('fixed-point order fields preserve fractional counts and convert dollars ex
   assert.equal(order.fill_count, 2.5);
   assert.deepEqual(executionTotals(order), { filled: 2.5, gross: 125, fees: 3 });
   assert.throws(() => executionTotals({ fill_count: 1 }), /costs unavailable/);
+});
+
+test('timed-out exit persists client identity and scheduled requery accounts partial fills once without reselling', async t => {
+  let submissions = 0, identity, found = false;
+  const client = { getOrder: async id => id === 'entry' ? entry : filled(4, 'canceled'),
+    sellPosition: async (...args) => { submissions++; identity = args[4]; throw Error('ECONNRESET'); },
+    findOrderByClientId: async (ticker, id) => {
+      assert.equal(id, identity);
+      return found ? { ticker, client_order_id: id, order_id: 'exit' } : null;
+    } };
+  const { pm, state, tp } = setup(t, client);
+  await pm._executeTakeProfit(tp);
+  assert.ok(identity);
+  assert.equal(state.openPositions[0].exitClientOrderId, identity);
+  assert.equal(pm._exitTimers.size, 1);
+  await pm.reconcileExitById('entry');
+  assert.equal(state.openPositions[0].exitSubmissionUnknown, true);
+  found = true;
+  await Promise.all([pm.reconcileExitById('entry'), pm.reconcileExitById('entry')]);
+  assert.equal(submissions, 1);
+  assert.equal(state.openPositions[0].filledContracts, 6);
+  assert.equal(state.openPositions[0].exitSubmissionUnknown, undefined);
+  assert.equal(pm._exitTimers.size, 0);
+  await pm.reconcileExitById('entry');
+  assert.equal(state.openPositions[0].filledContracts, 6);
+});
+
+test('exit retries resume persisted markers, remain bounded, and drain on shutdown', async t => {
+  let release, lookups = 0;
+  const { pm, state } = setup(t, { findOrderByClientId: () => { lookups++; return new Promise(r => { release = r; }); } });
+  pm.context.config = { EXIT_RECONCILIATION_MAX_ATTEMPTS: 1 };
+  Object.assign(state.openPositions[0], { exitSubmissionUnknown: true, exitClientOrderId: 'saved', exitRequested: 10 });
+  await pm.start();
+  pm.scheduleExitReconciliation('entry');
+  assert.equal(pm._exitTimers.size, 1);
+  const work = pm.reconcileExitById('entry');
+  let stopped = false;
+  const stopping = pm.stop().then(() => { stopped = true; });
+  await new Promise(setImmediate);
+  assert.equal(stopped, false);
+  release(null);
+  await work; await stopping;
+  assert.equal(lookups, 1);
+  assert.equal(pm._exitTimers.size, 0);
+  assert.equal(state.openPositions[0].exitSubmissionUnknown, true);
+  await pm.start();
+  assert.equal(state.halted, 'exit_reconciliation_retries_exhausted');
+  assert.equal(pm._exitTimers.size, 0);
+});
+
+test('known exit cancellation recovers on scheduled query without an exit signal', async t => {
+  let terminal = false, submissions = 0;
+  const { pm, state, tp } = setup(t, { getOrder: async id => id === 'entry' ? entry : filled(10, terminal ? 'executed' : 'resting'),
+    sellPosition: async () => { submissions++; return { order_id: 'exit' }; }, cancelOrder: async () => { throw Error('TLS'); } });
+  await pm._executeTakeProfit(tp);
+  terminal = true;
+  await pm.reconcileExitById('entry');
+  assert.equal(submissions, 1);
+  assert.equal(state.openPositions.length, 0);
+});
+
+test('order identity lookup follows pages, rejects incomplete/ambiguous data and never infers rejection from absence', async () => {
+  const client = new KalshiClient({}, {});
+  let reads = 0;
+  client.get = async () => ({ data: ++reads === 1 ? { orders: [], cursor: 'next' } : {
+    orders: [{ order_id: 'exit', ticker: 'BTC', client_order_id: 'id', fill_count_fp: '2.00' }], cursor: '' } });
+  assert.equal((await client.findOrderByClientId('BTC', 'id')).fill_count, 2);
+  assert.equal(reads, 2);
+  client.get = async () => ({ data: { orders: [] } });
+  assert.equal(await client.findOrderByClientId('BTC', 'id'), null);
+  client.get = async () => ({ data: {} });
+  await assert.rejects(client.findOrderByClientId('BTC', 'id'), /Missing orders/);
+  client.get = async () => ({ data: { orders: [], cursor: 'loop' } });
+  await assert.rejects(client.findOrderByClientId('BTC', 'id'), /Repeated orders cursor/);
+  client.get = async () => ({ data: { orders: ['a', 'b'].map(order_id => ({ order_id, ticker: 'BTC', client_order_id: 'id' })) } });
+  await assert.rejects(client.findOrderByClientId('BTC', 'id'), /Ambiguous/);
+});
+
+test('quote retry delay grows per ticker, recovers independently, and prunes inactive markets', async t => {
+  let now = 10000, healthy = false;
+  t.mock.method(Date, 'now', () => now);
+  const { state } = setup(t, {});
+  state.openPositions = [];
+  state.activeMarkets = [{ ticker: 'bad' }, { ticker: 'good' }];
+  const calls = { bad: 0, good: 0 }, skill = new KalshiMarketData();
+  skill.client = { fetchMarket: async ticker => {
+    calls[ticker]++;
+    if (ticker === 'bad' && !healthy) throw Error('offline');
+    return { yesBid: .5 };
+  } };
+  await skill._refreshMarkets(state);
+  now += 1000; await skill._refreshMarkets(state);
+  assert.deepEqual(calls, { bad: 1, good: 2 });
+  now += 1000; await skill._refreshMarkets(state);
+  assert.equal(skill._quoteRetries.get('bad').nextAttempt, now + 4000);
+  healthy = true; now += 4000; await skill._refreshMarkets(state);
+  assert.equal(state.activeMarkets[0].quoteStale, false);
+  assert.equal(skill._quoteRetries.size, 0);
+  healthy = false; await skill._refreshMarkets(state);
+  state.activeMarkets = []; await skill._refreshMarkets(state);
+  assert.equal(skill._quoteRetries.size, 0);
 });
 
 test('late cancel fill is counted before repricing; costs and fees include all partial exits', async t => {

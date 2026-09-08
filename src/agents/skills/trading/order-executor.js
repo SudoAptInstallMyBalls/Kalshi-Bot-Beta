@@ -1,3 +1,4 @@
+const { REJECTION_REASONS } = require('#src/risk/rejection-reasons');
 /**
  * OrderExecutor Skill (V2 Kalshi API Compliant)
  *
@@ -219,7 +220,6 @@ class OrderExecutor extends BaseSkill {
         placedAt: Date.now(),
         closeTime: signal.closeTime,
         orderStatus: fillCount > 0 ? 'executed' : 'resting',
-        isDualSide: signal.isDualSide || false,
       };
 
       state.removePendingOrder(submissionMarker.orderId);
@@ -272,7 +272,7 @@ class OrderExecutor extends BaseSkill {
         } else {
         // A timeout or incomplete response is not proof of rejection. Keep
         // the persisted client ID for account reconciliation and stop entries.
-        state.safety?.halt('entry_submission_unknown');
+        state.safety?.halt(REJECTION_REASONS.ENTRY_SUBMISSION_UNKNOWN);
         }
       }
       const status = err.response?.status || 'UNKNOWN';

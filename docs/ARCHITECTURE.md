@@ -25,7 +25,11 @@ Backend imports use Node's built-in package imports, such as `require('#src/risk
 | public/js | Browser state, API access, rendering, chart and event wiring |
 | scripts | CLI argument parsing and orchestration; stable user-facing commands |
 
-Entry generation remains in its existing skill. Exit evaluation is extracted into src/strategy/exit-policy.js and called through the skill's existing interface, preserving the shared live/replay path. Persisted-position compatibility branches are retained; absence of a current producer is insufficient evidence that old stored positions cannot reference them.
+Entry generation remains in its existing skill. Exit evaluation lives in src/strategy/exit-policy.js and is shared by live and replay paths. The unsupported DUAL_SIDE exit exemption has been removed: legacy positions carrying those flags now receive the ordinary exit policy. The legacy ML feature column is retained to preserve model vector compatibility.
+
+The four periodic loop bodies live in src/agents/core/periodic-tasks.js and accept an injected owner. ScheduledTask provides non-overlap, injectable timers, and shutdown draining for all four loops. The registry and orchestrator remain responsible for dependency ordering, workflows, metrics, and skill lifecycle; replacing them is a separate migration, not required for these fixes.
+
+Numeric defaults live in src/config/defaults.js; runtime environment values and frozen research JSON values explicitly override them. Startup logs effective numeric/boolean strategy and risk settings without credentials. Frozen JSON files remain reproducible research inputs, not alternative runtime defaults. See REVIEW_HARDENING.md for audit dispositions and frozen-study limitations.
 
 ## What moved
 
